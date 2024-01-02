@@ -10,6 +10,9 @@ NicerAppWebOS/3rd-party/tinymce-6.2.0/apiKey*
 NicerAppWebOS/3rd-party/geoLite2/apiKey.txt
 NicerAppWebOS/3rd-party/geoLite2/*.mmdb
 NicerAppWebOS/3rd-party/geoLite2/downloads/*
+NicerAppWebOS/apps/NicerAppWebOS/applications/2D/musicPlayer/music/*
+NicerAppWebOS/apps/NicerAppWebOS/applications/2D/mediaPlayer/music2024/*
+NicerAppWebOS/apps/NicerAppWebOS/webmail/configs/config.Rene.AJM.Veerman.json
 NicerAppWebOS/siteMedia/videos
 NicerAppWebOS/siteMedia/backgrounds/videos
 NicerAppWebOS/siteMedia/backgrounds/*.zip
