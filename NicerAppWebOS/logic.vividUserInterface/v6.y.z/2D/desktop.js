@@ -308,7 +308,6 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                         }
                         break;
                     case '#siteTaskbar':
-                        debugger;
                         divs[divID].top -= na.c.d.g.margin;
                         //divs[divID].left += na.c.d.g.margin;
                         //divs[divID].width -= (2 * na.c.d.g.margin);

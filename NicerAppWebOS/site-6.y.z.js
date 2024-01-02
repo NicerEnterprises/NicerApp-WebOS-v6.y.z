@@ -125,13 +125,16 @@ export class naSite {
             debugger;
             return false;
         }
-        if (!jsVarName.match(/[\w\.]+/)) {
+        if (!jsVarName.match(/[\w\.]*/)) {
             na.m.log (1, 'ERROR : na.loadModule() : jsVarName parameter incorrect.');
             debugger;
             return false;
         }
-        if (!url.match ('https://'+na.globals.domain)) {
-            na.m.log (1, 'ERROR : na.loadModule() : url parameter incorrect, for security reasons.');
+        if (
+            !url.match ('https://'+na.globals.domain)
+            && !url.match (/^\//)
+        ) {
+            na.m.log (1, 'ERROR : na.loadModule() : url parameter incorrect, for security reasons. url='+url);
             debugger;
             return false;
         };
@@ -140,9 +143,7 @@ export class naSite {
                 'na.apps["'+appName+'"] = {'
                 +'settings : new module.'+jsClassName+'('+jsVarName+')'
                 +'}';
-
             eval (js);
-            debugger;
         });
     }
 
