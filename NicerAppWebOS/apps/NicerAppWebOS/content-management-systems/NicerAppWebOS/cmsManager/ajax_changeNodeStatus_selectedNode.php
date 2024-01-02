@@ -33,7 +33,7 @@ foreach ($dbs as $idx => $dbName) {
         }
     }
 };
-//die();
+//exit();
 
 
 $cdb->setDatabase(str_replace('_documents_','_tree_',$_POST['database']),false);

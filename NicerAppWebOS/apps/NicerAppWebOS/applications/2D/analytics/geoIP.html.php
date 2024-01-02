@@ -11,13 +11,13 @@ if (!array_key_exists('geoIP',$_SESSION)) $_SESSION['geoIP'] = array();
     $apiKey = trim(file_get_contents(dirname(__FILE__).'/apiKey.ipinfo.io.txt'));
      $xec = 'curl -H "X-Forwarded-For: '.$_GET['IP'].'" ipinfo.io/'.$_GET['IP'].'?token='.$apiKey;
     exec ($xec, $output, $result);
-//echo '<pre>'; var_dump ($xec); var_dump ($output); die();
+//echo '<pre>'; var_dump ($xec); var_dump ($output); exit();
     $_SESSION['geoIP'][$_GET['IP']] = json_decode(join('',$output), true);
 //};
 
 $record = $_SESSION['geoIP'][$_GET['IP']];
 //
-//echo '<pre>'; var_dump ($_GET); var_dump ($record); die();
+//echo '<pre>'; var_dump ($_GET); var_dump ($record); exit();
 $html = 
     '<table>'
         //.'<tr><th>Continent</th><td>'.$record['continent_name'].'</td></tr>'

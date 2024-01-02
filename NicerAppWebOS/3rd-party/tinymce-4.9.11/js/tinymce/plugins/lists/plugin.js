@@ -603,7 +603,7 @@ var lists = (function (domGlobals) {
     };
 
     var lift2 = function (oa, ob, f) {
-      return oa.isSome() && ob.isSome() ? Option.some(f(oa.getOrDie(), ob.getOrDie())) : Option.none();
+      return oa.isSome() && ob.isSome() ? Option.some(f(oa.getOrexit(), ob.getOrexit())) : Option.none();
     };
 
     var fromElements = function (elements, scope) {

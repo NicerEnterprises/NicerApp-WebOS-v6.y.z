@@ -88,7 +88,7 @@ $naWebOS = new NicerAppWebOS();
 
 
 
-    //echo '<pre>t555'; var_dump ($_SERVER); die();
+    //echo '<pre>t555'; var_dump ($_SERVER); exit();
     if ($_SERVER['SCRIPT_NAME']=='/NicerAppWebOS/index.php') {
         $_SESSION['started'] = time();//microtime(true);
         $_SESSION['startedID'] = cdb_randomString(50);
@@ -103,7 +103,7 @@ $naWebOS = new NicerAppWebOS();
                 preg_replace('/.*\s/','',date(DATE_RFC2822))
             );
         $naBot = stripos($_SERVER['HTTP_USER_AGENT'], 'bot')!==false;
-        //echo '<pre>t584'; var_dump($naBot); die();
+        //echo '<pre>t584'; var_dump($naBot); exit();
 
         if (!$naBot) {
             $_SESSION['na_error_log_filepath_html'] =

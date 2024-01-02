@@ -3,7 +3,7 @@ $rootPathNA = realpath(dirname(__FILE__).'/../..').'/NicerAppWebOS';
 require_once ($rootPathNA.'/boot.php');
 
 global $naWebOS;
-if (!array_key_exists('themeName', $_POST) || $_POST['themeName']=='default') { echo 'status : Failed.'; die(); };
+if (!array_key_exists('themeName', $_POST) || $_POST['themeName']=='default') { echo 'status : Failed.'; exit(); };
 
 // do the changing of theme names as the couchdb admin user-id, meaning permissions won't matter one bit for this change.
 $result = $naWebOS->dbsAdmin->findConnection('couchdb')->delete_allThemes_byName ($_POST['themeName'], $_POST['specificityName']);

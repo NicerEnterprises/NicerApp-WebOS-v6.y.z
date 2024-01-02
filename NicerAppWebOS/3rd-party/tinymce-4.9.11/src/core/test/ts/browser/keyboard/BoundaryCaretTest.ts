@@ -19,7 +19,7 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.BoundaryCaretTest', function (
 
   const createLocation = function (elm, elementPath, offset) {
     const container = Hierarchy.follow(elm, elementPath);
-    const pos = CaretPosition(container.getOrDie().dom(), offset);
+    const pos = CaretPosition(container.getOrexit().dom(), offset);
     const location = BoundaryLocation.readLocation(isInlineTarget, elm.dom(), pos);
     return location;
   };
@@ -32,11 +32,11 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.BoundaryCaretTest', function (
 
       Assertions.assertEq('Should be a valid location: ' + html, true, location.isSome());
 
-      const pos = BoundaryCaret.renderCaret(caret, location.getOrDie()).getOrDie();
+      const pos = BoundaryCaret.renderCaret(caret, location.getOrexit()).getOrexit();
       Assertions.assertHtml('Should be equal html', expectedHtml, elm.dom().innerHTML);
 
       const container = Hierarchy.follow(elm, expectedPath);
-      Assertions.assertDomEq('Should be equal nodes', container.getOrDie(), Element.fromDom(pos.container()));
+      Assertions.assertDomEq('Should be equal nodes', container.getOrexit(), Element.fromDom(pos.container()));
     });
   };
 

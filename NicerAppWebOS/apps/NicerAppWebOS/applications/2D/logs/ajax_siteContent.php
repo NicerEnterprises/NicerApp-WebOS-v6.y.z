@@ -47,7 +47,7 @@ if (!$naLAN) die('403 Forbidden.');
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
-        die();
+        exit();
     }
 
 
@@ -118,7 +118,7 @@ if (!$naLAN) die('403 Forbidden.');
             //trigger_error ($msg, E_USER_ERROR);
             echo $msg;
             //return false;
-            die();
+            exit();
         }
 
         foreach ($call2->body->docs as $docID2 => $doc2) {

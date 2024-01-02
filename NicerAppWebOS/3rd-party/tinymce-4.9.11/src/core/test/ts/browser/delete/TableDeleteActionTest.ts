@@ -12,8 +12,8 @@ UnitTest.asynctest('browser.tinymce.core.delete.TableDeleteActionTest', function
   const cFromHtml = function (html, startPath, startOffset, endPath, endOffset) {
     return Chain.mapper(function () {
       const elm = Element.fromHtml(html);
-      const sc = Hierarchy.follow(elm, startPath).getOrDie();
-      const ec = Hierarchy.follow(elm, endPath).getOrDie();
+      const sc = Hierarchy.follow(elm, startPath).getOrexit();
+      const ec = Hierarchy.follow(elm, endPath).getOrexit();
       const rng = document.createRange();
 
       rng.setStart(sc.dom(), startOffset);

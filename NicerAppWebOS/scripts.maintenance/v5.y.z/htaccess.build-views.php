@@ -80,7 +80,7 @@ foreach ($softwareKeySettings as $softKey => $softSettings) {
                 $fsID = $folder.'/'.$viewFolderName;
 
                 $asa = [$fsID=>$viewSettings];
-                //echo '<pre style="color:green">'; var_dump ($viewSettings); die();
+                //echo '<pre style="color:green">'; var_dump ($viewSettings); exit();
 
                 $rec1 = [
                     '_id' => $id1

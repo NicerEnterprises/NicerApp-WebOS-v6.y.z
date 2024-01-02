@@ -83,7 +83,7 @@ function phpJSO_compress ($code, &$messages, $encoding_type, $fast_decompress, $
 	// Add strings back into code - NOT HERE EH!
 	echo ('t3.1 $code<br/>');
 	echo ($code.'<br/>');
-	//die();
+	//exit();
 	
 	
 	//phpJSO_restore_strings($code, $str_array);
@@ -627,7 +627,7 @@ function phpJSO_strip_strings_and_comments (&$str, &$strings, $comment_delim)
 			++$num_strings;
 		}
 	}
-	//die();
+	//exit();
 	
 	// get rid of any "about" sub-objects
 	/*
@@ -853,7 +853,7 @@ function phpJSO_get_tokens ($code, &$numeric_tokens, &$tokens)
 		echo 'matched_tokens_'.$i.' : '.htmlentities($m).'<br/>';
 	};
 	*/
-	//die();
+	//exit();
 	
 	
 	//phpJSO_count_duplicates($duplicates, $match[2]);
@@ -861,7 +861,7 @@ function phpJSO_get_tokens ($code, &$numeric_tokens, &$tokens)
 
 	//echo 'phpJSO_get_tokens::$matched_tokens<br/>';
 	//var_dump ($matched_tokens);
-	//die();
+	//exit();
 	
 	foreach ($matched_tokens as $token)
 	{
@@ -961,7 +961,7 @@ function phpJSO_strip_strings (&$str) {
  */
 function phpJSO_restore_strings (&$str, &$strings)
 {
-	//var_dump ('t1'); var_dump($str); var_dump ($strings); die();
+	//var_dump ('t1'); var_dump($str); var_dump ($strings); exit();
 	//do
 	//{
 	
@@ -972,7 +972,7 @@ function phpJSO_restore_strings (&$str, &$strings)
 			return isset($strings[$m[1]]) ? $strings[$m[1]] : $m[1];
 		};
 		$str = preg_replace_callback ('#`([0-9]+)`#', $f, $str);
-		//var_dump ($str);die();
+		//var_dump ($str);exit();
 	//}
 	//while (preg_match('#`([0-9]+)`#', $str));
 }

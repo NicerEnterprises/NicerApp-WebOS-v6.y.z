@@ -5562,7 +5562,7 @@ var mobile = (function (domGlobals) {
     var record = function (spec) {
       var uid = isSketchSpec(spec) && hasKey$1(spec, 'uid') ? spec.uid : generate$3('memento');
       var get = function (anyInSystem) {
-        return anyInSystem.getSystem().getByUid(uid).getOrDie();
+        return anyInSystem.getSystem().getByUid(uid).getOrexit();
       };
       var getOpt = function (anyInSystem) {
         return anyInSystem.getSystem().getByUid(uid).fold(Option.none, Option.some);
@@ -7235,12 +7235,12 @@ var mobile = (function (domGlobals) {
     var getDomDefinition = function (info, bList, bData) {
       var definition = toDefinition(info);
       var baseModification = { 'alloy.base.modification': toModification(info) };
-      var modification = combine$1(bData, baseModification, bList, definition).getOrDie();
+      var modification = combine$1(bData, baseModification, bList, definition).getOrexit();
       return merge$1(definition, modification);
     };
     var getEvents$6 = function (info, bList, bData) {
       var baseEvents = { 'alloy.base.behaviour': toEvents(info) };
-      return combine$2(bData, info.eventOrder(), bList, baseEvents).getOrDie();
+      return combine$2(bData, info.eventOrder(), bList, baseEvents).getOrexit();
     };
     var build = function (spec) {
       var getMe = function () {
@@ -7357,7 +7357,7 @@ var mobile = (function (domGlobals) {
     var build$1 = function (spec) {
       return getPremade(spec).fold(function () {
         var userSpecWithUid = deepMerge({ uid: generate$3('') }, spec);
-        return buildFromSpec(userSpecWithUid).getOrDie();
+        return buildFromSpec(userSpecWithUid).getOrexit();
       }, function (prebuilt) {
         return prebuilt;
       });
@@ -8419,7 +8419,7 @@ var mobile = (function (domGlobals) {
         onOpenSubmenu: function (container, item, submenu) {
           var w = get$6(container.element());
           var menu = ancestor$1(item.element(), '[role="menu"]').getOrDie('hacky');
-          var menuComp = container.getSystem().getByDom(menu).getOrDie();
+          var menuComp = container.getSystem().getByDom(menu).getOrexit();
           set$3(submenu.element(), w);
           Transitioning.progressTo(menuComp, 'before');
           Transitioning.jumpTo(submenu, 'after');
@@ -8427,7 +8427,7 @@ var mobile = (function (domGlobals) {
         },
         onCollapseMenu: function (container, item, menu) {
           var submenu = ancestor$1(item.element(), '[role="menu"]').getOrDie('hacky');
-          var submenuComp = container.getSystem().getByDom(submenu).getOrDie();
+          var submenuComp = container.getSystem().getByDom(submenu).getOrexit();
           Transitioning.progressTo(submenuComp, 'after');
           Transitioning.progressTo(menu, 'current');
         },
@@ -9628,7 +9628,7 @@ var mobile = (function (domGlobals) {
     };
 
     var tag = function () {
-      var head = first('head').getOrDie();
+      var head = first('head').getOrexit();
       var nu = function () {
         var meta = Element.fromTag('meta');
         set(meta, 'name', 'viewport');

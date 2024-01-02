@@ -34,8 +34,8 @@ UnitTest.asynctest(
     };
 
     const setSelection = function (editor, start, soffset, finish, foffset) {
-      const sc = Hierarchy.follow(Element.fromDom(editor.getBody()), start).getOrDie();
-      const fc = Hierarchy.follow(Element.fromDom(editor.getBody()), start).getOrDie();
+      const sc = Hierarchy.follow(Element.fromDom(editor.getBody()), start).getOrexit();
+      const fc = Hierarchy.follow(Element.fromDom(editor.getBody()), start).getOrexit();
 
       const rng = document.createRange();
       rng.setStart(sc.dom(), soffset);

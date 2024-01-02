@@ -101,7 +101,7 @@ if (!$call->headers->_HTTP->status===200) {
     $id = cdb_randomString(20); 
     $rec = array('id'=>$id);
 } else {
-    //echo '<pre>'; var_dump ($call->body); die();
+    //echo '<pre>'; var_dump ($call->body); exit();
     if (array_key_exists(0, $call->body->docs)) {
         $id = $call->body->docs[0]->_id;
         $call = $cdb->get($id);
@@ -183,7 +183,7 @@ $dbg = [
     ini_set('session.gc_maxlifetime', 3600);
     session_start();
 };*/
-//echo '<pre>'; var_dump ($dbg); die();
+//echo '<pre>'; var_dump ($dbg); exit();
 if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$_SESSION)) {
     echo 'Session does not contain required "selectors" data.'; exit();
 } else {
@@ -199,8 +199,8 @@ if (!isset($_SESSION) || !is_array($_SESSION) || !array_key_exists('selectors',$
 
         if ($selector['specificityName']===$_POST['specificityName']) $sel = $selector;
     }
-    //die();
-    //var_dump ($selector);    var_dump ($sel);    var_dump ($_POST);    die();
+    //exit();
+    //var_dump ($selector);    var_dump ($sel);    var_dump ($_POST);    exit();
 
     if ($debug) { echo '$sel='; var_dump ($sel); }
     if (!array_key_exists('permissions',$sel)) {

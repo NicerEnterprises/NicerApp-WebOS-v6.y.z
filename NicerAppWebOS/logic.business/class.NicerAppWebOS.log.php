@@ -211,7 +211,7 @@ class class_NicerAppWebOS_log {
 
             if (!array_key_exists($sessionKeyName,$_SESSION)) $_SESSION[$sessionKeyName] = [];
             array_push ($_SESSION[$sessionKeyName], $html);
-            //die();
+            //exit();
         } else {
             foreach ($entries as $entryIdx => $entry) {
                 $it = $entry['ENTRY:add_PHPerror'];

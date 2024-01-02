@@ -19,22 +19,22 @@ UnitTest.asynctest('browser.tinymce.core.delete.DeleteUtilsTest', function () {
 
   const cGetParentTextBlock = function (elementPath) {
     return Chain.mapper(function (viewBlock: any) {
-      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
       return DeleteUtils.getParentBlock(Element.fromDom(viewBlock.get()), element);
     });
   };
 
   const cAssertBlock = function (elementPath) {
     return Chain.op(function (actualBlock: Option<any>) {
-      const expectedBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
-      Assertions.assertDomEq('Should be the expected block element', expectedBlock, actualBlock.getOrDie());
+      const expectedBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
+      Assertions.assertDomEq('Should be the expected block element', expectedBlock, actualBlock.getOrexit());
     });
   };
 
   const cWillDeleteLastPositionInElement = function (forward, caretPath, caretOffset, elementPath) {
     return Chain.mapper(function (actualBlock) {
-      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
-      const caretNode = Hierarchy.follow(Element.fromDom(viewBlock.get()), caretPath).getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
+      const caretNode = Hierarchy.follow(Element.fromDom(viewBlock.get()), caretPath).getOrexit();
 
       return DeleteUtils.willDeleteLastPositionInElement(forward, CaretPosition(caretNode.dom(), caretOffset), element.dom());
     });

@@ -30,8 +30,8 @@ const sSetFieldOptValue = function (optVal) {
 
 const sStartEditor = function (alloy) {
   return Step.sync(function () {
-    const button = UiFinder.findIn(alloy.element(), '[role="button"]').getOrDie();
-    const x = alloy.getByDom(button).getOrDie();
+    const button = UiFinder.findIn(alloy.element(), '[role="button"]').getOrexit();
+    const x = alloy.getByDom(button).getOrexit();
     AlloyTriggers.emit(x, NativeEvents.click());
   });
 };

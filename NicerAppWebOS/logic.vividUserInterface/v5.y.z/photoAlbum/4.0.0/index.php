@@ -18,7 +18,7 @@
 
     // sanity check
     $_GET['basePath'] = str_replace('//', '/', $_GET['basePath']);
-    //echo '<pre>'; var_dump ($_GET); die();
+    //echo '<pre>'; var_dump ($_GET); exit();
 
 
     $targetDir = $baseDir.$_GET['basePath'];
@@ -28,7 +28,7 @@
     $imgStyle = ''; // boxShadow perhaps
 
     $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'), 1,1,true);
-    //echo '<pre>'; var_dump ($targetDir); var_dump($files);die();
+    //echo '<pre>'; var_dump ($targetDir); var_dump($files);exit();
     if (!array_key_exists('files', $files)) {
         $msg = 'No files found in this folder.';
     } else {

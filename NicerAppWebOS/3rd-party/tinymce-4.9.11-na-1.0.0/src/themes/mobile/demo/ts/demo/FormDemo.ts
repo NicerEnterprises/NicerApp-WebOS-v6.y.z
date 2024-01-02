@@ -7,7 +7,7 @@ import * as SerialisedDialog from 'tinymce/themes/mobile/ui/SerialisedDialog';
 import * as UiDomFactory from 'tinymce/themes/mobile/util/UiDomFactory';
 
 export default function () {
-  const ephoxUi = SelectorFind.first('#ephox-ui').getOrDie();
+  const ephoxUi = SelectorFind.first('#ephox-ui').getOrexit();
 
   const form = SerialisedDialog.sketch({
     onExecute () { },

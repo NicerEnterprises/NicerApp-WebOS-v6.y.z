@@ -54,7 +54,7 @@ UnitTest.asynctest('Browser Test: ui.SerialisedLinkTest', function () {
     return Logger.t(
       label,
       Step.sync(function () {
-        const active = Focus.active().getOrDie();
+        const active = Focus.active().getOrexit();
         // The buttons are next and previous siblings
         const prev = Traverse.parent(active).bind(Traverse.prevSibling).getOrDie('Could not find button to left');
         const next = Traverse.parent(active).bind(Traverse.nextSibling).getOrDie('Could not find button to right');

@@ -7,7 +7,7 @@ import * as FontSizeSlider from 'tinymce/themes/mobile/ui/FontSizeSlider';
 import * as UiDomFactory from 'tinymce/themes/mobile/util/UiDomFactory';
 
 export default function () {
-  const ephoxUi = SelectorFind.first('#ephox-ui').getOrDie();
+  const ephoxUi = SelectorFind.first('#ephox-ui').getOrexit();
 
   const fontSlider = Container.sketch({
     dom: UiDomFactory.dom('<div class="${prefix}-toolbar ${prefix}-context-toolbar"></div>'),

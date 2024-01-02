@@ -38,15 +38,15 @@ UnitTest.asynctest('browser.tinymce.core.focus.EditorFocusTest', function () {
   const cFocusElement = function (elementPath) {
     return Chain.op(function (editor: any) {
       const isHtmlElm = (elm: Element<DomNode>): elm is Element<HTMLElement> => Node.isElement(elm);
-      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).filter(isHtmlElm).getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).filter(isHtmlElm).getOrexit();
       element.dom().focus();
     });
   };
 
   const cSetSelection = function (startPath, startOffset, endPath, endOffset) {
     return Chain.op(function (editor: any) {
-      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrexit();
       const rng = editor.dom.createRng();
 
       rng.setStart(startContainer.dom(), startOffset);
@@ -58,8 +58,8 @@ UnitTest.asynctest('browser.tinymce.core.focus.EditorFocusTest', function () {
 
   const cAssertSelection = function (startPath, startOffset, endPath, endOffset) {
     return Chain.op(function (editor: any) {
-      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrexit();
       const rng = editor.selection.getRng();
 
       Assertions.assertDomEq('Should be expected from start container', startContainer, Element.fromDom(rng.startContainer));
@@ -71,9 +71,9 @@ UnitTest.asynctest('browser.tinymce.core.focus.EditorFocusTest', function () {
 
   const cAssertHasFocus = function (elementPath) {
     return Chain.op(function (editor: any) {
-      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).getOrexit();
       Assertions.assertEq('Should have focus on the editor', true, EditorFocus.hasFocus(editor));
-      Assertions.assertDomEq('Should be the expected activeElement', element, Focus.active().getOrDie());
+      Assertions.assertDomEq('Should be the expected activeElement', element, Focus.active().getOrexit());
     });
   };
 

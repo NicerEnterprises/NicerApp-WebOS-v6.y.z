@@ -12,9 +12,9 @@ function saComments_getSubscription($subscriptionName) {
 
 function saComments_echoSubscription ($subscriptionName) {
 	//reportVariable ('stacktrace', debug_backtrace());
-	//reportVariable ('$subscriptionName', $subscriptionName); die();
+	//reportVariable ('$subscriptionName', $subscriptionName); exit();
 	$data = saComments_readSubscription($subscriptionName);
-	//reportVariable ('$data', $data); die();
+	//reportVariable ('$data', $data); exit();
 	$data['comments'] = array_reverse ($data['comments']);
 	foreach ($data['comments'] as $idx => $comment) {
 		saComments_echoEntry ($subscriptionName, count($data['comments']) - $idx - 1, $comment);

@@ -34,7 +34,7 @@ function photoAlbum_getImageSizes_recursive ($albumsList) {
 			$albumsList[$path] = $filesWithSizes;
 		}
 	}
-	//reportVariable ('$albumsList', $albumsList); die();
+	//reportVariable ('$albumsList', $albumsList); exit();
 	return $albumsList;
 }
 
@@ -55,7 +55,7 @@ function photoAlbum_getImageSizes ($files) {
 		$file = str_replace('\\', '/', $file); // imagemagick needs this. search google for 'imagemagick' to install your copy onto your PHP server
 		
 		$pi = pathinfo ($file);
-//echo '<pre>$pi=';var_dump ($pi);echo '</pre>'; die();
+//echo '<pre>$pi=';var_dump ($pi);echo '</pre>'; exit();
 		if (!array_key_exists('extension', $pi)) continue;
 		$ext = $pi['extension'];
 		
@@ -78,14 +78,14 @@ function photoAlbum_getImageSizes ($files) {
 				 '$return_var' => $return_var
 			);
 			if (!array_key_exists(0, $output)) continue;
-			//reportVariable ('t', $t); die();
+			//reportVariable ('t', $t); exit();
 			
 			$r[] = array (
 				'f' => $file,
 				's' => $output[0]
 			);
 			
-			//echo '<pre>imagemagick returns : '; var_dump ($t); echo '</pre>'; die();
+			//echo '<pre>imagemagick returns : '; var_dump ($t); echo '</pre>'; exit();
 		} else {
 			$r[] = array (
 				'f' => $file
@@ -386,7 +386,7 @@ function photoAlbum_html_viewAlbum ($album, $topLeftImageIndexInAlbumsContents) 
 
 function photoAlbum_html_albumPhotoList ($db, $album, $topLeftImageIndexInAlbumsContents, $howManyPhotosToShow, $w, $h) {
 	
-	//var_dump ($album); var_dump ($db); die();
+	//var_dump ($album); var_dump ($db); exit();
 	$ac = $db->db['photoAlbum']['albumsContents'][$album];
 	//var_dump ($ac); 
 	
@@ -394,7 +394,7 @@ function photoAlbum_html_albumPhotoList ($db, $album, $topLeftImageIndexInAlbums
 	for ($i = (($topLeftImageIndexInAlbumsContents)); $i < ($topLeftImageIndexInAlbumsContents + $howManyPhotosToShow); $i++) {
 		$rootPath = SA_SITE_WEB.'siteData/seductiveapps/com/ui/photoAlbum/albums/';
 		$photoPath = $rootPath.$ac[$i];
-		//var_dump ($i);var_dump ($ac[$i]);die();
+		//var_dump ($i);var_dump ($ac[$i]);exit();
 		$rPos = strrpos ($photoPath, '/');
 		$thumbPath = substr($photoPath, 0, $rPos+1).'lowres/'.substr($photoPath, $rPos+1);
 		$href = SA_SITE_WEB . 'photo/' . $ac[$i] . '--' . $i;

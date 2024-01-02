@@ -3,7 +3,7 @@ require_once (realpath(dirname(__FILE__).'/../../../../../../').'/NicerAppWebOS/
 require_once (dirname(__FILE__).'/functions.php');
 require_once (dirname(__FILE__).'/sources-list.php');
 global $naWebOS;
-//var_dump ($naWebOS->view);die();
+//var_dump ($naWebOS->view);exit();
 foreach ($naWebOS->view as $viewPath => $viewRec) {
     $section = $viewRec['section'];
     $hl = '';
@@ -22,11 +22,11 @@ foreach ($naWebOS->view as $viewPath => $viewRec) {
     if (strpos($section, 'Headlines')===false) {
         $hl = ' headlines';
     }
-    //var_dump ($section); die();
+    //var_dump ($section); exit();
 
     $section2 = preg_replace('/.*__/','',$section);
     $section2 = preg_replace('/_/',' ',$section2);
 }
 echo $section2.$hl.' '.$op;
-//die();
+//exit();
 ?>

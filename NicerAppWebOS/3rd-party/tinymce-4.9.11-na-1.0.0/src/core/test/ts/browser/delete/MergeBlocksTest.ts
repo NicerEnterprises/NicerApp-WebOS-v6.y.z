@@ -24,18 +24,18 @@ UnitTest.asynctest('browser.tinymce.core.delete.MergeBlocksTest', function () {
 
   const cMergeBlocks = function (forward, block1Path, block2Path) {
     return Chain.mapper(function (viewBlock: any) {
-      const block1 = Hierarchy.follow(Element.fromDom(viewBlock.get()), block1Path).getOrDie();
-      const block2 = Hierarchy.follow(Element.fromDom(viewBlock.get()), block2Path).getOrDie();
+      const block1 = Hierarchy.follow(Element.fromDom(viewBlock.get()), block1Path).getOrexit();
+      const block2 = Hierarchy.follow(Element.fromDom(viewBlock.get()), block2Path).getOrexit();
       return MergeBlocks.mergeBlocks(Element.fromDom(viewBlock.get()), forward, block1, block2);
     });
   };
 
   const cAssertPosition = function (expectedPath, expectedOffset) {
     return Chain.op(function (position: Option<any>) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), expectedPath).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), expectedPath).getOrexit();
 
-      Assertions.assertDomEq('Should be expected container', container, Element.fromDom(position.getOrDie().container()));
-      Assertions.assertEq('Should be expected offset', expectedOffset, position.getOrDie().offset());
+      Assertions.assertDomEq('Should be expected container', container, Element.fromDom(position.getOrexit().container()));
+      Assertions.assertEq('Should be expected offset', expectedOffset, position.getOrexit().offset());
     });
   };
 

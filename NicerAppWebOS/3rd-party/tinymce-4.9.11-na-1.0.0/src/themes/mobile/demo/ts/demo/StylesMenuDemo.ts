@@ -6,7 +6,7 @@ import StylesMenu from 'tinymce/themes/mobile/ui/StylesMenu';
 import * as UiDomFactory from 'tinymce/themes/mobile/util/UiDomFactory';
 
 export default function () {
-  const ephoxUi = SelectorFind.first('#ephox-ui').getOrDie();
+  const ephoxUi = SelectorFind.first('#ephox-ui').getOrexit();
 
   const menu = StylesMenu.sketch({
     formats: {

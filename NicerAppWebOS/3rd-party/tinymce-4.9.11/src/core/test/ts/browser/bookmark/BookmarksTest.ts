@@ -20,8 +20,8 @@ UnitTest.asynctest('browser.tinymce.core.bookmark.BookmarksTest', (success, fail
   };
 
   const assertRawRange = function (element, rng, startPath, startOffset, endPath, endOffset) {
-    const startContainer = Hierarchy.follow(element, startPath).getOrDie();
-    const endContainer = Hierarchy.follow(element, endPath).getOrDie();
+    const startContainer = Hierarchy.follow(element, startPath).getOrexit();
+    const endContainer = Hierarchy.follow(element, endPath).getOrexit();
 
     Assertions.assertDomEq('Should be expected start container', startContainer, Element.fromDom(rng.startContainer));
     Assertions.assertEq('Should be expected start offset', startOffset, rng.startOffset);

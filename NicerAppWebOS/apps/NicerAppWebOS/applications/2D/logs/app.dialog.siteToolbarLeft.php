@@ -126,7 +126,7 @@ if ($appRec['page']=='index') {
         //echo '<pre>'; echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT); echo '</pre>';
         $msg = $fncn.' FAILED (siteToolbarLeft) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         echo $msg;
-        die();
+        exit();
     }
 
     foreach ($call->body->docs as $docID => $doc) {

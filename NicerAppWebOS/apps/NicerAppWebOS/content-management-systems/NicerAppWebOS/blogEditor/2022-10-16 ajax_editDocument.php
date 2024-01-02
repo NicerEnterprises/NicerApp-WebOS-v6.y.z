@@ -102,7 +102,7 @@ if ($illegal) {
             array_key_exists('role',$_POST)
             && $_POST['role']!==''
         ) $findCommand['selector']['role'] = $_POST['role'];
-        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); die();
+        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); exit();
         $go = true;
         try {
             $call = $acdb->find ($findCommand);

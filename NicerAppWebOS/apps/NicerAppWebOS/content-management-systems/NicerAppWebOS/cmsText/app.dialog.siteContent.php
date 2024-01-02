@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);    
 
 $rootPath = realpath(dirname(__FILE__).'/../../../../../..');
-//var_dump ($rootPath); die();
+//var_dump ($rootPath); exit();
 
 require_once ($rootPath.'/NicerAppWebOS/boot.php');
 global $naWebOS;

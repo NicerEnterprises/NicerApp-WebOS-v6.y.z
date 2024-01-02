@@ -33,7 +33,7 @@ foreach ($dbs as $idx => $dbName) {
         }
     }
 };
-//die();
+//exit();
 
 
 $cdb->setDatabase($_POST['database'],false);

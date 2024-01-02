@@ -21,7 +21,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.TableCellsTest', function () {
   const cAssertCell = (path) => {
     return Chain.op(function (cellOption: Option<any>) {
       const cell = cellOption.getOrDie('x');
-      const expectedContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const expectedContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       Assertions.assertDomEq('Should be the expected element', expectedContainer, Element.fromDom(cell));
     });
   };
@@ -49,7 +49,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.TableCellsTest', function () {
   const cFindClosestPositionInAboveCell = (path: number[], offset: number) => {
     return Chain.mapper(function (viewBlock: any) {
       const table = SelectorFind.descendant<HTMLTableElement>(Element.fromDom(viewBlock.get()), 'table').getOrDie('Could not find table').dom();
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return findClosestPositionInAboveCell(table, pos);
     });
@@ -58,7 +58,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.TableCellsTest', function () {
   const cFindClosestPositionInBelowCell = (path: number[], offset: number) => {
     return Chain.mapper(function (viewBlock: any) {
       const table = SelectorFind.descendant<HTMLTableElement>(Element.fromDom(viewBlock.get()), 'table').getOrDie('Could not find table').dom();
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return findClosestPositionInBelowCell(table, pos);
     });
@@ -66,7 +66,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.TableCellsTest', function () {
 
   const cAssertCaretPosition = (path: number[], offset: number) => {
     return Chain.op(function (posOption: Option<any>) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       const pos = posOption.getOrDie('Needs to return a caret');
 
       Assertions.assertDomEq('Should be the expected container', container, Element.fromDom(pos.container()));

@@ -106,7 +106,7 @@ if ($callOK) {
             echo json_encode($rets);
             exit();
         } /*else while (!$triedAllOrientations) {
-            //if ($triedCount==2) die();
+            //if ($triedCount==2) exit();
             $check = false;
             foreach ($toTry as $or2 => $tried2) {
                 if (is_bool($tried2) && $tried2) $check = true;
@@ -116,7 +116,7 @@ if ($callOK) {
                 if (is_array($tried)) {
                     $triedAll = false;
                     while (!$triedAll) {
-                        //if ($triedCount>20) die();
+                        //if ($triedCount>20) exit();
                         $check = true;
                         $tried2 = $toTry[$or];
                         if (is_array($tried2)) {
@@ -193,7 +193,7 @@ if ($callOK) {
                                             echo 'info : $call='; var_dump ($call); echo '.<br/>'.PHP_EOL;
                                             //exit();
                                         }
-                                        //die();
+                                        //exit();
 
                                         if ($hasDocument) {
                                             $hasRecord = false;
@@ -221,7 +221,7 @@ if ($callOK) {
                         fwrite ($f, json_encode($toTry).PHP_EOL);
                         fclose ($f);
                         $f = fopen ($fnl, 'a');* /
-        //die();
+        //exit();
                                     } else $toTry[$or][$what] = true;/*else {
                                         if ($debug) {
                                             echo 'info : $findCommand2='; var_dump ($findCommand2); echo '.<br/>'.PHP_EOL;
@@ -270,7 +270,7 @@ if ($callOK) {
                             }
 
                         }
-                        //if ($triedCount==1) die();
+                        //if ($triedCount==1) exit();
                         $triedCount++;
                     }
                 }

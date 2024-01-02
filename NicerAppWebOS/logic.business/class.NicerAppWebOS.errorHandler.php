@@ -160,7 +160,7 @@ class class_NicerAppWebOS__errorHandler {
     }
 
     function addStandardResults ($res) {
-        //echo '<pre>'; var_dump ($res); die();
+        //echo '<pre>'; var_dump ($res); exit();
 
         global $phpScript_startupTime;
         global $naIP;
@@ -242,7 +242,7 @@ class class_NicerAppWebOS__errorHandler {
                 'txt' => $errTXT
             ]
         ];
-        //echo '<pre>'; var_dump ($x); die();
+        //echo '<pre>'; var_dump ($x); exit();
         return $x;
     }
 

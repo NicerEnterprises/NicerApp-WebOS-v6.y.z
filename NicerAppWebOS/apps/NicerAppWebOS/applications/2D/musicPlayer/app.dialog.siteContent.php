@@ -3,7 +3,7 @@
 //require_once ('nicerapp-2012/boot.php');
 //require_once ('nicerapp-2012/com/userInterface/comments/saComments-1.0.0.php');
 
-//echo realpath(dirname(__FILE__).'/../../../../../..').'/NicerAppWebOS/boot.php';die();
+//echo realpath(dirname(__FILE__).'/../../../../../..').'/NicerAppWebOS/boot.php';exit();
 require_once (realpath(dirname(__FILE__).'/../../../../../..').'/NicerAppWebOS/boot.php');
 global $naWebOS;
 //echo '<pre>'; var_dump ($naWebOS->view); exit();
@@ -19,7 +19,7 @@ if ($view['set']==='index') {
     /*
     if (file_exists($setPath.'/regex_filenameFilter.js-regexps.json')) {
         $res = json_decode(file_get_contents($setPath.'/regex_filenameFilter.js-regexps.json'),true);
-        //var_dump(file_get_contents($setPath.'/regex_filenameFilter.js-regexps.json'));        var_dump($res);die();
+        //var_dump(file_get_contents($setPath.'/regex_filenameFilter.js-regexps.json'));        var_dump($res);exit();
     } else {
         $res = [];
     }
@@ -93,7 +93,7 @@ $spacer = "\n\t\t\t\t";
             $idx = 0;
 			foreach ($files as $file=>$fp) {
 				$fn = basename($fp);
-//echo '<pre>'; var_dump($fn);die();
+//echo '<pre>'; var_dump($fn);exit();
                 $fileLabel = $fn;//$filez[$idx];
                 $filez2[$idx] = $fileLabel;
 
@@ -101,7 +101,7 @@ $spacer = "\n\t\t\t\t";
                     //foreach ($ffIt as $j => $it) {
                         //note: $it === $ff[$i][$j];
                         $itRegExps = $it[0];
-                        //echo '<pre>';var_dump ($itRegExps); die();
+                        //echo '<pre>';var_dump ($itRegExps); exit();
                         $itReplaceString = $it[1];
                         foreach ($itRegExps as $k => $regExp) {
                             //echo '1:'.$fileLabel.'<br/>';
@@ -116,7 +116,7 @@ $spacer = "\n\t\t\t\t";
                 $idx++;
 			}
 			asort ($filez);
-            //echo '<pre>'; var_dump($filez); die();
+            //echo '<pre>'; var_dump($filez); exit();
             $idx = 0;
 			foreach ($filez as $idx=>$fn) {
 				$id = 'mp3_'.$idx;

@@ -10,7 +10,7 @@
     } else {
         $inputJSONurl = '/NicerAppWebOS/siteMedia/backgrounds';
     }
-    //echo '<pre>'; var_dump ($naWebOS->view); die();
+    //echo '<pre>'; var_dump ($naWebOS->view); exit();
 
 
     foreach ($view as $k => $rec) {

@@ -265,7 +265,7 @@ class newsApp3_class {
             if ($go) {
                 if (!is_null($call) && !is_null($call->body) && count($call->body->docs)===0) $done = true;
                 if (!$done && !is_null($call) && !is_null($call->body)) $bookmark = $call->body->bookmark; else $bookmark = null;
-                //var_dump ($call->body); die();
+                //var_dump ($call->body); exit();
                 if (!$done) foreach ($call->body->docs as $idx => $doc) {
                     $arr2[] = $doc;
                 }                
@@ -400,7 +400,7 @@ class newsApp3_class {
     
     public static function writeOutMenuIfNeeded_walk_key ($cd) {
 
-        //echo base64_decode_url('eyIvTmljZXJBcHBXZWJPUy9hcHBzL05pY2VyQXBwV2ViT1MvYXBwbGljYXRpb25zLzJEL25ld3MiOnsic2VjdGlvbiI6IkVuZ2xpc2hfTmV3c19fV29ybGRfSGVhZGxpbmVzIn19'); die();
+        //echo base64_decode_url('eyIvTmljZXJBcHBXZWJPUy9hcHBzL05pY2VyQXBwV2ViT1MvYXBwbGljYXRpb25zLzJEL25ld3MiOnsic2VjdGlvbiI6IkVuZ2xpc2hfTmV3c19fV29ybGRfSGVhZGxpbmVzIn19'); exit();
 
         if (is_array($cd['v'])) {
             $path = $cd['path'].'/'.$cd['k'];
@@ -466,7 +466,7 @@ class newsApp3_class {
         $cd['params']['valueCount'] = $cd['params']['valueCount'] + 1;
         /*
         $path = substr($cd['path'],1);
-        //echo substr($path.'/'.$cd['k'],1).PHP_EOL; die();
+        //echo substr($path.'/'.$cd['k'],1).PHP_EOL; exit();
         $path2 = str_replace (' ', '_', $path);
         $path2a = str_replace('/','__', $path2);
         if ($cd['level'] > 0) $indent = str_pad ('', $cd['level']+3, "\t"); else $indent='';

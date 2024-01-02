@@ -126,7 +126,7 @@ function getBackgrounds ($root, $webRoot, $recursive=false) {
 
     $files1 = getBackgroundFiles ($root, FILE_FORMATS_photos_texts, $excl, $recursive);
     $files2 = processBackgroundFiles ($files1, $root, $webRoot, $recursive);
-    //echo '<pre>'; var_dump ($root); var_dump ($webRoot); var_dump ($files2); die();
+    //echo '<pre>'; var_dump ($root); var_dump ($webRoot); var_dump ($files2); exit();
 
     return $files2;
 }
@@ -175,9 +175,9 @@ function processBackgroundFile_value ($cd) {
         $file = $cd['v'];
     }
 
-    //echo '<pre>';var_dump ($file);echo '</pre>';die();
+    //echo '<pre>';var_dump ($file);echo '</pre>';exit();
     $td = str_replace ($cd['params']['root'], '', $file);
-    //echo '<pre>';var_dump ($cd);echo '</pre>';die();
+    //echo '<pre>';var_dump ($cd);echo '</pre>';exit();
     $path2 = $cd['path'].'/'.$cd['k'];
     $path2 = substr($path2,1);
     $ref = &chaseToPath ($cd['params']['a'], $path2);
@@ -461,13 +461,13 @@ function cdb_login($cdb, $cRec, $username) {
             ) {
                 $done = true;
             } else {
-              //  echo 't34j21'; var_dump ($cdb); var_dump ($cRec); die();
+              //  echo 't34j21'; var_dump ($cdb); var_dump ($cRec); exit();
                 $_SESSION['cdb_loginName'] = $cRec['username'];
                 $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
                 $cdb_session = $cdb->getSession();
             }
         } catch (Exception $e) {
-           //echo 't34j22'; var_dump ($cdb); var_dump ($cRec); die();
+           //echo 't34j22'; var_dump ($cdb); var_dump ($cRec); exit();
                 $_SESSION['cdb_loginName'] = $cRec['username'];
                 $cdb->login ($cRec['username'], $cRec['password'], Sag::$AUTH_COOKIE);
                 $cdb_session = $cdb->getSession();
@@ -605,7 +605,7 @@ function require_return ($file, $flush=false) {
 function cssArray_seperate ($id, $regExps, $exclRegExps, $arr) {
     $ret = [ $id => [] ];
     $debug = false;
-    if ($debug) { echo '<pre style="color:green">$arr='; var_dump ($arr); echo '</pre>';die(); }
+    if ($debug) { echo '<pre style="color:green">$arr='; var_dump ($arr); echo '</pre>';exit(); }
     foreach ($regExps as $rIdx => $regex) {
         foreach ($arr as $key => $value) {
             if (is_array($value)) {
@@ -875,7 +875,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     global $filePerms_perms_publicWriteableExecutable;
     global $filePerms_perms_readonly;
     global $filePerms_perms_readWrite;
-    //var_dump($job); echo PHP_EOL; die();
+    //var_dump($job); echo PHP_EOL; exit();
 
     $root = $job['path'];
     $thumbsPath = $job['thumbnails'];
@@ -885,13 +885,13 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     $excl2 = null;
 
 
-    //var_dump ($files); die();
+    //var_dump ($files); exit();
     $files3 = [];
 
     $msgJobs = ($jobsDoneCount+1).'of'.$totalJobsCount;
     $fncn = 'naWebOS_photoAlbum_convert() job '.$msgJobs.' :: ';
     echo $fncn.'Figuring out which files to convert.'.PHP_EOL;
-    //var_dump ($delThumbs); var_dump ($excl); die();
+    //var_dump ($delThumbs); var_dump ($excl); exit();
 
     if ($delThumbs) {
         $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file'], null, 1, false);
@@ -906,7 +906,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
     } else {
         $files = getFilePathList ($root, true, FILE_FORMATS_photos, $excl, ['file'], null, 1, false);
     }
-    //echo '<pre>'; var_dump ($files); echo '</pre>'; die();
+    //echo '<pre>'; var_dump ($files); echo '</pre>'; exit();
 
     foreach ($files as $idx => $file) {
         if (strpos($file,'/thumbs/thumbs')!==false) {
@@ -945,7 +945,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
             echo $fncn.$t->getMessage().'.'.PHP_EOL;
             continue;
         }
-        //var_dump ($original_info); die();
+        //var_dump ($original_info); exit();
 
         // my (and the end-user's) thanks go to https://ansi.gabebanks.net/.
         $cEnd = '';
@@ -1150,7 +1150,7 @@ function naWebOS_photoAlbum_resizeFiles ($totalFileCount, $totalJobsCount, $jobs
         exec ($xec, $output, $result);
 
         $result = $result1.$result;
-//var_dump ($output); die();
+//var_dump ($output); exit();
         if (
             (
                 $result === 0
@@ -1362,7 +1362,7 @@ another example:
             $msg = $fncn.' : FATAL ERROR : "'.$path.'" does not exist.';
             trigger_error ($msg, E_USER_ERROR);
             echo $msg;
-            die();
+            exit();
         }
 		$path = realpath($path);
 

@@ -22,8 +22,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.RangeNormalizerTest', functio
 
   const mCreateRange = function (startPath, startOffset, endPath, endOffset) {
     return Step.stateful(function (value, next, die) {
-      const startContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrexit();
       const rng = document.createRange();
       rng.setStart(startContainer.dom(), startOffset);
       rng.setEnd(endContainer.dom(), endOffset);
@@ -33,8 +33,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.RangeNormalizerTest', functio
 
   const mAssertRange = function (startPath, startOffset, endPath, endOffset) {
     return Step.stateful(function (value: any, next, die) {
-      const startContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrexit();
 
       Assertions.assertDomEq('Should be expected startContainer', startContainer, Element.fromDom(value.startContainer));
       Assertions.assertEq('Should be expected startOffset', startOffset, value.startOffset);

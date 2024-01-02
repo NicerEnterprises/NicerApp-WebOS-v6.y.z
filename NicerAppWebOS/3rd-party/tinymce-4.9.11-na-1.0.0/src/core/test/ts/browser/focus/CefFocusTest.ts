@@ -29,8 +29,8 @@ UnitTest.asynctest('browser.tinymce.core.focus.CefFocusTest', function () {
   const sAssertSelection = function (editorIndex, startPath, startOffset, endPath, endOffset) {
     return Step.sync(function () {
       const editor = EditorManager.get(editorIndex);
-      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrexit();
       const rng = editor.selection.getRng();
 
       Assertions.assertDomEq('Should be expected from start container', startContainer, Element.fromDom(rng.startContainer));

@@ -24,7 +24,7 @@ UnitTest.asynctest('browser.tinymce.core.selection.TableCellSelectionTest', func
   const cGetCellsFromRanges = function (paths) {
     return Chain.mapper(function (viewBlock: any) {
       const ranges = Arr.map(paths, function (path) {
-        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
         const rng = document.createRange();
         rng.selectNode(container.dom());
         return rng;

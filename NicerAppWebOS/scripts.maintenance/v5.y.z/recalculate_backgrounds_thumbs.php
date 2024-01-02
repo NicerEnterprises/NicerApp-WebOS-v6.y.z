@@ -26,7 +26,7 @@ $jobs = [
         'arguments' => $aStr
     ]*/
 ];
-//echo 'recalculate_backgrounds_thumbs.php :: Job Listing : '.PHP_EOL; var_dump ($jobs); echo PHP_EOL.PHP_EOL; die();
+//echo 'recalculate_backgrounds_thumbs.php :: Job Listing : '.PHP_EOL; var_dump ($jobs); echo PHP_EOL.PHP_EOL; exit();
 
 //$totalFileCount = naWebOS_photoAlbum_countFiles ($jobs);
 
@@ -34,7 +34,7 @@ $jobs = [
 $jobsDoneCount = 0;
 foreach ($jobs as $jobIdx => $job) {
     //echo PHP_EOL.$jobIdx.PHP_EOL;
-    //var_dump ($job); var_dump (is_dir($job['path'])); die();
+    //var_dump ($job); var_dump (is_dir($job['path'])); exit();
 
     if (is_dir($job['path']))
         $jobsDoneCount +=

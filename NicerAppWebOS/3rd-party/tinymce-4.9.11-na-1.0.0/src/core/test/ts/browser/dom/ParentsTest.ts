@@ -16,24 +16,24 @@ UnitTest.asynctest('browser.tinymce.core.dom.ParentsTest', function () {
 
   const cParentsUntil = function (startPath, rootPath, predicate) {
     return Chain.mapper(function (structure: any) {
-      const startNode = Hierarchy.follow(structure, startPath).getOrDie();
-      const rootNode = Hierarchy.follow(structure, rootPath).getOrDie();
+      const startNode = Hierarchy.follow(structure, startPath).getOrexit();
+      const rootNode = Hierarchy.follow(structure, rootPath).getOrexit();
       return Parents.parentsUntil(startNode, rootNode, predicate);
     });
   };
 
   const cParents = function (startPath, rootPath) {
     return Chain.mapper(function (structure: any) {
-      const startNode = Hierarchy.follow(structure, startPath).getOrDie();
-      const rootNode = Hierarchy.follow(structure, rootPath).getOrDie();
+      const startNode = Hierarchy.follow(structure, startPath).getOrexit();
+      const rootNode = Hierarchy.follow(structure, rootPath).getOrexit();
       return Parents.parents(startNode, rootNode);
     });
   };
 
   const cParentsAndSelf = function (startPath, rootPath) {
     return Chain.mapper(function (structure: any) {
-      const startNode = Hierarchy.follow(structure, startPath).getOrDie();
-      const rootNode = Hierarchy.follow(structure, rootPath).getOrDie();
+      const startNode = Hierarchy.follow(structure, startPath).getOrexit();
+      const rootNode = Hierarchy.follow(structure, rootPath).getOrexit();
       return Parents.parentsAndSelf(startNode, rootNode);
     });
   };

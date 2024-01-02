@@ -24,14 +24,14 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.BoundaryLocationTest', functio
 
   const createLocation = function (elm, elementPath, offset) {
     const container = Hierarchy.follow(elm, elementPath);
-    const pos = CaretPosition(container.getOrDie().dom(), offset);
+    const pos = CaretPosition(container.getOrexit().dom(), offset);
     const location = BoundaryLocation.readLocation(isInlineTarget, elm.dom(), pos);
     return location;
   };
 
   const createPosition = function (elm, elementPath, offset) {
     const container = Hierarchy.follow(elm, elementPath);
-    return CaretPosition(container.getOrDie().dom(), offset);
+    return CaretPosition(container.getOrexit().dom(), offset);
   };
 
   const locationName = function (location) {
@@ -57,8 +57,8 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.BoundaryLocationTest', functio
       const elm = createViewElement(html);
       const location = createLocation(elm, elementPath, offset);
       Assertions.assertEq('Should be a valid location: ' + html, true, location.isSome());
-      Assertions.assertEq('Should be expected location', expectedLocationName, locationName(location.getOrDie()));
-      Assertions.assertDomEq('Should be expected element', SelectorFind.descendant(elm, expectedInline).getOrDie(), locationElement(location.getOrDie()));
+      Assertions.assertEq('Should be expected location', expectedLocationName, locationName(location.getOrexit()));
+      Assertions.assertDomEq('Should be expected element', SelectorFind.descendant(elm, expectedInline).getOrexit(), locationElement(location.getOrexit()));
     });
   };
 
@@ -76,9 +76,9 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.BoundaryLocationTest', functio
       const position = createPosition(elm, elementPath, offset);
       const location = BoundaryLocation.findLocation(forward, isInlineTarget, elm.dom(), position);
 
-      Assertions.assertDomEq('Should be expected element', SelectorFind.descendant(elm, expectedInline).getOrDie(), locationElement(location.getOrDie()));
+      Assertions.assertDomEq('Should be expected element', SelectorFind.descendant(elm, expectedInline).getOrexit(), locationElement(location.getOrexit()));
       Assertions.assertEq('Should be a valid location: ' + html, true, location.isSome());
-      Assertions.assertEq('Should be expected location', expectedLocationName, locationName(location.getOrDie()));
+      Assertions.assertEq('Should be expected location', expectedLocationName, locationName(location.getOrexit()));
     });
   };
 

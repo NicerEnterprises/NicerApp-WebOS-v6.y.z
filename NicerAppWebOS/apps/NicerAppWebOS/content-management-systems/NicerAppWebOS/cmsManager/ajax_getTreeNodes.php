@@ -4,7 +4,7 @@ require_once (realpath(dirname(__FILE__).'/../../../../..').'/boot.php');
 global $naWebOS;
 $cdb = $naWebOS->dbs->findConnection('couchdb')->cdb;
 $username = array_key_exists('cdb_loginName',$_SESSION) ? $_SESSION['cdb_loginName'] : $cdbConfig['username'];
-//echo '<pre>t342:';var_dump ($_SESSION);echo '</pre>';die();
+//echo '<pre>t342:';var_dump ($_SESSION);echo '</pre>';exit();
 $username = preg_replace ('/.*___/', '', $username);
 $username = str_replace(' ', '__', $username);
 $username = str_replace('.', '_', $username);

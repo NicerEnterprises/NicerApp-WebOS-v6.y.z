@@ -203,19 +203,19 @@ try {
         .str_replace('#', '<br/>&nbsp;&nbsp;&nbsp;#', $e->getTraceAsString()).'<br/>'
         .'credentials used are in '.$fn;
     echo $msg;
-    die();
+    exit();
 }
-//echo '<pre style="color:green">'; var_dump ($allDBs); echo '</pre>'; die();
-//echo '<pre style="color:green">'; var_dump ($dbs); echo '</pre>'; die();
+//echo '<pre style="color:green">'; var_dump ($allDBs); echo '</pre>'; exit();
+//echo '<pre style="color:green">'; var_dump ($dbs); echo '</pre>'; exit();
 echo $naWebOS->dbsAdmin->listDatabases ($allDBs, $dbs, $dbsReset);
 
-//echo require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true); die();
+//echo require_return(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true); exit();
 
 $users = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.json.php', true);
-//echo '<pre style="color:black;background:skyblue;">'; var_dump ($users); die();
+//echo '<pre style="color:black;background:skyblue;">'; var_dump ($users); exit();
 //$users = json_decode($usersJSON, true);
 $groups = safeLoadJSONfile(dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.groups.json.php', true);
-//echo '<pre>'; var_dump ($groups); die();
+//echo '<pre>'; var_dump ($groups); exit();
 //$groups = json_decode($groupsJSON, true);
 
 $clientUsersJSONfn = dirname(__FILE__).'/domainConfigs/'.$naWebOS->domain.'/database.users.CLIENT.json.php';

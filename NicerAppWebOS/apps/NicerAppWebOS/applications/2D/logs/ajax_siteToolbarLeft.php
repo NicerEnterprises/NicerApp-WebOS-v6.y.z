@@ -138,7 +138,7 @@ echo $naWebOS->html_vividButton (
     } catch (Exception $e) {
         $msg = $fncn.' FAILED (ajax_siteToolbarLeft) while trying to find in \''.$dbName.'\' : '.$e->getMessage();
         echo $msg;
-        die();
+        exit();
     }
 
     foreach ($call->body->docs as $docID => $doc) {

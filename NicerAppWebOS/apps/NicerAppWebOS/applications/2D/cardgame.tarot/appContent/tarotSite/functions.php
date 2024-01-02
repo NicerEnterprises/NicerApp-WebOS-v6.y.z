@@ -109,7 +109,7 @@ function t2_getDecks() {
 	}
 	
 	global $decks;
-	//echo '<pre>'; var_dump ($decks); die();
+	//echo '<pre>'; var_dump ($decks); exit();
 
 	return $decks;
 }
@@ -195,15 +195,15 @@ function t2_html_deck_info_preg ($pattern, $subject, $default) {
 function t2_html_menu_decks() {
 	
 	$decks = t2_getDecks();
-	//echo '<pre>';var_dump ($decks);die();
+	//echo '<pre>';var_dump ($decks);exit();
 	//$decks = getFilePathList(dirname(__FILE__).'/decks/',true,FILE_FORMATS_photos, null, array('dir'), null, 1, true);
 
-	//echo '</ul></ul></ul></ul></div></div></div><pre>'; var_dump ($decks); die();
+	//echo '</ul></ul></ul></ul></div></div></div><pre>'; var_dump ($decks); exit();
 
 
 	$html = t2_html_menu_decks_recurse ($decks);	
-	//echo '</ul></ul></ul></ul></div></div></div><pre>'; var_dump ($html); die();
-	//echo $html; die();
+	//echo '</ul></ul></ul></ul></div></div></div><pre>'; var_dump ($html); exit();
+	//echo $html; exit();
 	
 	return $html;
 }	

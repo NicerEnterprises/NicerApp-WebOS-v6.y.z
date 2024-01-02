@@ -136,11 +136,12 @@ export class naSite {
             return false;
         };
         import (url).then((module) => {
-            eval (
-                'na.apps[appName] = {
+            var js =
+                'na.apps["'+appName+'"] = {'
                 +'settings : new module.'+jsClassName+'('+jsVarName+')'
-                +'}'
-            );
+                +'}';
+
+            eval (js);
             debugger;
         });
     }

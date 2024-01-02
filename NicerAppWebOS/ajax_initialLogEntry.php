@@ -69,7 +69,7 @@ require_once (dirname(__FILE__).'/boot.php');
           //trigger_error ($msg, E_USER_ERROR);
           //echo $msg;
           //return false;
-          //die();
+          //exit();
       }
 
       $ipInfo = null;
@@ -133,7 +133,7 @@ require_once (dirname(__FILE__).'/boot.php');
       global $naLog;
       $naLog->add ( [ $err ] );
       //trigger_error ($msg, E_USER_NOTICE);
-      //echo '<pre>'; var_dump ($_SERVER); die();
+      //echo '<pre>'; var_dump ($_SERVER); exit();
     }
 
 ?>

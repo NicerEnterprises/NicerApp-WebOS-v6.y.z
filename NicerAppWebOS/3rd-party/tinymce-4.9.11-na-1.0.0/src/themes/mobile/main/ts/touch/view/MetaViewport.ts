@@ -12,7 +12,7 @@ import { Attr, Element, Insert, SelectorFind } from '@ephox/sugar';
  * for the user
  */
 const tag = function () {
-  const head = SelectorFind.first('head').getOrDie();
+  const head = SelectorFind.first('head').getOrexit();
 
   const nu = function () {
     const meta = Element.fromTag('meta');

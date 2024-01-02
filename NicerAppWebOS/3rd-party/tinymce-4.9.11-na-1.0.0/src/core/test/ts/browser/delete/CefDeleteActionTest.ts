@@ -17,7 +17,7 @@ UnitTest.asynctest('browser.tinymce.core.delete.CefDeleteActionTest', (success, 
 
   const cReadAction = function (forward, cursorPath, cursorOffset) {
     return Chain.mapper(function (viewBlock: any) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), cursorPath).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), cursorPath).getOrexit();
       const rng = document.createRange();
       rng.setStart(container.dom(), cursorOffset);
       rng.setEnd(container.dom(), cursorOffset);
@@ -27,8 +27,8 @@ UnitTest.asynctest('browser.tinymce.core.delete.CefDeleteActionTest', (success, 
 
   const cAssertRemoveElementAction = function (elementPath) {
     return Chain.op(function (actionOption: Option<any>) {
-      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
-      const action = actionOption.getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
+      const action = actionOption.getOrexit();
       Assertions.assertEq('Should be expected action type', 'remove', actionName(action));
       Assertions.assertDomEq('Should be expected element', element, actionValue(action));
     });
@@ -36,8 +36,8 @@ UnitTest.asynctest('browser.tinymce.core.delete.CefDeleteActionTest', (success, 
 
   const cAssertMoveToElementAction = function (elementPath) {
     return Chain.op(function (actionOption: Option<any>) {
-      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
-      const action = actionOption.getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
+      const action = actionOption.getOrexit();
       Assertions.assertEq('Should be expected action type', 'moveToElement', actionName(action));
       Assertions.assertDomEq('Should be expected element', element, actionValue(action));
     });
@@ -45,8 +45,8 @@ UnitTest.asynctest('browser.tinymce.core.delete.CefDeleteActionTest', (success, 
 
   const cAssertMoveToPositionAction = function (elementPath, offset) {
     return Chain.op(function (actionOption: Option<any>) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrDie();
-      const action = actionOption.getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), elementPath).getOrexit();
+      const action = actionOption.getOrexit();
       Assertions.assertEq('Should be expected action type', 'moveToPosition', actionName(action));
       Assertions.assertDomEq('Should be expected container', container, Element.fromDom(actionValue(action).container()));
       Assertions.assertEq('Should be expected offset', offset, actionValue(action).offset());

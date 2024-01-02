@@ -1,14 +1,14 @@
 <?php
 require_once (realpath(dirname(__FILE__).'/../../../../../../').'/NicerAppWebOS/boot.php');
 
-//echo '<pre>'; var_dump ($_REQUEST); die();
+//echo '<pre>'; var_dump ($_REQUEST); exit();
     
 global $naWebOS;
 $view = $naWebOS->view;
 global $wiki_url;
 if (array_key_exists('app-wikipedia_org', $_GET)) {
     $wiki_url = 'https://en.wikipedia.org/wiki/'.urlencode($_GET['app-wikipedia_org']);
-    //var_dump ($wiki_url); die();
+    //var_dump ($wiki_url); exit();
     if (
         $wiki_url=='https://en.wikipedia.org/wiki/en.wikipedia.org/frontpage'
         || $wiki_url=='https://en.wikipedia.org/wiki/frontpage'
@@ -23,17 +23,17 @@ if (array_key_exists('app-wikipedia_org', $_GET)) {
 
 global $naIP;
 //var_dump ($xec);
-//echo '<pre>'; var_dump ($_GET); echo '</pre>'; //die();
+//echo '<pre>'; var_dump ($_GET); echo '</pre>'; //exit();
 if (array_key_exists('search',$_GET)) $wiki_url .= '?search='.$_GET['search'];
 if (array_key_exists('family',$_GET)) $wiki_url .= '&family='.$_GET['family'];
 if (array_key_exists('language',$_GET)) $wiki_url .= '&language='.$_GET['language'];
 $xec = 'curl -L '.$wiki_url.' -H "X-NA-Forwarded-For: '.$naIP.'" -H "X-NA-IS: https://nicer.app/wiki/frontpage"';
-//var_dump ($xec); //die();
+//var_dump ($xec); //exit();
 
 exec ($xec, $output, $result);
 $output2 = join ("\n", $output);
 //$output2 = preg_replace ('/\s+/', '  ', $output2); // essential for multi-line replaces
-//echo $output2; die();
+//echo $output2; exit();
 //
 
 //$output2 = str_replace('<body class="', '<body class="vividScrollpane ', $output2);
@@ -44,7 +44,7 @@ $output2 = join ("\n", $output);
 //$output2 = preg_replace('/<\/html>/','', $output2);
 
 preg_match_all('/<form (.*?)action="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
-//var_dump ($m); die();
+//var_dump ($m); exit();
 foreach ($m[0] as $idx => $str) {
     //$rf = '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/search_redirect.php';
     $rf =
@@ -58,7 +58,7 @@ foreach ($m[0] as $idx => $str) {
 //echo '<pre>';
 //echo htmlentities($output2);
 preg_match_all('/<img (.*?)src="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
-//var_dump ($m); die();
+//var_dump ($m); exit();
 foreach ($m[0] as $idx => $str) {
   //  echo '$idx='.$idx.PHP_EOL;
     //var_dump (htmlentities($str));
@@ -85,12 +85,12 @@ foreach ($m[0] as $idx => $str) {
     //var_dump (htmlentities($r2));
     $output2 = str_replace ($str, $r2, $output2);
 }
-//die();
+//exit();
 
 //$output2 = preg_replace('|<a(.*?)href="(.*?)"(.*?)</a>|U', '<a $1 href="http://192.168.178.29/wiki/$2"$3</a>', $output2);
 preg_match_all('/<a (.*?)href="(.*?)"(.*?)>/', $output2, $m, PREG_PATTERN_ORDER);
 //echo '<pre>';
-//var_dump ($m); die();
+//var_dump ($m); exit();
 foreach ($m[0] as $idx => $str) {
     //var_dump ('$idx='.$idx);
     //var_dump (htmlentities($str));
@@ -111,7 +111,7 @@ foreach ($m[0] as $idx => $str) {
     //var_dump (htmlentities($r1)).PHP_EOL;
     //var_dump (htmlentities($r2)).PHP_EOL;
 }
-//die();
+//exit();
 
 //echo '<pre>';
 preg_match_all('/<link (.*?)href="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
@@ -127,7 +127,7 @@ foreach ($m[0] as $idx => $str) {
 
     $output2 = str_replace ($str, $r1, $output2);
 }
-//die();
+//exit();
 
 preg_match_all('/<script (.*?)src="(.*?)"/', $output2, $m, PREG_PATTERN_ORDER);
 //echo '<pre>';
@@ -146,11 +146,11 @@ foreach ($m[0] as $idx => $str) {
 
     $output2 = str_replace ($str, $r1, $output2);
 }
-//die();
+//exit();
 $output2 = preg_replace('/\.mw\-parser\-output \#mp\-left \{.*?\}/','',$output2);
 
 //echo '<pre>';
-//die();
+//exit();
 $output2 = str_replace('</body>', '<link type="text/css" rel="StyleSheet" href="https://'.$naWebOS->domain.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/index.css"/><link type="text/css" rel="StyleSheet" href="https://'.$naWebOS->domain.'/NicerAppWebOS/domainConfigs/'.$naWebOS->domain.'/index.dark.css"/><link type="text/css" rel="StyleSheet" href="https://'.$naWebOS->domain.'/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/3rd-party-site.wikipedia.org/index.css"/></body>', $output2);
 
 

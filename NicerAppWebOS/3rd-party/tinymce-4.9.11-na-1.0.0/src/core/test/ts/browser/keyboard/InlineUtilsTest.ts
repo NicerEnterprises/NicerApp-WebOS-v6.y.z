@@ -19,7 +19,7 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.InlineUtilsTest', function () 
 
   const cNormalizePosition = function (forward, path, offset) {
     return Chain.mapper(function (elm: any) {
-      const container = Hierarchy.follow(elm, path).getOrDie();
+      const container = Hierarchy.follow(elm, path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return { pos: InlineUtils.normalizePosition(forward, pos), elm };
     });
@@ -27,7 +27,7 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.InlineUtilsTest', function () 
 
   const cAssertPosition = function (path, expectedOffset) {
     return Chain.mapper(function (elmPos: any) {
-      const expectedContainer = Hierarchy.follow(elmPos.elm, path).getOrDie();
+      const expectedContainer = Hierarchy.follow(elmPos.elm, path).getOrexit();
       Assertions.assertDomEq('Should be expected container', Element.fromDom(elmPos.pos.container()), expectedContainer);
       Assertions.assertEq('Should be expected offset', elmPos.pos.offset(), expectedOffset);
       return {};
@@ -36,7 +36,7 @@ UnitTest.asynctest('browser.tinymce.core.keyboard.InlineUtilsTest', function () 
 
   const cSplitAt = function (path, offset) {
     return Chain.mapper(function (elm: Element<DomNode>) {
-      const textNode = Hierarchy.follow(elm, path).filter(Node.isText).getOrDie();
+      const textNode = Hierarchy.follow(elm, path).filter(Node.isText).getOrexit();
       textNode.dom().splitText(offset);
       return elm;
     });

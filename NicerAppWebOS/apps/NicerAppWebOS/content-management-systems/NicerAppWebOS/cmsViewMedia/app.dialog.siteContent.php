@@ -85,7 +85,7 @@ foreach ($files as $idx => $file) {
             'prev' => $prev,
             'next' => $next
         ];
-        //echo '<pre>'; var_dump ($dbg); echo '</pre>'; die();
+        //echo '<pre>'; var_dump ($dbg); echo '</pre>'; exit();
         $prevArr = array (
             "misc" => [ "folder" => "/NicerAppWebOS/apps/NicerAppWebOS/content-management-systems/NicerAppWebOS" ],
             'cmsViewMedia' => array (

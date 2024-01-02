@@ -19,7 +19,7 @@ UnitTest.asynctest('browser.tinymce.core.delete.BlockMergeBoundary', function ()
 
   const cReadBlockBoundary = function (forward, cursorPath, cursorOffset) {
     return Chain.mapper(function (viewBlock: any) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), cursorPath).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), cursorPath).getOrexit();
       const rng = document.createRange();
       rng.setStart(container.dom(), cursorOffset);
       rng.setEnd(container.dom(), cursorOffset);
@@ -29,9 +29,9 @@ UnitTest.asynctest('browser.tinymce.core.delete.BlockMergeBoundary', function ()
 
   const cAssertBlockBoundaryPositions = function (fromPath, fromOffset, toPath, toOffset) {
     return Chain.op(function (blockBoundaryOption: Option<any>) {
-      const fromContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), fromPath).getOrDie();
-      const toContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), toPath).getOrDie();
-      const blockBoundary = blockBoundaryOption.getOrDie();
+      const fromContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), fromPath).getOrexit();
+      const toContainer = Hierarchy.follow(Element.fromDom(viewBlock.get()), toPath).getOrexit();
+      const blockBoundary = blockBoundaryOption.getOrexit();
 
       Assertions.assertDomEq('Should be expected from container', fromContainer, Element.fromDom(blockBoundary.from().position().container()));
       Assertions.assertEq('Should be expected from offset', fromOffset, blockBoundary.from().position().offset());
@@ -42,9 +42,9 @@ UnitTest.asynctest('browser.tinymce.core.delete.BlockMergeBoundary', function ()
 
   const cAssertBlockBoundaryBlocks = function (fromBlockPath, toBlockPath) {
     return Chain.op(function (blockBoundaryOption: Option<any>) {
-      const expectedFromBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), fromBlockPath).getOrDie();
-      const expectedToBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), toBlockPath).getOrDie();
-      const blockBoundary = blockBoundaryOption.getOrDie();
+      const expectedFromBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), fromBlockPath).getOrexit();
+      const expectedToBlock = Hierarchy.follow(Element.fromDom(viewBlock.get()), toBlockPath).getOrexit();
+      const blockBoundary = blockBoundaryOption.getOrexit();
 
       Assertions.assertDomEq('Should be expected from block', expectedFromBlock, blockBoundary.from().block());
       Assertions.assertDomEq('Should be expected to block', expectedToBlock, blockBoundary.to().block());

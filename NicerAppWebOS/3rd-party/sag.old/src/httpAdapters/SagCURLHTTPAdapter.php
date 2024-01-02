@@ -43,7 +43,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       ? "{$this->proto}://".$naWebOS->domainForDB.'___'.preg_replace('/.*___/','',str_replace(' ','_',str_replace('.','__',$_SESSION['cdb_loginName']))).":".$_SESSION['cdb_pw']."@{$this->host}:{$this->port}{$url}"
       : "{$this->proto}://{$this->host}:{$this->port}{$url}"
     );
-    //var_dump ('t3322'); var_dump ($url); die();
+    //var_dump ('t3322'); var_dump ($url); exit();
 
     $opts = array(
       CURLOPT_URL => $url,
@@ -176,7 +176,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       3 => (is_object($naWebOS->dbs) ? $naWebOS->dbs->findConnection('couchdb')->username : 'NOTSETYET'),
       4 => $this->debug
     ];
-    //echo '<pre>'.PHP_EOL; var_dump ($dbg); echo '</pre>'.PHP_EOL;die();
+    //echo '<pre>'.PHP_EOL; var_dump ($dbg); echo '</pre>'.PHP_EOL;exit();
     if (
       $this->debug // declared in SagHTTPAdapter.php::__construct()
       && session_status() === PHP_SESSION_ACTIVE
@@ -212,7 +212,7 @@ class SagCURLHTTPAdapter extends SagHTTPAdapter {
       }
 
 
-      //var_dump ($na_error_log_filepath_html); die();
+      //var_dump ($na_error_log_filepath_html); exit();
       $now = DateTime::createFromFormat('U', (
         array_key_exists('started', $_SESSION)
           ? $_SESSION['started']

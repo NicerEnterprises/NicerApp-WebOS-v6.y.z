@@ -17,8 +17,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.SimpleTableModel', function (
   const cFromDomSubSection = function (html, startPath, endPath) {
     return Chain.binder(function (_) {
       const tableElm = Element.fromHtml(html);
-      const startElm = Hierarchy.follow(tableElm, startPath).getOrDie();
-      const endElm = Hierarchy.follow(tableElm, endPath).getOrDie();
+      const startElm = Hierarchy.follow(tableElm, startPath).getOrexit();
+      const endElm = Hierarchy.follow(tableElm, endPath).getOrexit();
       return SimpleTableModel.subsection(SimpleTableModel.fromDom(tableElm), startElm, endElm).fold(
         Fun.constant(Result.error('Failed to get the subsection')),
         Result.value

@@ -1,7 +1,7 @@
 <?php
     require_once (dirname(__FILE__).'/../../../../../boot.php');
     require_once (dirname(__FILE__).'/class.newsApp-3.php');
-//var_dump ($_REQUEST); die();
+//var_dump ($_REQUEST); exit();
 
     header ('Content-Type: application/json');
     ob_start("ob_gzhandler");

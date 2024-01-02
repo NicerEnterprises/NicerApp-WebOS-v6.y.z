@@ -12,7 +12,7 @@ UnitTest.asynctest('browser.tinymce.core.dom.ControlSelectionTest', function () 
 
   const sContextMenuClickInMiddleOf = function (editor, elementPath) {
     return Step.sync(function () {
-      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).filter(Node.isElement).getOrDie().dom();
+      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), elementPath).filter(Node.isElement).getOrexit().dom();
       const rect = element.getBoundingClientRect();
       const clientX = (rect.left + rect.width / 2), clientY = (rect.top + rect.height / 2);
 

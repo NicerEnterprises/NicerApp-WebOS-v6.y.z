@@ -31,7 +31,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cGetPositionsUntilPreviousLine = (path: number[], offset: number) => {
     return Chain.mapper(function (scope: any) {
-      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return getPositionsUntilPreviousLine(scope.get(), pos);
     });
@@ -39,7 +39,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cGetPositionsUntilNextLine = (path: number[], offset: number) => {
     return Chain.mapper(function (scope: any) {
-      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return getPositionsUntilNextLine(scope.get(), pos);
     });
@@ -47,7 +47,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cGetAbovePositions = (path: number[], offset: number) => {
     return Chain.mapper(function (scope: any) {
-      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return getPositionsAbove(scope.get(), pos);
     });
@@ -55,7 +55,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cGetBelowPositions = (path: number[], offset: number) => {
     return Chain.mapper(function (scope: any) {
-      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return getPositionsBelow(scope.get(), pos);
     });
@@ -63,7 +63,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cFindClosestHorizontalPosition = (path: number[], offset: number) => {
     return Chain.mapper(function (positions: CaretPosition[]) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return findClosestHorizontalPosition(positions, pos);
     });
@@ -77,7 +77,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
       Assertions.assertEq('Should be the expected amount of positions', expectedPositions.length, actualPositions.length);
       Arr.each(expectedPositions, (p: Path, i) => {
-        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), p.path).getOrDie();
+        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), p.path).getOrexit();
         Assertions.assertDomEq('Should be the expected container', container, Element.fromDom(actualPositions[i].container()));
         Assertions.assertEq('Should be the expected offset', p.offset, actualPositions[i].offset());
       });
@@ -100,7 +100,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
       Assertions.assertEq('Should be the expected amount of positions', expectedPositions.length, actualPositions.length);
       Arr.each(expectedPositions, (p: Path, i) => {
-        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), p.path).getOrDie();
+        const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), p.path).getOrexit();
         Assertions.assertDomEq('Should be the expected container', container, Element.fromDom(actualPositions[i].container()));
         Assertions.assertEq('Should be the expected offset', p.offset, actualPositions[i].offset());
       });
@@ -113,8 +113,8 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cAssertBreakPosition = (path: number[], offset: number) => {
     return Chain.op(function (linebreak: LineInfo) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
-      const breakPos = linebreak.breakAt.getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
+      const breakPos = linebreak.breakAt.getOrexit();
 
       Assertions.assertDomEq('Should be the expected container', container, Element.fromDom(breakPos.container()));
       Assertions.assertEq('Should be the expected offset', offset, breakPos.offset());
@@ -130,7 +130,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cAssertCaretPosition = (path: number[], offset: number) => {
     return Chain.op(function (posOption: Option<any>) {
-      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(viewBlock.get()), path).getOrexit();
       const pos = posOption.getOrDie('Needs to return a caret');
 
       Assertions.assertDomEq('Should be the expected container', container, Element.fromDom(pos.container()));
@@ -140,7 +140,7 @@ UnitTest.asynctest('browser.tinymce.core.caret.LineReader', (success, failure) =
 
   const cVisualCaretCheck = (predicate, path: number[], offset: number) => {
     return Chain.mapper(function (scope: any) {
-      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrDie();
+      const container = Hierarchy.follow(Element.fromDom(scope.get()), path).getOrexit();
       const pos = CaretPosition(container.dom(), offset);
       return predicate(scope.get(), pos);
     });

@@ -19,8 +19,8 @@ UnitTest.asynctest('browser.tinymce.core.fmt.ExpandRangeTest', function () {
 
   const cExpandRng = function (startPath, startOffset, endPath, endOffset, format, remove) {
     return Chain.mapper(function (editor: any) {
-      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrexit();
 
       const rng = editor.dom.createRng();
       rng.setStart(startContainer.dom(), startOffset);
@@ -32,8 +32,8 @@ UnitTest.asynctest('browser.tinymce.core.fmt.ExpandRangeTest', function () {
 
   const cAssertRange = function (editor, startPath, startOffset, endPath, endOffset) {
     return Chain.op(function (rng: any) {
-      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrDie();
-      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrDie();
+      const startContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), startPath).getOrexit();
+      const endContainer = Hierarchy.follow(Element.fromDom(editor.getBody()), endPath).getOrexit();
 
       Assertions.assertDomEq('Should be expected start container', startContainer, Element.fromDom(rng.startContainer));
       Assertions.assertEq('Should be expected start offset', startOffset, rng.startOffset);

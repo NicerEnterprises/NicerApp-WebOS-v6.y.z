@@ -11,7 +11,7 @@
         $mi = [];
 
         $root = $naRoot.'/NicerAppWebOS/siteMedia/backgrounds';
-        //var_dump (file_exists($root)); die();
+        //var_dump (file_exists($root)); exit();
         $fileFormats = '/.*/';
         global $fileFormats;
         $excl = '/.*thumbs.*/';

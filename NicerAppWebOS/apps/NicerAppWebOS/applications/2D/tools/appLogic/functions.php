@@ -10,7 +10,7 @@ function getContentSettings_4app_tools ($p) { // OUTDATED!!!
 	
 	$relInstallPath = 'SA_SITE_HD/apps/tools/appContent/';
 	
-	//var_dump ($u); die();
+	//var_dump ($u); exit();
 	
 	if ($u[0]!=='tools') return false;
 	
@@ -100,7 +100,7 @@ function getTitle_4app_tools ($p) {
 	
 	$relInstallPath = 'SA_SITE_HD/apps/tools/appContent/';
 	
-	//var_dump ($u); die();
+	//var_dump ($u); exit();
 	
 	if ($u[0]!=='tools') return false;
 

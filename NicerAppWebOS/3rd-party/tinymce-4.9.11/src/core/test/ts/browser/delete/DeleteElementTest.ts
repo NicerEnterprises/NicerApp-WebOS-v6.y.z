@@ -13,7 +13,7 @@ UnitTest.asynctest('browser.tinymce.core.delete.DeleteElementTest', function () 
 
   const sDeleteElementPath = function (editor, forward, path) {
     return Step.sync(function () {
-      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), path).getOrDie();
+      const element = Hierarchy.follow(Element.fromDom(editor.getBody()), path).getOrexit();
       DeleteElement.deleteElement(editor, forward, element);
     });
   };

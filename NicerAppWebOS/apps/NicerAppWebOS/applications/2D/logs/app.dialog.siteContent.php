@@ -39,7 +39,7 @@ if ($appRec['page']=='index') {
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
-        die();
+        exit();
     }
 
 

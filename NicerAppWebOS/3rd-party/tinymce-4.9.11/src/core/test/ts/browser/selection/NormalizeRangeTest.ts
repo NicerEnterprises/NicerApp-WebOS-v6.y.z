@@ -14,8 +14,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.NormalizeRangeTest', function
   const viewBlock = ViewBlock();
 
   const assertRange = function (root, range, startPath, startOffset, endPath, endOffset) {
-    const sc = Hierarchy.follow(Element.fromDom(root), startPath).getOrDie();
-    const ec = Hierarchy.follow(Element.fromDom(root), endPath).getOrDie();
+    const sc = Hierarchy.follow(Element.fromDom(root), startPath).getOrexit();
+    const ec = Hierarchy.follow(Element.fromDom(root), endPath).getOrexit();
     const actualRange = range.getOrDie('Should be some');
 
     Assertions.assertDomEq('Should be expected start container', sc, Element.fromDom(actualRange.startContainer));
@@ -32,8 +32,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.NormalizeRangeTest', function
 
   const cNormalizeRange = function (startPath, startOffset, endPath, endOffset) {
     return Chain.mapper(function (viewBlock: any) {
-      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrDie();
-      const ec = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrDie();
+      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrexit();
+      const ec = Hierarchy.follow(Element.fromDom(viewBlock.get()), endPath).getOrexit();
       const rng = document.createRange();
 
       rng.setStart(sc.dom(), startOffset);

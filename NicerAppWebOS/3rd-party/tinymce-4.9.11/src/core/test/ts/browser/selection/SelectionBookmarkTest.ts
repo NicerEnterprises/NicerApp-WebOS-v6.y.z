@@ -31,14 +31,14 @@ UnitTest.asynctest('browser.tinymce.core.selection.SelectionBookmarkTest', funct
 
   const cGetBookmark = function (rootPath) {
     return Chain.mapper(function () {
-      const root = Hierarchy.follow(Element.fromDom(viewBlock.get()), rootPath).getOrDie();
+      const root = Hierarchy.follow(Element.fromDom(viewBlock.get()), rootPath).getOrexit();
       return SelectionBookmark.getBookmark(root);
     });
   };
 
   const cValidateBookmark = function (rootPath) {
     return Chain.async(function (input: any, next, die) {
-      const root = Hierarchy.follow(Element.fromDom(viewBlock.get()), rootPath).getOrDie();
+      const root = Hierarchy.follow(Element.fromDom(viewBlock.get()), rootPath).getOrexit();
 
       return input.each(function (b) {
         return next(SelectionBookmark.validate(root, b));
@@ -56,8 +56,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.SelectionBookmarkTest', funct
 
   const cAssertSelection = function (startPath, startOffset, finishPath, finishOffset) {
     return Chain.op(function () {
-      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrDie();
-      const fc = Hierarchy.follow(Element.fromDom(viewBlock.get()), finishPath).getOrDie();
+      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrexit();
+      const fc = Hierarchy.follow(Element.fromDom(viewBlock.get()), finishPath).getOrexit();
 
       const win = Traverse.defaultView(Element.fromDom(viewBlock.get()));
 
@@ -87,8 +87,8 @@ UnitTest.asynctest('browser.tinymce.core.selection.SelectionBookmarkTest', funct
 
   const cAssertBookmark = function (startPath, startOffset, finishPath, finishOffset) {
     return Chain.op(function (input: Option<any>) {
-      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrDie();
-      const fc = Hierarchy.follow(Element.fromDom(viewBlock.get()), finishPath).getOrDie();
+      const sc = Hierarchy.follow(Element.fromDom(viewBlock.get()), startPath).getOrexit();
+      const fc = Hierarchy.follow(Element.fromDom(viewBlock.get()), finishPath).getOrexit();
 
       const bookmarkRng = input.getOrDie('no bookmark!');
 

@@ -40,9 +40,9 @@ $cdb->setDatabase ($dataSetName, false);
             $r = '';
         } elseif (count($call->body->docs)===1) {
             //echo '<pre>';
-            //var_dump ($call->body->docs); //die();
+            //var_dump ($call->body->docs); //exit();
             $call2 = $cdb->get ($call->body->docs[0]->_id);
-            //var_dump ($call2->body); //die();
+            //var_dump ($call2->body); //exit();
             /*
             $r = null;
             if (property_exists($call2->body, 'viewSettings')) {

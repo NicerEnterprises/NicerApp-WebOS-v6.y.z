@@ -35,12 +35,12 @@ if (!$naLAN) die('403 Forbidden.');
         //trigger_error ($msg, E_USER_ERROR);
         echo $msg;
         //return false;
-        die();
+        exit();
     }
 
 
 
-    //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>'; die();
+    //echo '<pre style="color:white;background:rgba(0,50,0,0.5);border-radius:10px;margin:10px;">'; var_dump($call); echo '</pre>'; exit();
     foreach ($call->body->docs as $docIdx => $doc) {
         $call2 = $cdb->get($doc->_id);
         //echo $call2->body->entry->request->html;
@@ -111,7 +111,7 @@ if (!$naLAN) die('403 Forbidden.');
             //trigger_error ($msg, E_USER_ERROR);
             echo $msg;
             //return false;
-            die();
+            exit();
         }
 
         foreach ($call2->body->docs as $docID2 => $doc2) {

@@ -1268,7 +1268,7 @@ class Sag {
      * For now we only data data as strings. Streams and other formats will be
      * permitted later.
      */
-    //var_dump ('t32;34lkj'); var_dump ($url); var_dump ($data); var_dump ($headers); echo json_encode(debug_backtrace(),JSON_PRETTY_PRINT); die();
+    //var_dump ('t32;34lkj'); var_dump ($url); var_dump ($data); var_dump ($headers); echo json_encode(debug_backtrace(),JSON_PRETTY_PRINT); exit();
 
 
     if($data && !is_string($data)) {

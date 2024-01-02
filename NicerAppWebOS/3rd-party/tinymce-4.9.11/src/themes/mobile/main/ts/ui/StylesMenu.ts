@@ -190,7 +190,7 @@ const sketch = function (settings) {
     onOpenSubmenu (container, item, submenu) {
       const w = Width.get(container.element());
       const menu = SelectorFind.ancestor(item.element(), '[role="menu"]').getOrDie('hacky');
-      const menuComp = container.getSystem().getByDom(menu).getOrDie();
+      const menuComp = container.getSystem().getByDom(menu).getOrexit();
 
       Width.set(submenu.element(), w);
 
@@ -201,7 +201,7 @@ const sketch = function (settings) {
 
     onCollapseMenu (container, item, menu) {
       const submenu = SelectorFind.ancestor(item.element(), '[role="menu"]').getOrDie('hacky');
-      const submenuComp = container.getSystem().getByDom(submenu).getOrDie();
+      const submenuComp = container.getSystem().getByDom(submenu).getOrexit();
       Transitioning.progressTo(submenuComp, 'after');
       Transitioning.progressTo(menu, 'current');
     },

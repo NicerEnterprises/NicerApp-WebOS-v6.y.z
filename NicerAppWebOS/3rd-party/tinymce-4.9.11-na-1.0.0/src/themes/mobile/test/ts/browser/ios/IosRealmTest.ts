@@ -44,7 +44,7 @@ UnitTest.asynctest('Browser Test: ios.IosRealmTest', function () {
     Replacing.append(
       realm.system().getByDom(Element.fromDom(
         realm.element().dom().querySelector('.tinymce-mobile-editor-socket'))
-      ).getOrDie(),
+      ).getOrexit(),
       GuiFactory.external({
         element: editor
       })

@@ -80,7 +80,7 @@ if ($illegal) {
         ];
         if ( array_key_exists('user',$_POST) && $_POST['user']!=='' ) $findCommand['selector']['user'] = $_POST['user'];
         if ( array_key_exists('role',$_POST) && $_POST['role']!=='' ) $findCommand['selector']['role'] = $_POST['role'];
-        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); die();
+        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); exit();
 
         $document = [
             'database' => $_POST['database'],
@@ -120,7 +120,7 @@ if ($illegal) {
         ];
         if ( array_key_exists('user',$_POST) && $_POST['user']!=='' ) $findCommand['selector']['user'] = $_POST['user'];
         if ( array_key_exists('role',$_POST) && $_POST['role']!=='' ) $findCommand['selector']['role'] = $_POST['role'];
-        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); die();
+        //echo '<pre>'; var_dump ($findCommand); var_dump ($_POST); exit();
 
         $document = [
             'dataID' => $dr['resultValue'],

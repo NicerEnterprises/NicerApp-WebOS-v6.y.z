@@ -91,7 +91,7 @@ $viewIdx = 0;
 $viewIDsIdx = 0;
 foreach ($fc2 as $appName => $appSettings) {
     $viewIdx++;
-    $appParams = $appSettings['viewSettings']['appParams'];
+    $appParams = $appSettings['viewSettings'];
     $rec1 = [
         '_id' => $id1,
         'view' => $appParams
