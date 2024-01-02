@@ -1232,6 +1232,7 @@ class Sag {
   public function setSecurity($data) {
     if (!is_string($data)) $data = json_encode($data);
     global $scriptName_SAG; $this->checkJSONencoding ($scriptName_SAG, 'setSecurity()', $data);
+    //echo 'Sag::setSecurity() : '; var_dump($this->db); echo PHP_EOL;
     return $this->procPacket ('PUT', '/'.$this->db.'/_security', $data);
   }
   public function getSecurity() {

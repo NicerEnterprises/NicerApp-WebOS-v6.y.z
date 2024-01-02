@@ -188,23 +188,26 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             echo json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
             echo '</pre>';
         }
+
+        $debugMe = false;
+
         //echo '<pre style="color:green;">'.$username.'</pre>';
         if (!is_null($usersFinal))
         foreach ($usersFinal as $username1 => $userDoc) {
-            if (false) {
+            if ($debugMe) {
                 $dbg = [
                     'username1' => $username1,
                     'username1-tr' => $this->translate_plainUserName_to_couchdbUserName($username1),
                     'username' => $username
                 ];
-                echo '<pre style="color:blue;">t32118:'; var_dump ($dbg); echo '</pre>';
+                echo '<pre style="color:blue;">t32118:'; var_dump ($dbg); echo '</pre>'.PHP_EOL ;
             }
             if (
                 $this->translate_plainUserName_to_couchdbUserName($username1)===$username
                 || $username1===$username
                 || $username==='admin'
             ) {
-               //echo '<pre>'.$this->translate_plainUserName_to_couchdbUserName($username1).'==='.$username.'</pre>';
+               if ($debugMe) echo '<pre>'.$this->translate_plainUserName_to_couchdbUserName($username1).'==='.$username.'</pre>'.PHP_EOL;
                 $g = [];
                 //echo '<pre>'; var_dump($userDoc); echo '</pre>';
                 foreach ($userDoc['groups'] as $idx => $gn) {
@@ -240,6 +243,7 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
             }
         }
 
+        if ($debugMe) { echo '<pre>t3333 : '; var_dump ($this->security_admin); var_dump ($this->security_guest); echo '</pre>'.PHP_EOL; }
         return true;
     }
 

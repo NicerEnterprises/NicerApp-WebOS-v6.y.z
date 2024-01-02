@@ -19,12 +19,13 @@ $bytes = file_put_contents (realpath(dirname(__FILE__).'/../..').'/.htaccess', $
 echo $bytes.' bytes written to .../.htaccess and .../.htaccess-reverse'.PHP_EOL;
 
 $db = $naWebOS->dbsAdmin->findConnection('couchdb');
+//echo '<pre>t3334 : '; var_dump ($db->security_guest); exit();
 $cdb = $db->cdb;
 $dataSetName1 = $db->dataSetName('views');
 $dataSetName2 = $db->dataSetName('viewsIDs');
 
 try {
-    $db = $cdb->deleteDatabase($dataSetName1);
+    $call = $cdb->deleteDatabase($dataSetName1);
     echo 'Deleted database '.$dataSetName1.PHP_EOL;
 } catch (Exception $e) {
     echo
@@ -32,9 +33,10 @@ try {
         .'"'.$dataSetName1.'" : $e->getMessage()='.$e->getMessage().PHP_EOL;
     if (strpos($e->getMessage(), 'Database does not exist')===false) exit();
 }
-if (is_null($cdb->security_guest)) { trigger_error ('FATAL ERROR : $cdb->security_guest is null. see $cdb->setGlobals()', E_USER_ERROR); exit(); }
+$cdb->setDatabase ($dataSetName1, true);
+if (is_null($db->security_guest)) { trigger_error ('FATAL ERROR : $db->security_guest is null. see $db->setGlobals()', E_USER_ERROR); exit(); }
 try {
-    $call = $cdb->setSecurity ($this->security_guest);
+    $call = $cdb->setSecurity ($db->security_guest);
 } catch (Exception $e) {
     echo
         'While setting security to "Guest" for '
@@ -43,7 +45,7 @@ try {
 }
 
 try {
-    $db = $cdb->deleteDatabase($dataSetName2);
+    $call = $cdb->deleteDatabase($dataSetName2);
     echo 'Deleted database '.$dataSetName2.PHP_EOL;
 } catch (Exception $e) {
     echo
@@ -51,9 +53,10 @@ try {
         .'"'.$dataSetName1.'" : $e->getMessage()='.$e->getMessage().PHP_EOL;
     if (strpos($e->getMessage(), 'Database does not exist')===false) exit();
 }
-if (is_null($cdb->security_guest)) { trigger_error ('FATAL ERROR : $cdb->security_guest is null. see $cdb->setGlobals()', E_USER_ERROR); exit(); }
+$cdb->setDatabase ($dataSetName2, true);
+if (is_null($db->security_guest)) { trigger_error ('FATAL ERROR : $db->security_guest is null. see $db->setGlobals()', E_USER_ERROR); exit(); }
 try {
-    $call = $cdb->setSecurity ($this->security_guest);
+    $call = $cdb->setSecurity ($db->security_guest);
 } catch (Exception $e) {
     echo
         'While setting security to "Guest" for '
