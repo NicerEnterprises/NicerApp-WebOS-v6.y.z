@@ -113,7 +113,7 @@ foreach ($fc2 as $appName => $appSettings) {
         $id2 = randomString(40);
         $rec2 = [
             '_id' => $id2,
-            'seo_value' => $seoValue,
+            'seoValue' => $seoValue,
             'viewID' => $id1
         ];
         try {
