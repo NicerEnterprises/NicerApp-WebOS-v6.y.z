@@ -136,7 +136,7 @@ error_reporting(E_ALL);
             echo '<p style="color:red;background:white;">'; var_dump($targetDir); echo '</pre>';
         } else {
 
-            $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'));
+            $files = getFilePathList ($targetDir, false, FILE_FORMATS_photos, null, array('file'), 1,1,true);
             
             $dbg = array (
                 'baseURL' => $baseURL,

@@ -1300,6 +1300,7 @@ function getFilePathList (
 	$depth = null,
 	$level = 1,
 	$returnRecursive = false,           // whether or not to return the filepaths found as a recursive array (true) or a flat list array (false).
+  $debug = false,
 	$ownerFilter = array (),			// array (int=>string (username) ); only return files owned by someone in $ownerFilter.
 	$fileSizeMin = null,				// If >=0, any files returned must have a minimum size of $fileSizeMin bytes.
 	$fileSizeMax = null,				// same as above, but maximum size
@@ -1343,21 +1344,20 @@ example:
 			  string(117) "c:/dat/web/sources.php - [listCall=ctime=2003/05/11 18:05:26 - atime=2003/05/16 04:05:50 - mtime=2003/05/12 00:05:22]"
 }
 		in this example, the $listCall is kinda complicated. but only to show it's power.
-		if you're having trouble debugging your $listCall, turn on the relevant htmlDump() call in this function.
+		if you're having trouble debugging your $listCall, turn on the relevant jsonViewer() call in this function.
 
 another example:
-	htmlDump (getFilePathList("c:/dat/web", false, "/.*\.php$|.*\.php\d$|.*\.inc$/",
+	jsonViewer (getFilePathList("c:/dat/web", false, "/.*\.php$|.*\.php\d$|.*\.inc$/",
 		array(), array(), null, null, null, null, null, time()-mktime (0,0,0,0,1,0));
 	-== this returns, for my system, all *.php,*.php3/4,*.inc files in c:/dat/web, that havent changed since 24 hours ago:
 */
 
 ) {
     $fncn = '.../NicerAppWebOS/functions.php/getFilePathList()';
-    $debug = false;
     if (is_null($pathStart)) $pathStart = $path;
 
 	//if (stripos($path, $pathStart)!==false) {
-		if ($debug) { echo '<pre style="color:cyan;">'; var_dump ($path); var_dump ($excludeFolders); echo '</pre>'; };
+		if ($debug) { echo '<pre style="color:black;background:lime;">'; var_dump ($path); var_dump ($excludeFolders); echo '</pre>'; };
 		if (!realpath($path)) {
             $msg = $fncn.' : FATAL ERROR : "'.$path.'" does not exist.';
             trigger_error ($msg, E_USER_ERROR);
@@ -1401,11 +1401,11 @@ another example:
                         //echo $path.$file.'<br/>';
                         $ft = filetype($path.$file);
 
-                        if (!$recursive && !in_array ($ft, $fileTypesFilter)) $pass = false;
-                        if ($debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
+                        if (!in_array ($ft, $fileTypesFilter)) $pass = false;
+                        if (false && $debug) { echo '<pre style="color:red">'; var_dump ($ft); var_dump($fileTypesFilter); echo '</pre>'; };
                         if ($ft=="dir") $filepath = $path.$file."/"; else $filepath = $path.$file;
 
-                        if ($debug) {
+                        if ($debug && false) {
                             echo '<pre style="color:yellow;background:red;border-radius:10px">';
                             var_dump ($filepath); echo PHP_EOL;
                             var_dump ($fileSpecRE); echo PHP_EOL;
@@ -1473,24 +1473,24 @@ another example:
                             'pass' => $pass,
                             'c' => (is_null($depth) || $level < $depth)
                             ];
-                            echo '<pre>'; var_dump ($dbg); echo '</pre>';
+                            echo '<pre>'; echo json_encode ($dbg); echo '</pre>';
                         }
 
                         if (
                             $recursive
                             && $ft=="dir"
-                            && $pass
+                            //&& $pass
                             && (
                                 is_null($depth)
                                 || $level<$depth
                             )
                             //&& preg_match($excludeFolders, $filepath.$r)===1
                         ) {
-                            $subdir = @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
-                                $fileTypesFilter, $depth, $level+1, $returnRecursive, $ownerFilter, $fileSizeMin, $fileSizeMax,
+                            $subdir = array_merge([$filepath], @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
+                                $fileTypesFilter, $depth, $level+1, $returnRecursive, $debug, $ownerFilter, $fileSizeMin, $fileSizeMax,
                                 $aTimeMin, $aTimeMax, $mTimeMin, $mTimeMax,
-                                $cTimeMin, $cTimeMax, $listCall, $pathStart, $flatList);
-                            if ($debug) { echo '<pre>$subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
+                                $cTimeMin, $cTimeMax, $listCall, $pathStart, $flatList));
+                            if ($debug) { echo '<pre>$fp='.$filepath.', $subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
                             if (count($subdir) > 0)
                                 if (!$returnRecursive || $flatList===true) {
                                     if (!is_null($subdir) && count($subdir)>0) array_splice ($result, count($result)+1, 0, $subdir);
@@ -1505,7 +1505,7 @@ another example:
                                     }
                                 }
                         } else {
-                            if ($pass==true) {
+                            if ($pass==true || $recursive) {
                                 //htmlOut ("PASSED");
 
                                 $ev = "\$r = $listCall";
@@ -1520,6 +1520,7 @@ another example:
                                 }*/
                                 //if (!array_key_exists('files',$result)) $result['files'] = [];
                                 //$result['files'][basename($filepath)] = $filepath;//DON'T! str_replace($pathStart,'',$filepath);
+                                if (in_array ($ft, $fileTypesFilter))
                                 if (!$returnRecursive) {
                                     $result[$idx] = $filepath.$r;
                                 } else {
@@ -1605,6 +1606,7 @@ function walkArray (&$a, $keyCallback=null, $valueCallback=null, $callKeyForValu
                 'type' => 'key',
                 'path' => $path,
                 'level' => $level,
+                'a' => &$a,
                 'k' => &$k,
                 'v' => &$v,
                 'params' => &$callbackParams
