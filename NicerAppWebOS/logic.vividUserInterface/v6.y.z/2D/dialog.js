@@ -23,9 +23,9 @@ export class vividUserInterface_2D_dialog extends vividUserInterface_2D_componen
         } else {
             t.canvas = $('canvas',t.cmd.el)[0];
         }
-        //t.borderVideo = $('video',t.cmd.el)[0];
-        //t.backgroundVideo = $('video',t.cmd.el)[1];
-        //t.init_borderVideo(t);
+        t.borderVideo = $('video',t.cmd.el)[0];
+        t.backgroundVideo = $('video',t.cmd.el)[1];
+        if (t.cmd.el[0].id=='siteTaskbar') t.init_borderVideo(t);
         t.init_vividUserInterface_2D_dialogBorder_lavaLamp(t);
         return this;
     }

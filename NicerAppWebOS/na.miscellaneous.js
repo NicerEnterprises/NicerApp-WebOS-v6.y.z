@@ -55,6 +55,17 @@ export class naMisc {
         return this;
     }
 
+    myName (t) {
+        var e = new Error('dummy');
+        var stack = e.stack
+                .split('\n')[2]
+                // " at functionName ( ..." => "functionName"
+                .replace(/^\s+at\s(.+?)(?:\s.*:|:)(.*?):(.*?)?$/g, '$1 ($2:$3)' );
+        return t.moduleURL+'::'+t.constructor.name+'.'+stack+'()';
+    }
+
+
+
     handleGalleryLinkClick (e){
         e.preventDefault();
         const $thisLink = e.currentTarget;

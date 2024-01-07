@@ -18,7 +18,7 @@ export class naApp_mediaPlayer {
       width : $('#siteContent > .vividDialogContent').width(),
       height :
         $('#siteContent > .vividDialogContent').height()
-        - $('#header').outerHeight()
+        - $('#header').offset().top - $('#header').outerHeight()
     });
 
     $('.na3D').each(function(idx,el){

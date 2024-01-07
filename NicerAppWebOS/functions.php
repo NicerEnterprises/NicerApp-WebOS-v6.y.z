@@ -1486,10 +1486,10 @@ another example:
                             )
                             //&& preg_match($excludeFolders, $filepath.$r)===1
                         ) {
-                            $subdir = array_merge([$filepath], @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
+                            $subdir = @getFilePathList ($filepath,$recursive, $fileSpecRE, $excludeFolders,
                                 $fileTypesFilter, $depth, $level+1, $returnRecursive, $debug, $ownerFilter, $fileSizeMin, $fileSizeMax,
                                 $aTimeMin, $aTimeMax, $mTimeMin, $mTimeMax,
-                                $cTimeMin, $cTimeMax, $listCall, $pathStart, $flatList));
+                                $cTimeMin, $cTimeMax, $listCall, $pathStart, $flatList);
                             if ($debug) { echo '<pre>$fp='.$filepath.', $subdir='; var_dump($subdir); echo '</pre>'.PHP_EOL; };
                             if (count($subdir) > 0)
                                 if (!$returnRecursive || $flatList===true) {

@@ -6,15 +6,30 @@ if (!array_key_exists('f', $_GET)) die (500);
 //if (strpos($_GET['f'], '..')!==false) die (403);
 //if (!file_exists($rt.$_GET['f']) || !is_readable($rt.$_GET['f'])) die (403);
 //echo $rt.$_GET['f']; exit();
+
+if (preg_match('/\.\.\//', $_GET['f'])) $_GET['f'] = '/'.$_GET['f'];
+
 $js = file_get_contents($rt.$_GET['f']);
+$js = filestampJSmodule($js);
 $js = timestampJSmodule1($js);
 $js = timestampJSmodule2($js);
 $js = timestampJSmodule3($js);
 echo $js;
 
+function filestampJSmodule ($js) {
+  $rt = realpath(dirname(__FILE__).'/..');
+  $preg = preg_match_all ('/class\s+(.*?)\s+\{/', $js, $matches);
+
+  return str_replace(
+    $matches[0][0],
+    $matches[0][0].PHP_EOL."\t".'moduleURL = "'.$_GET['f'].'";',
+    $js
+  ).PHP_EOL;
+}
+
 function timestampJSmodule1 ($js) {
   $rt = realpath(dirname(__FILE__).'/..');
-  $preg = preg_match_all ('/from\s+[\'"](\/NicerAppWebOS\/[.*?)[\'"]/', $js, $matches);
+  $preg = preg_match_all ('/from\s+[\'"](\/NicerAppWebOS\/.*?)[\'"]/', $js, $matches);
   $matches[2] = [];
   $matches[3] = [];
 
@@ -31,9 +46,14 @@ function timestampJSmodule1 ($js) {
   }
 
   foreach ($matches[1] as $idx => $relPath) {
+    $rp = str_replace('/NicerAppWebOS/ajax_getModule.php?f=','',$relPath);
     if ($matches[3][$idx]!==false) {
       $m = $matches[3][$idx];
-      $js = str_replace($relPath, $relPath.'&c='.date('Ymd-His',$m), $js);
+      $js = str_replace(
+        $relPath,
+        '/NicerAppWebOS/ajax_getModule.php?f='.$rp.'&c='.date('Ymd-His',$m),
+        $js
+      );
     }
   }
   //echo '<pre style="background:red;color:yellow;">'; var_dump($matches); echo '</pre>';
@@ -42,7 +62,11 @@ function timestampJSmodule1 ($js) {
 }
 function timestampJSmodule2 ($js) {
   $rt = realpath(dirname(__FILE__).'/..');
-  $rt2 = $rt.(preg_match('/^\//', $_GET['f'])?'':'/').$_GET['f'];
+  $rt2 = $rt.(
+    preg_match('/^\//', $_GET['f'])
+    ?''
+    :'/'
+  ).$_GET['f'];
   $fn = basename($rt2);
   $rt2a = str_replace($rt,'',dirname($rt2));
   $rt3 = $rt.$rt2a;
@@ -66,11 +90,10 @@ function timestampJSmodule2 ($js) {
   }
 
   foreach ($matches[1] as $idx => $relPath) {
+    $rp = str_replace('/NicerAppWebOS/ajax_getModule.php?f=','',$relPath);
     if ($matches[3][$idx]!==false) {
       $m = $matches[3][$idx];
-      preg_match_all('/\/(.*\.js)/', $relPath, $matches2, PREG_PATTERN_ORDER);
-      $fn2 = $matches2[0][0];
-      $js = str_replace($relPath, '/NicerAppWebOS/ajax_getModule.php?f='.$rt2a.'/'.$relPath.'&c='.date('Ymd-His',$m), $js);
+      $js = str_replace($relPath, '/NicerAppWebOS/ajax_getModule.php?f='.$rt2a.'/'.$rp.'&c='.date('Ymd-His',$m), $js);
     }
   }
   //echo '/* <pre style="background:red;color:yellow;">'.PHP_EOL; var_dump($matches); echo '</pre> */'.PHP_EOL;
@@ -96,9 +119,10 @@ function timestampJSmodule3 ($js) {
   }
 
   foreach ($matches[1] as $idx => $relPath) {
+    $rp = str_replace('/NicerAppWebOS/ajax_getModule.php?f=','',$relPath);
     if ($matches[3][$idx]!==false) {
       $m = $matches[3][$idx];
-      $js = str_replace($relPath, $relPath.'&c='.date('Ymd-His',$m), $js);
+      $js = str_replace($relPath, '/NicerAppWebOS/ajax_getModule.php?f='.$rp.'&c='.date('Ymd-His',$m), $js);
     }
   }
   //echo '/* <pre style="background:red;color:yellow;">'.PHP_EOL; var_dump($matches); echo '</pre> */';

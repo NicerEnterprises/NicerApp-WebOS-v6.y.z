@@ -54,8 +54,9 @@ export class vividUserInterface_2D_background extends vividUserInterface_2D_comp
     }
 
     next (div, search, url, saveTheme, callback, callStack) {
-        var t = this;
-        na.m.waitForCondition ('na.backgrounds.next() : t.data?', function() {
+        var t = na.backgrounds;
+        var fncn = na.m.myName(t);
+        na.m.waitForCondition (fncn+' : t.data?', function() {
             return t.data;
         }, function() {
             t.next_do (div, search, url, saveTheme, callback, callStack);

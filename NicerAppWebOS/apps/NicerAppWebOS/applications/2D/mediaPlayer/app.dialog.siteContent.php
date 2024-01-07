@@ -17,3 +17,4 @@ global $naWebOS;
   <h2>This page is under construction.</h2>
 </div>
 <div class="na3D"></div>
+<div id="site3D_label"></div>

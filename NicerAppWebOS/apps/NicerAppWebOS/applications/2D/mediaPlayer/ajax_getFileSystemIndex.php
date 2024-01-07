@@ -18,7 +18,7 @@
         global $fileFormats;
         $excl = '/.*thumbs.*/';
         global $excl;
-        $f = getFilePathList ($root, true, $fileFormats, $excl, array('dir'), null, 1, true);
+        $f = getFilePathList ($root, true, $fileFormats, $excl, ['file'], null, 1, true);
         //echo '<pre style="color:blue;">'; var_dump ($root); var_dump ($f); echo '</pre>';
         //$f = getFileDetails ($f);
         //echo '<pre style="color:red;">'; var_dump ($root); var_dump ($f); echo '</pre>';

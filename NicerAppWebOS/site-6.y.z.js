@@ -88,7 +88,7 @@ export class naSite {
 
         });
 
-        setInterval (t.backgrounds.next, 60 * 1000);
+        //setInterval (t.backgrounds.next, 60 * 1000);
         setInterval (t.updateSiteDatetime, 1000);
         setTimeout (function() {
             c.desktop = c.d = new vividUserInterface_2D_desktop(desktopDefinition);

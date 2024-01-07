@@ -1,104 +1,19 @@
-import {
-  AmbientLight,
-  AnimationMixer,
-  AxesHelper,
-  Box3,
-  Cache,
-  CubeTextureLoader,
-  DirectionalLight,
-  GridHelper,
-  HemisphereLight,
-  LinearEncoding,
-  LoaderUtils,
-  LoadingManager,
-  PMREMGenerator,
-  PerspectiveCamera,
-  RGBAFormat,
-  Scene,
-  SkeletonHelper,
-  UnsignedByteType,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-  sRGBEncoding,
-  Raycaster
-} from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
-
-import * as THREE from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
-import { Stats } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/libs/stats.module.js';
-import { GLTFLoader } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-import { KTX2Loader } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
-import { DRACOLoader } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
-import { OrbitControls } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
-import { RGBELoader } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
-import { DragControls } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
-//import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
-import { FlyControls } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
-//import { FirstPersonControls} from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FirstPersonControls.js';
-import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
-import { CameraControls, approxZero } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
-
-  import {
-    CSS2DRenderer,
-    CSS2DObject,
-  } from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
-
-
-
-
-
-/*import {
-  AmbientLight,
-  AnimationMixer,
-  AxesHelper,
-  Box3,
-  Cache,
-  CubeTextureLoader,
-  DirectionalLight,
-  GridHelper,
-  HemisphereLight,
-  LinearEncoding,
-  LoaderUtils,
-  LoadingManager,
-  PMREMGenerator,
-  PerspectiveCamera,
-  RGBAFormat,
-  Scene,
-  SkeletonHelper,
-  UnsignedByteType,
-  Vector3,
-  WebGLRenderer,
-  sRGBEncoding,
-} from 'three';
-import { Stats } from 'three/addons';
+import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
+import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
 import { DRACOLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
 import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/RGBELoader.js';
 import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/DragControls.js';
-//import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
+import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
+import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
+import { CameraControls, approxZero } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
-export class na3D_portraitFrame {
-    
-    constructor (el, parent, centerX, centerY, centerZ, sizeX, sizeY, sizeZ) {
-        
-        var minX = centerX - Math.round(sizeX/2);
-        var minY = centerY - Math.round(sizeY/2);
-        var minZ = centerY - Math.round(sizeZ/2);
-        var min = new Vector3 (minX, minY, minZ);
-        
-        var maxX = centerX + Math.round(sizeX/2);
-        var maxY = centerY + Math.round(sizeY/2);
-        var maxZ = centerY + Math.round(sizeZ/2);
-        var max = new Vector3 (maxX, maxY, maxZ);
-        
-        t.box = new Box3 (min,max);
-        return this;
-    }
-    
-}
-*/
+  import {
+    CSS2DRenderer,
+    CSS2DObject,
+  } from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
 
 
 export class na3D_fileBrowser {
@@ -123,7 +38,7 @@ export class na3D_fileBrowser {
         t.ld1 = {}; //levelDataOne
         t.ld2 = {}; //levelDataTwo
 
-        t.items = [ {
+        t.items = [ /*{
             name : 'backgrounds',
             offsetY : 0,
             offsetX : 0,
@@ -139,7 +54,7 @@ export class na3D_fileBrowser {
             rowOffsetValue : 100,
             parentRowOffset : 0,
             parentColumOffset : 0
-        } ];
+        }*/ ];
         
         t.lines = []; // onhover lines only in here
         t.permaLines = []; // permanent lines, the lines that show all of the parent-child connections.
@@ -156,7 +71,7 @@ export class na3D_fileBrowser {
         
         t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
         t.renderer.physicallyCorrectLights = true;
-        t.renderer.outputEncoding = sRGBEncoding;
+        t.renderer.outputEncoding = THREE.sRGBEncoding;
         t.renderer.setPixelRatio (window.devicePixelRatio);
         t.renderer.setSize( $(el).width()-20, $(el).height()-20 );
         t.renderer.toneMappingExposure = 1.0;
@@ -213,15 +128,14 @@ export class na3D_fileBrowser {
         });
         
         t.loader = new GLTFLoader();
-        t.initializeItems (t);
 
-        const light1  = new AmbientLight(0xFFFFFF, 0.3);
+        const light1  = new THREE.AmbientLight(0xFFFFFF, 0.3);
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
         light1.color = 0xFFFFFF;
         t.camera.add( light1 );
 
-        const light2  = new DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
+        const light2  = new THREE.DirectionalLight(0xFFFFFF, 0.8 * Math.PI);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         light2.intensity = 0.8 * Math.PI;
@@ -230,7 +144,7 @@ export class na3D_fileBrowser {
         
         t.lights.push(light1, light2);
         
-        t.pmremGenerator = new PMREMGenerator( t.renderer );
+        t.pmremGenerator = new THREE.PMREMGenerator( t.renderer );
         t.pmremGenerator.compileEquirectangularShader();
         
         //t.updateEnvironment(this);
@@ -276,7 +190,7 @@ export class na3D_fileBrowser {
             var innerHeight = $('#siteContent .vividDialogContent').height();
 
             t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
-            t.mouse.y = (-1 * ((clientY-$('#siteContent .vividDialogContent').offset().top) / innerHeight) * 2) + 1;
+            t.mouse.y = (-1 * ((clientY-$('#header').offset().top-$('#header').height()) / innerHeight) * 2) + 1;
             //t.animate(t);
         });
 
@@ -284,7 +198,7 @@ export class na3D_fileBrowser {
         window.addEventListener('resize', () => {
             //const { innerWidth, innerHeight } = window;
             var innerWidth = $('#siteContent .vividDialogContent').width();
-            var innerHeight = $('#siteContent .vividDialogContent').height();
+            var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
 
             t.renderer.setSize(innerWidth, innerHeight);
             t.camera.aspect = innerWidth / innerHeight;
@@ -303,7 +217,7 @@ export class na3D_fileBrowser {
         t.clock = new THREE.Clock();
         t.lookClock = -1;
         //t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.orbitControls.enabled = false;
+        //t.orbitControls.enabled = true;
         //t.controls.listenToKeyEvents( window ); // optional
 
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
@@ -315,6 +229,7 @@ export class na3D_fileBrowser {
         t.flyControls.rollSpeed = Math.PI / 24;
         t.flyControls.autoMove = true;
         //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
+        t.initializeItems (t);
         t.camera.lookAt (t.s2[0].position);
         t.cameraControls._camera.lookAt (t.s2[0].position);
 
@@ -489,9 +404,8 @@ export class na3D_fileBrowser {
 
 
 
-
             var intersects = t.raycaster.intersectObjects (t.s2);
-            if (intersects[0] && intersects[0].object.type!=='Line') 
+            if (false && intersects[0] && intersects[0].object.type!=='Line')
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
                 while (hoveredItem && !done) {
@@ -613,15 +527,19 @@ export class na3D_fileBrowser {
                 if (hovered && hovered.object.type!=='Line') {
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
-                    //$('#site3D_label')[0].textContent = hovered.object.it.name;
-                    //debugger;
+                    $('#site3D_label')[0].textContent = hovered.object.it.name;
 
                     // Get offset from object's dimensions
-                    const offset = new Vector3();
-                    new Box3().setFromObject(hovered.object).getSize(offset);
+                    const offset = new THREE.Vector3();
+                    new THREE.Box3().setFromObject(hovered.object).getSize(offset);
 
                     // Move label over hovered element
                     $('#site3D_label').css({
+                        left : t.mouse.layerX + 20,
+                        top : t.mouse.layerY + 20
+                    });
+                    console.log({
+                        name : t.hoverOverName,
                         left : t.mouse.layerX + 20,
                         top : t.mouse.layerY + 20
                     });
@@ -774,9 +692,50 @@ export class na3D_fileBrowser {
     }
     initializeItems_walkKey (cd) {
         var ps = cd.path.split('/');
-        //debugger;
-        if (ps[ps.length-1]=='folders') {
-        console.log ('initializeItems_walkKey', 'cd', cd);
+        if (ps[ps.length-1]=='files') {
+/*
+            let n = cd.at.lenth;
+            console.log ('initializeItems_walkKey', 'files', cd);
+            debugger;
+            let nn = n * n;
+            let nnn = n * n * n;
+
+            function mapTo3D(index) {
+                let x = index % n;
+                let y = Math.floor(index / n) % n;
+                let z = Math.floor(index / nn);
+                return { x: x, y: y, z: z };
+            }
+
+            function mapFrom3D(x, y, z) {
+                return x + y * n + z * nn;
+            }
+
+            // add nnn points to the position attribute of your myGeometryBuffer...
+
+            let indices3D = [];
+            for (let i = 0; i < nnn; i++) {
+                var p = mapTo3D(i);
+                if (p.x + 1 < n) {
+                    indices3D.push(i);
+                    indices3D.push(mapFrom3D(p.x + 1, p.y, p.z));
+                }
+                if (p.y + 1 < n) {
+                    indices3D.push(i);
+                    indices3D.push(mapFrom3D(p.x, p.y + 1, p.z));
+                }
+                if (p.z + 1 < n) {
+                    indices3D.push(i);
+                    indices3D.push(mapFrom3D(p.x, p.y, p.z + 1));
+                }
+            }
+
+            myBufferGeometry.setIndex(indices3D);
+            let lines = new THREE.LineSegments(myBufferGeometry);
+            cd.params.t.scene.add( lines );
+*/
+        } else if (ps[ps.length-1]=='folders') {
+            console.log ('initializeItems_walkKey', 'folders', cd);
             cd.params.idxPath = cd.params.idxPath2;
             //cd.params.idxPath = cd.params.idxPath + '/' + cd.params.t.items.length;
 
@@ -827,28 +786,6 @@ export class na3D_fileBrowser {
             textures = [];
             for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
 
-            if (false)
-            for (var i=0; i<6; i++) {
-                var p = null;
-                //debugger;
-
-                if (it.data.files && it.data.files[i] && it.data.files[i].match(/.*\.png|.*\.jpeg|.*\.jpg|.*\.gif$/)) {
-                    var
-                    fullPath = cd.params.t.data[0].root+'/'+cd.path.replace('0/filesAtRoot/','').replace(/\/folders/g,'')+'/'+cd.k+'/'+it.data.files[i],
-                    filename = fullPath.replace(/^.*[\\\/]/, ''),
-                    path = fullPath.replace('/'+filename,''),
-                    pathThumb = path+'/thumbs/300/'+filename;
-                    textures[i] = pathThumb;//'/NicerAppWebOS/'+filepath+'/'+key+'/thumbs/'+itd[''+i];//fn;
-                    textures[i] = textures[i].replace(/\/\//g, '/');
-                    it.fullPath = fullPath;
-                    //if (itd.files[i] && itd.files[i].match(/streetfighter/)) debugger;
-                    //alert (JSON.stringify(textures,null,2));
-                } else {
-                    //alert (itd[''+i]);
-                }
-            }
-
-
             var
             materials = [
                 new THREE.MeshBasicMaterial({
@@ -870,7 +807,90 @@ export class na3D_fileBrowser {
                     map: new THREE.TextureLoader().load(textures[5])
                 })
             ];
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 250, 250, 250 ), materials );
+
+            var
+            textures2 = [];
+            for (var i=0; i<6; i++) textures2[i] = '/NicerAppWebOS/siteMedia/iconMusic.png';
+
+            var
+            materials2 = [
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[0])
+                }),
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[1])
+                }),
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[2])
+                }),
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[3])
+                }),
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[4])
+                }),
+                new THREE.MeshBasicMaterial({
+                    map: new THREE.TextureLoader().load(textures2[5])
+                })
+            ];
+            // display files :
+
+            if (it.data.files)
+            for (var fkey in it.data.files) {
+                if (fkey.match(/\.mp3$/)) {
+                    var p = null;
+
+                    var ps2 = $.extend([],ps);
+                    delete ps2[ps2.length-1];
+                    var level = ps2.length;
+                    var ps2Str = ps2.join('/');
+                    var parent = na.m.chaseToPath (cd.root, ps2Str+'/files/'+fkey, false);
+
+                    var
+                    it1a = {
+                        data : it.data.files[fkey],
+                        level : ps2.length,
+                        name : fkey,
+                        idx : cd.params.t.items.length,
+                        idxPath : cd.params.idxPath + '/' + it.idx,//cd.params.t.items.length,
+                        filepath : cd.path+'/'+cd.k,
+                        levelIdx : ++cd.params.ld2[level].levelIdx,
+                        parent : it,
+                        leftRight : 0,
+                        upDown : 0,
+                        columnOffsetValue : 1000,
+                        rowOffsetValue : 1000
+                    };
+                    //debugger;
+                    /*
+                    for (var i=0; i<cd.params.t.items.length; i++) {
+                        var it2 = cd.params.t.items[i];
+                        if (it1a.filepath===it2.filepath) {
+                            debugger;
+                            it1a.idxPath = it2.idxPath;
+                            break;
+                        }
+                    }
+
+                    /*
+                    if (!cd.params.t.ld3) cd.params.t.ld3 = {};
+                    if (!cd.params.t.ld3[it1a.idxPath]) cd.params.t.ld3[it1a.idxPath] = { itemCount : 0, items : [] };
+                    cd.params.t.ld3[it1a.idxPath].itemCount++;
+                    cd.params.t.ld3[it1a.idxPath].items.push (it1a.idx);
+                    cd.params.idxPath2 += '/' + it1a.idx;
+                    */
+
+                    var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
+                    cd.params.t.scene.add( cube );
+                    cd.params.t.s2.push(cube);
+                    cube.it = it1a;
+                    it1a.model = cube;
+                    cd.params.t.items.push (it1a);
+                }
+            }
+
+            // parent/current folder :
+            var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
             cd.params.t.scene.add( cube );
             cd.params.t.s2.push(cube);
             cube.it = it;
@@ -883,9 +903,9 @@ export class na3D_fileBrowser {
     }
     
     onresize (t, levels) {
-        if (!t) t = this;
-        //debugger;
-        na.m.waitForCondition ('waiting for other onresize commands to finish',
+        var url = window.moduleURL;
+        var fncn = url+'::'+t.constructor.name+'.onresize()';
+        na.m.waitForCondition (fncn + ' : waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
             function () { t.onresize_do (t, levels); }, 
             50
@@ -910,7 +930,6 @@ export class na3D_fileBrowser {
                     var
                     column = 1,
                     row = 1;
-
                     
                     //if (it.filepath=='siteMedia/backgrounds/tiled/active') debugger;
                     for (var j=0; j<ld3.items.length; j++) {
@@ -945,6 +964,7 @@ export class na3D_fileBrowser {
         its.sort (compare);
         
         
+        /*
         var 
         x = t.data, // x[a][b][c].it
         maxLevel = 0;
@@ -970,6 +990,8 @@ export class na3D_fileBrowser {
                 }
             }
         }
+        */
+        var its2 = $.extend( [], its );
         var
         compare2 = function (a,b) {
             var x = b.maxColumn - a.maxColumn;
@@ -983,162 +1005,74 @@ export class na3D_fileBrowser {
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null),
-            rndMax = 4000;
+            rndMax = 400,
+            spacing = 300,
+
+            n = it.name.match(/\.mp3$/)
+                ? Object.keys(p.parent.data.folders?p.parent.data.folders:{}).length
+                    + Object.keys(p.parent.data.files?p.parent.data.files:{}).length
+                : p
+                    ? Object.keys(p.data.folders?p.data.folders:{}).length
+                        + Object.keys(p.data.files?p.data.files:{}).length
+                    : Object.keys(it.data.folders?it.data.folders:{}).length
+                        + Object.keys(it.data.files?it.data.files:{}).length,
+
+            colCount = t.nthroot(n,3),
+            rowCount = colCount,
+
+            hCount = Math.floor(n / colCount),
+            vCount = hCount,
+            dCount = hCount,
+
+            h = column,// Math.floor(it.levelIdx / hCount),
+            v = row,//(it.levelIdx - h ) / vCount,
+            d = (it.levelIdx - v ) / dCount;
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax );
+            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax);
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
             if (it.parent) var rndz = poz[it.parent.idx]; else var rndz = 0;
 
-            if (p && p.parent && t.items[p.parent.idx]) {
-                var
-                it2 = t.items[p.parent.idx],
-                ppLeftRight = it2.leftRight,
-                ppUpDown = it2.upDown;                
-            } else {
-                var
-                it2 = null,
-                ppLeftRight = it.leftRight,
-                ppUpDown = it.upDown;
-            };
-            
-            if (p) {
-                var
-                itmaxc = it.maxColumnIta.maxColumn,
-                itmaxr = it.maxRowIta.maxRow,
-                itmaxc2 = Math.floor(itmaxc/2),
-                itmaxr2 = Math.floor(itmaxr/2),
-                itLeftRight = /*p.leftRight * */(
-                    it.column-1 == itmaxc / 2
-                    ? 0
-                    : itmaxc===1
-                        ? 0
-                        : itmaxc - it.column == it.column -1
-                            ? 0
-                            : itmaxc - it.column < it.column - 1
-                                ? 1
-                                : -1
-                            ),
-                itUpDown = /*p.upDown * */(
-                    it.row-1 == itmaxr/2
-                    ? 0
-                    : itmaxr===1
-                        ? 0
-                        : itmaxr - it.row == it.row - 1
-                            ? 0
-                            : itmaxr - it.row < it.row - 1
-                                ? 1
-                                : -1
-                            ),
-                itc = (itmaxc - it.column),
-                itr = (itmaxr - it.row);
+debugger;
+            //it.model.position.x = (h - hCount/2) * spacing;
+            //it.model.position.y = (v - vCount/2) * spacing;
+            //it.model.position.z = -1 * rndz + ( (d - dCount/2) * 200 );
+            it.model.position.x = (h ) * spacing;
+            it.model.position.y = (v ) * spacing;
+            it.model.position.z = -1 * rndz + ( (d ) * 200 );
 
-                it.columnOffsetValue = itc;//Math.floor(itc);
-                it.rowOffsetValue = itr;//Math.floor(itr);
-                it.leftRight = itLeftRight;
-                it.upDown = itUpDown;                
-
-            } else {
-                var mc = 0, mr = 0, p = it;
-
-                var
-                itmaxc = it.maxColumnIta.maxColumn,
-                itmaxr = it.maxRowIta.maxRow,
-                itLeftRight = /*p.leftRight * */(
-                    it.column-1 == itmaxc / 2
-                    ? 0
-                    : itmaxc===1
-                        ? 0
-                        : itmaxc - it.column == it.column -1
-                            ? 0
-                            : itmaxc - it.column < it.column - 1
-                                ? 1
-                                : -1
-                            ),
-                itUpDown = /*p.upDown * */(
-                    it.row-1 == itmaxr/2
-                    ? 0
-                    : itmaxr===1
-                        ? 0
-                        : itmaxr - it.row == it.row - 1
-                            ? 0
-                            : itmaxr - it.row < it.row - 1
-                                ? 1
-                                : -1
-                            ),
-                itc = (itmaxc - it.column),
-                itr = (itmaxr - it.row);
-
-                it.columnOffsetValue = itc;//Math.floor(itc);
-                it.rowOffsetValue = itr;//Math.floor(itr);
-                it.leftRight = itLeftRight;
-                it.upDown = itUpDown;
-                //if (it.name=='landscape') debugger;
-            };
-        
-            if (it.model && p && p.model) {
-
-                var
-                z = -1 * ((it.level+1) * 2500 ),
-                plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
-                plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
-                ilc = it.leftRight * it.column,// * p.columnOffsetValue,
-                ilr = it.upDown * it.row,// * p.rowOffsetValue,
-
-                min = 4, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 200, m1 = 2500/m0, m2 = 2500/m0, m2a = 200, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 600, q = 500, s = 1,
-                u = 1 * (p.leftRight===0?ilc:p.leftRight),
-                v = 1,
-                w = 1 * (p.upDown===0?ilr:p.upDown),
-                x = 1,
-                u1 = p.columnOffsetValue/4,
-                w1 = p.rowOffsetValue/4,
-                u2 = -1 * p.columnOffsetValue,
-                w2 = -1 * p.rowOffsetValue;
-
-                it.model.position.x = Math.round(
-                    p.model.position.x
-                    + (u1 * m1)+(it.column*m1)
-                    + (it.level > min ? (u2 * v * ((o * n))) : 0)
-                    + (it.level > min ? (u2 * v * ((o * s))) : 0)
-                    + (it.level > min ? p.leftRight * rndx : 0)
-                );
-                it.model.position.y = Math.round(
-                    p.model.position.y
-                    + (w1 * m2)+(it.row*m2)
-                    + (it.level > min ? (w2 * x * ((o * n))) : 0)
-                    + (it.level > min ? (w2 * x * ((o * s))) : 0)
-                    + (it.level > min ? p.upDown * rndy : 0)
-                );
-                it.model.position.z = -1 * z - rndz;
-                //if (it.name=='space'||it.name=='wood') debugger;
-
-                var x = it.data.it;
-            }else if (it.model) {
-                //debugger;
-                it.model.position.x = it.leftRight * (it.column) * 100;
-                it.model.position.y = it.upDown * (it.row) * 100;
-                it.model.position.z = -1 * (it.level+1) * 100;
-            }
-
-            if (false && it.model) {
+            if (it.model) {
                 var dbg = {
                     px : it.model.position.x,
                     py : it.model.position.y,
                     pz : it.model.position.z,
                     it : it
                 };
-                console.log (it.filepath, dbg);
+                console.log (it.filepath, it.name, it.levelIdx, dbg);
             }
         }
         
         t.onresize_postDo(t);
     }
 
+    nthroot (x, n) {
+        // thanks go to https://stackoverflow.com/questions/7308627/javascript-calculate-the-nth-root-of-a-number
+        try {
+            var negate = n % 2 == 1 && x < 0;
+            if(negate)
+            x = -x;
+            var possible = Math.pow(x, 1 / n);
+            n = Math.pow(possible, n);
+            if(Math.abs(x - n) < 1 && (x > 0 == n > 0))
+            return negate ? -possible : possible;
+        } catch(e){}
+    }
+
     onresize_postDo (t) {
-        t.drawLines(t);
+        //t.drawLines(t);
 
         if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
 
@@ -1260,6 +1194,13 @@ export class na3D_fileBrowser {
         t.curves3x = t.points3a.concat (t.points3b, t.points3z);
         t.curve3 = new THREE.CatmullRomCurve3(t.curves3x);
         t.points3 = t.curve3.getPoints(numPoints);
+
+        /*
+        t.orbitControls.center =  new THREE.Vector3(
+            t.middle.x,
+            t.middle.y,
+            t.middle.z
+        );*/
 
 /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
@@ -1420,7 +1361,7 @@ export class na3D_fileBrowser {
             if (!t.started) {
                 t.started = true;
                 t.cameraControls.enabled = true;
-                t.pathAnimation.play(0);
+                //t.pathAnimation.play(0);
 
 
                 t.renderer.domElement.addEventListener ('pointerdown', function (evt) {
