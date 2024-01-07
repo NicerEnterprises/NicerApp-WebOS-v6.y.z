@@ -862,25 +862,32 @@ export class na3D_fileBrowser {
                         rowOffsetValue : 1000
                     };
                     //debugger;
-                    /*
-                    for (var i=0; i<cd.params.t.items.length; i++) {
-                        var it2 = cd.params.t.items[i];
-                        if (it1a.filepath===it2.filepath) {
-                            debugger;
-                            it1a.idxPath = it2.idxPath;
-                            break;
-                        }
-                    }
+                    // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
+                    const length = 12, width = 8;
 
-                    /*
-                    if (!cd.params.t.ld3) cd.params.t.ld3 = {};
-                    if (!cd.params.t.ld3[it1a.idxPath]) cd.params.t.ld3[it1a.idxPath] = { itemCount : 0, items : [] };
-                    cd.params.t.ld3[it1a.idxPath].itemCount++;
-                    cd.params.t.ld3[it1a.idxPath].items.push (it1a.idx);
-                    cd.params.idxPath2 += '/' + it1a.idx;
-                    */
+                    const shape = new THREE.Shape();
+                    shape.moveTo( 0,0 );
+                    shape.lineTo( 0, width );
+                    shape.lineTo( length, width );
+                    shape.lineTo( length, 0 );
+                    shape.lineTo( 0, 0 );
 
-                    var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
+                    const extrudeSettings = {
+                    steps: 2,
+                    depth: 16,
+                    bevelEnabled: true,
+                    bevelThickness: 1,
+                    bevelSize: 1,
+                    bevelOffset: 0,
+                    bevelSegments: 1
+                    };
+
+                    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+
+                    // parent/current folder :
+                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+                    var cube = new THREE.Mesh( geometry, materials );
                     cd.params.t.scene.add( cube );
                     cd.params.t.s2.push(cube);
                     cube.it = it1a;
@@ -889,8 +896,33 @@ export class na3D_fileBrowser {
                 }
             }
 
+
+            // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
+            const length = 12, width = 8;
+
+            const shape = new THREE.Shape();
+            shape.moveTo( 0,0 );
+            shape.lineTo( 0, width );
+            shape.lineTo( length, width );
+            shape.lineTo( length, 0 );
+            shape.lineTo( 0, 0 );
+
+            const extrudeSettings = {
+            steps: 2,
+            depth: 16,
+            bevelEnabled: true,
+            bevelThickness: 1,
+            bevelSize: 1,
+            bevelOffset: 0,
+            bevelSegments: 1
+            };
+
+            const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+
             // parent/current folder :
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+            var cube = new THREE.Mesh( geometry, materials );
             cd.params.t.scene.add( cube );
             cd.params.t.s2.push(cube);
             cube.it = it;
@@ -1017,7 +1049,7 @@ export class na3D_fileBrowser {
                     : Object.keys(it.data.folders?it.data.folders:{}).length
                         + Object.keys(it.data.files?it.data.files:{}).length,
 
-            colCount = t.nthroot(n,3),
+            colCount = Math.cbrt(n),
             rowCount = colCount,
 
             hCount = Math.floor(n / colCount),
@@ -1026,7 +1058,8 @@ export class na3D_fileBrowser {
 
             h = column,// Math.floor(it.levelIdx / hCount),
             v = row,//(it.levelIdx - h ) / vCount,
-            d = (it.levelIdx - v ) / dCount;
+            //d = (it.levelIdx - (hCount + vCount) );
+            d = (n - (hCount + vCount) );
 
             if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
             if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
@@ -1042,7 +1075,7 @@ debugger;
             //it.model.position.z = -1 * rndz + ( (d - dCount/2) * 200 );
             it.model.position.x = (h ) * spacing;
             it.model.position.y = (v ) * spacing;
-            it.model.position.z = -1 * rndz + ( (d ) * 200 );
+            it.model.position.z = -1 * ( (d ) * 200 );
 
             if (it.model) {
                 var dbg = {
