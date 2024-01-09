@@ -188,6 +188,7 @@ export class na3D_fileBrowser {
         //t.raycaster = new Raycaster();
         //t.mouse = new Vector2();
 
+        /*
         window.addEventListener('mousemove', ({ clientX, clientY }) => {
             //const { innerWidth, innerHeight } = window;
             var innerWidth = $('#siteContent .vividDialogContent').width();
@@ -196,7 +197,7 @@ export class na3D_fileBrowser {
             t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
             t.mouse.y = (-1 * ((clientY-$('#header').height()) / innerHeight) * 2) + 1;
             //t.animate(t);
-        });
+        });*/
 
         // Handle window resize
         window.addEventListener('resize', () => {
@@ -1227,7 +1228,7 @@ export class na3D_fileBrowser {
                 if (!list) debugger;
                 var it = t.items[j];
                 if (it) {
-                    if (it.name.match(/SABATON/)) debugger;
+                    //if (it.name.match(/SABATON/)) debugger;
                     if (it.parent && it.parent.idx) {
                         for (var k=0; k<list.length; k++) {
                             if (p1[k]==it.parent.idx) {
@@ -1459,8 +1460,8 @@ export class na3D_fileBrowser {
             p = (it.parent ? t.items[it.parent.idx] : null),
             rndMax = 8000;
 
-            if (it.parent && it.parent.idx && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax * 10);
-            if (it.parent && it.parent.idx && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax * 10);
+            if (it.parent && it.parent.idx && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax * 2);
+            if (it.parent && it.parent.idx && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax * 3);
             if (it.parent && it.parent.idx && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax * 5);
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
@@ -1592,7 +1593,7 @@ export class na3D_fileBrowser {
                 ilc = it.leftRight * it.column,// * p.columnOffsetValue,
                 ilr = it.upDown * it.row,// * p.rowOffsetValue,
 
-                min = 6, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 2500, m1 = 2500, m2 = 2500, m2a = 200, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 50* 1000, s = 1,
+                min = 6, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1 = 1500, m2 = 1500, m1a = 10*1000, m2a = 10*1000, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 5000, s = 1,
                 u = 1 * (p.leftRight===0?ilc:p.leftRight),
                 v = 1,
                 w = 1 * (p.upDown===0?ilr:p.upDown),
@@ -1607,21 +1608,21 @@ export class na3D_fileBrowser {
                 if (it.name.match(/\.mp3$/)) {
                     it.model.position.x = Math.round(
                         p.model.position.x
-                        + (u2 * m1)+(it.column*m1)
+                        + (u2 * m1a)+(it.column*m1)
                         + (it.level > min ? (u2 * v * ((o * n))) : 0)
                         + (it.level > min ? (u2 * v * ((o * s))) : 0)
                         + (it.level > min ? p.leftRight * rndx : 0)
                     );
                     it.model.position.y = Math.round(
                         p.model.position.y
-                        + (v2 * m2)+(it.row*m2)
+                        + (v2 * m2a)+(it.row*m2)
                         + (it.level > min ? (v2 * x * ((o * n))) : 0)
                         + (it.level > min ? (v2 * x * ((o * s))) : 0)
                         + (it.level > min ? p.upDown * rndy : 0)
                     );
                     it.model.position.z = Math.round(
                         (p.model.position.z ? p.model.position.z : 0)
-                        + (w1 * m2)+(it.depth*m2)
+                        + (w2 * m2a)+(it.depth*m2)
                         + (it.level > min ? (w2 * x * ((o * n))) : 0)
                         + (it.level > min ? (w2 * x * ((o * s))) : 0)
                         + (it.level > min ? p.backForth * z + rndz : 0)
@@ -2036,7 +2037,10 @@ export class na3D_fileBrowser {
                 var objs = [];
                 for (var i=0; i<t.items.length; i++) if (t.items[i].model) objs[objs.length] = t.items[i].model;
 
-                t.dragndrop = new DragControls( objs, t.camera, t.renderer.domElement );
+                t.dragndrop = new DragControls(
+                    objs, t.camera, t.renderer.domElement
+                );
+                //t.dragndrop.activate();
 
                 $(t.renderer.domElement).contextmenu(function() {
                     return false;
@@ -2048,6 +2052,7 @@ export class na3D_fileBrowser {
                     t.flyControls.enabled = false;
                     t.flyControls.moveState.forward = 0;
                     t.flyControls.moveState.back = 0;
+                    t.orbitControls.enabled = false;
 
                     t.dragndrop.cube = event.object;
                     t.dragndrop.mouseX = t.mouse.layerX;
@@ -2062,9 +2067,9 @@ export class na3D_fileBrowser {
                             it2.model.position.dragStartX = it2.model.position.x;
                             it2.model.position.dragStartY = it2.model.position.y;
                             it2.model.position.dragStartZ = it2.model.position.z;
-                            it2.model2.position.dragStartX = it2.model2.position.x;
+                            /*it2.model2.position.dragStartX = it2.model2.position.x;
                             it2.model2.position.dragStartY = it2.model2.position.y;
-                            it2.model2.position.dragStartZ = it2.model2.position.z;
+                            it2.model2.position.dragStartZ = it2.model2.position.z;*/
                         }
                     }
 
@@ -2073,17 +2078,19 @@ export class na3D_fileBrowser {
                 t.dragndrop.addEventListener( 'drag', function (event) {
                     let cube = event.object;
 
+                    //if (false)
+                            debugger;
                     for (let i=0; i<t.items.length; i++) {
                         let it2 = t.items[i];
                         if (it2.idxPath === cube.it.idxPath) {
-                            //debugger;
-                            it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
-                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model.position.x = it2.model.position.dragStartX + (t.dragndrop.mouseX - t.mouse.layerX) * 10;
+                            it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY) * 10;
                             it2.model.position.z = it2.model.position.dragStartZ ;
 
+                            /*
                              it2.model2.position.x = it2.model2.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
                             it2.model2.position.y = it2.model2.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
-                            it2.model2.position.z = it2.model2.position.dragStartZ ;
+                            it2.model2.position.z = it2.model2.position.dragStartZ ;*/
                         }
                     }
                     /*
@@ -2109,7 +2116,8 @@ export class na3D_fileBrowser {
                 t.dragndrop.addEventListener( 'dragend', function ( event ) {
                     if (t.showLines) t.drawLines(t);
                     t.lookClock = -2;
-                    t.cameraControls.enabled = false;
+                    t.cameraControls.enabled = true;
+                    t.orbitControls.enabled = true;
                     t.flyControls.enabled = false;
                 } );
 
