@@ -14,29 +14,39 @@ export class naApp_mediaPlayer {
       });
 
     //debugger;
-    $('.na3D').css({
-      width : $('#siteContent > .vividDialogContent').width(),
-      height :
-        $('#siteContent > .vividDialogContent').height()
-        - $('#header').offset().top - $('#header').outerHeight()
-    });
+    setTimeout (function() {
+      $('.na3D').css({
+        width : $('#siteContent > .vividDialogContent').width(),
+        height :
+          $('#siteContent > .vividDialogContent').height()
+          - $('#header').offset().top - $('#header').outerHeight()
+      });
+      $(window).resize(function() {
+        $('.na3D').css({
+          width : $('#siteContent > .vividDialogContent').width(),
+          height :
+            $('#siteContent > .vividDialogContent').height()
+            - $('#header').offset().top - $('#header').outerHeight()
+        });
+      });
 
-    $('.na3D').each(function(idx,el){
-        var ac = {
-            type : 'GET',
-            url : '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/mediaPlayer/ajax_getFileSystemIndex.php',
-            success : function (data, ts) {
-                var parameters = { views : [ JSON.parse(data) ] };
-                //debugger;
+      $('.na3D').each(function(idx,el){
+          var ac = {
+              type : 'GET',
+              url : '/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/mediaPlayer/ajax_getFileSystemIndex.php',
+              success : function (data, ts) {
+                  var parameters = { views : [ JSON.parse(data) ] };
+                  //debugger;
 
-                na.settings.na3D= {
-                  '#na3D' :
-                    new na3D_fileBrowser(el, $(el).parent()[0], parameters)
-                };
-            }
-        };
-        $.ajax(ac);
-    });
+                  na.settings.na3D= {
+                    '#na3D' :
+                      new na3D_fileBrowser(el, $(el).parent()[0], parameters)
+                  };
+              }
+          };
+          $.ajax(ac);
+      });
 
+    }, 500);
   }
 }

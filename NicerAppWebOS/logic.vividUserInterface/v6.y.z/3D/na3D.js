@@ -1,6 +1,7 @@
 import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
 import { Stats } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/libs/stats.module.js';
 import { GLTFLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/GLTFLoader.js';
+import { FBXLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/FBXLoader.js';
 import { KTX2Loader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/KTX2Loader.js';
 import { DRACOLoader } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/loaders/DRACOLoader.js';
 import { OrbitControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/OrbitControls.js';
@@ -9,6 +10,9 @@ import { DragControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples
 import { FlyControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/examples/jsm/controls/FlyControls.js';
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
 import { CameraControls, approxZero } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
+
+
+import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
 
   import {
     CSS2DRenderer,
@@ -190,7 +194,7 @@ export class na3D_fileBrowser {
             var innerHeight = $('#siteContent .vividDialogContent').height();
 
             t.mouse.x = ((clientX-$('#siteContent .vividDialogContent').offset().left) / innerWidth) * 2 - 1;
-            t.mouse.y = (-1 * ((clientY-$('#header').offset().top-$('#header').height()) / innerHeight) * 2) + 1;
+            t.mouse.y = (-1 * ((clientY-$('#header').height()) / innerHeight) * 2) + 1;
             //t.animate(t);
         });
 
@@ -216,9 +220,9 @@ export class na3D_fileBrowser {
         CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
         t.lookClock = -1;
-        //t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.orbitControls.enabled = true;
-        //t.controls.listenToKeyEvents( window ); // optional
+        t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
+        t.orbitControls.enabled = true;
+        t.orbitControls.listenToKeyEvents( window ); // optional
 
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
         t.cameraControls.enabled = true;
@@ -249,13 +253,15 @@ export class na3D_fileBrowser {
             t.scene.matrixWorldAutoUpdate = true;;
             t.camera.matrixWorldAutoUpdate = true;
 
+            //t.flyControls.enabled = false;
+
             if (t.debug) console.log ('t.lookClock', t.lookClock);
             if (t.lookClock === -2) {
                 t.lookClock = Date.now();
             }
             if (t.lookClock > 0) {
                 //debugger;
-                var delta2 = Date.now() - 1500;
+                var delta2 = Date.now() - 1700;
                 if (t.debug) console.log ('animate(): delta2', delta2 > t.lookClock);
             };
             const delta = t.clock.getDelta();
@@ -270,6 +276,9 @@ export class na3D_fileBrowser {
                 if (t.debug) console.log ('animate() : calling t.flyControls.update()');
                 t.flyControls.update(delta)
                 t.flyControls.updateMovementVector();
+            } else {
+                t.cameraControls.enabled = true;
+                //t.onresize_postDo(t);
             }
 
             if (t.cameraControls.enabled) {
@@ -300,10 +309,12 @@ export class na3D_fileBrowser {
                 if (t.debug) console.log ('t.flyControls.enabled, t.cameraControls.disabled');
                 t.flyControls.enabled = true;
                 t.cameraControls.enabled = false;
+                t.orbitControls.enabled = false;
             } else {
                 //if (t.debug) console.log ('t.flyControls.disabled, t.cameraControls.enabled');
-                //t.flyControls.enabled = false;
-                //t.cameraControls.enabled = true;
+                t.flyControls.enabled = false;
+                t.cameraControls.enabled = true;
+                t.orbitControls.enabled = true;
             }
 
 
@@ -405,7 +416,7 @@ export class na3D_fileBrowser {
 
 
             var intersects = t.raycaster.intersectObjects (t.s2);
-            if (false && intersects[0] && intersects[0].object.type!=='Line')
+            if (intersects[0] && intersects[0].object.type!=='Line')
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
                 while (hoveredItem && !done) {
@@ -458,7 +469,7 @@ export class na3D_fileBrowser {
                                     geometry.dynamic = true;
                                     geometry.verticesNeedUpdate = true;
 
-                                    var material = new THREE.LineBasicMaterial({ color: 0xCCCCFF, linewidth:4 });
+                                    var material = new THREE.LineBasicMaterial({ color: 0xCCCCFF, linewidth:2 });
                                     var line = new THREE.Line( geometry, material );
                                     t.scene.add(line);
 
@@ -477,6 +488,7 @@ export class na3D_fileBrowser {
                             it = t.items[it.parent.idx];
                         }
                                                 
+                        /*
                         // draw lines to children
                         for (var j=0; j<t.items.length; j++) {
                             var child = t.items[j];
@@ -514,12 +526,15 @@ export class na3D_fileBrowser {
                                 };
                             }
                         }
+                        */
                         done = true;
                     }
                     
                     hoveredItem = t.items[hoveredItem.parent.idx];
                 }
-                
+        }
+
+        if (!t.animPlaying) {
                 // show folder name for item under mouse and closest to the country
                 $('#site3D_label').html(t.hoverOverName).css({display:'flex',opacity:1});
 
@@ -527,7 +542,7 @@ export class na3D_fileBrowser {
                 if (hovered && hovered.object.type!=='Line') {
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
-                    $('#site3D_label')[0].textContent = hovered.object.it.name;
+                    $('#site3D_label')[0].textContent = hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
 
                     // Get offset from object's dimensions
                     const offset = new THREE.Vector3();
@@ -535,6 +550,7 @@ export class na3D_fileBrowser {
 
                     // Move label over hovered element
                     $('#site3D_label').css({
+                        display : 'block',
                         left : t.mouse.layerX + 20,
                         top : t.mouse.layerY + 20
                     });
@@ -546,16 +562,14 @@ export class na3D_fileBrowser {
                 } else {
                     // Reset label
                     t.renderer.domElement.className = '';
-                    t.label.visible = false;
-                    t.labelDiv.textContent = '';
+                    $('#site3D_label').css({ display : 'none' });
+                    //t.label.visible = false;
+                    //t.labelDiv.textContent = '';
                 }
-
-                // Render scene
-                t.renderer.render(t.scene, t.camera);
 
                 // Render labels
                 //t.labelRenderer.render(t.scene, t.camera);
-            }
+
             if (!intersects[0]) {
                 $('#site3D_label').fadeOut();
             } else {
@@ -564,8 +578,7 @@ export class na3D_fileBrowser {
                     model.rotation.z += 0.02; //TODO : auto revert back to model.rotation.z = 0;
                 }
             }
-        //}
-        
+        }
         //if (t.controls) t.controls.update();
 
         for (var i=0; i<t.lines.length; i++) {
@@ -693,47 +706,7 @@ export class na3D_fileBrowser {
     initializeItems_walkKey (cd) {
         var ps = cd.path.split('/');
         if (ps[ps.length-1]=='files') {
-/*
-            let n = cd.at.lenth;
             console.log ('initializeItems_walkKey', 'files', cd);
-            debugger;
-            let nn = n * n;
-            let nnn = n * n * n;
-
-            function mapTo3D(index) {
-                let x = index % n;
-                let y = Math.floor(index / n) % n;
-                let z = Math.floor(index / nn);
-                return { x: x, y: y, z: z };
-            }
-
-            function mapFrom3D(x, y, z) {
-                return x + y * n + z * nn;
-            }
-
-            // add nnn points to the position attribute of your myGeometryBuffer...
-
-            let indices3D = [];
-            for (let i = 0; i < nnn; i++) {
-                var p = mapTo3D(i);
-                if (p.x + 1 < n) {
-                    indices3D.push(i);
-                    indices3D.push(mapFrom3D(p.x + 1, p.y, p.z));
-                }
-                if (p.y + 1 < n) {
-                    indices3D.push(i);
-                    indices3D.push(mapFrom3D(p.x, p.y + 1, p.z));
-                }
-                if (p.z + 1 < n) {
-                    indices3D.push(i);
-                    indices3D.push(mapFrom3D(p.x, p.y, p.z + 1));
-                }
-            }
-
-            myBufferGeometry.setIndex(indices3D);
-            let lines = new THREE.LineSegments(myBufferGeometry);
-            cd.params.t.scene.add( lines );
-*/
         } else if (ps[ps.length-1]=='folders') {
             console.log ('initializeItems_walkKey', 'folders', cd);
             cd.params.idxPath = cd.params.idxPath2;
@@ -743,7 +716,7 @@ export class na3D_fileBrowser {
             delete ps2[ps2.length-1];
             var level = ps2.length;
             var ps2Str = ps2.join('/');
-            var parent = na.m.chaseToPath (cd.root, ps2Str, false);
+            var parent = cd.params.t.items[parseInt(ps2[ps2.length-1])];//na.m.chaseToPath (cd.root, ps2Str, false);
 
             if (!cd.params.ld2[level]) cd.params.ld2[level] = { levelIdx : 0 };
 
@@ -782,31 +755,174 @@ export class na3D_fileBrowser {
             cd.params.t.ld3[it.idxPath].items.push (it.idx);
             cd.params.idxPath2 += '/' + it.idx;
 
-            var
-            textures = [];
-            for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/folderIcon.png';
 
             var
-            materials = [
+            textures = [];
+            for (var i=0; i<6; i++) textures[i] = '/NicerAppWebOS/siteMedia/iconFolder.old.png';
+
+            var
+            materials1 = [
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[0])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[1])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[2])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[3])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[4])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures[5])
                 })
-            ];
+            ],
+            materials1a = [
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#008000',
+                    opacity : 0.3,
+                    transparent : true
+                })
+            ],
+            materials1a = [
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#005000',
+                    opacity : 0.5,
+                    transparent : true
+                })
+            ];;
+
+
+            // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
+            var sideLength = 300, length = sideLength, width = sideLength;
+
+            var shape = new THREE.Shape();
+            shape.moveTo( 0,0 );
+            shape.lineTo( 0, width );
+            shape.lineTo( length, width );
+            shape.lineTo( length, 0 );
+            shape.lineTo( 0, 0 );
+
+            var extrudeSettings = {
+            steps: 2,
+            depth: sideLength,
+            bevelEnabled: true,
+            bevelThickness: 1,
+            bevelSize: 1,
+            bevelOffset: 0,
+            bevelSegments: 1
+            };
+
+            var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+
+            // parent/current folder :
+            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+            var cube = new THREE.Mesh( geometry, materials1a );
+            cd.params.t.scene.add( cube );
+            cd.params.t.s2.push(cube);
+            cube.it = it;
+            it.model = cube;
+            cd.params.t.items.push (it);
+
+            var sideLength = 240, length = sideLength, width = sideLength;
+
+            var shape = new THREE.Shape();
+            shape.moveTo( 0,0 );
+            shape.lineTo( 0, width );
+            shape.lineTo( length, width );
+            shape.lineTo( length, 0 );
+            shape.lineTo( 0, 0 );
+
+            var extrudeSettings = {
+            steps: 2,
+            depth: sideLength,
+            bevelEnabled: true,
+            bevelThickness: 1,
+            bevelSize: 1,
+            bevelOffset: 0,
+            bevelSegments: 1
+            };
+
+            var geometry2 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+            // folder mesh display
+            var cube = new THREE.Mesh( geometry2, materials1 );
+            cd.params.t.scene.add( cube );
+            //cd.params.t.s2.push(cube);
+            cube.it = it;
+            it.model2 = cube;
+            //cd.params.t.items.push (it);
+            /*
+            const fbxLoader = new FBXLoader();
+            fbxLoader.load('/NicerAppWebOS/siteMedia/models/award-027.fbx', (object) => {
+              object.it = it;
+              cd.params.t.s2.push(object);
+              cd.params.t.items.push(it);
+              it.model = object;
+              cd.params.t.scene.add(object);
+            });
+            */
 
             var
             textures2 = [];
@@ -815,24 +931,100 @@ export class na3D_fileBrowser {
             var
             materials2 = [
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[0])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[1])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[2])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[3])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[4])
                 }),
                 new THREE.MeshBasicMaterial({
+                    transparent : true,
                     map: new THREE.TextureLoader().load(textures2[5])
                 })
+            ],
+            materials2 = [
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000080',
+                    opacity : 0.3,
+                    transparent : true
+                })
+            ],
+            materials2a = [
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                }),
+                new THREE.MeshBasicMaterial({
+                    color : '#000050',
+                    opacity : 0.5,
+                    transparent : true
+                })
             ];
+
+
+
+
+
+
             // display files :
 
             if (it.data.files)
@@ -852,7 +1044,7 @@ export class na3D_fileBrowser {
                         level : ps2.length,
                         name : fkey,
                         idx : cd.params.t.items.length,
-                        idxPath : cd.params.idxPath + '/' + it.idx,//cd.params.t.items.length,
+                        idxPath : cd.params.idxPath + '/' + it.idx,// + '/' + cd.params.t.items.length,//cd.params.t.items.length,
                         filepath : cd.path+'/'+cd.k,
                         levelIdx : ++cd.params.ld2[level].levelIdx,
                         parent : it,
@@ -862,19 +1054,29 @@ export class na3D_fileBrowser {
                         rowOffsetValue : 1000
                     };
                     //debugger;
-                    // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
-                    const length = 12, width = 8;
 
-                    const shape = new THREE.Shape();
+                    if (!cd.params.t.ld3) cd.params.t.ld3 = {};
+                    if (!cd.params.t.ld3[it1a.idxPath]) cd.params.t.ld3[it1a.idxPath] = { itemCount : 0, items : [] };
+                    cd.params.t.ld3[it1a.idxPath].itemCount++;
+                    cd.params.t.ld3[it1a.idxPath].items.push (it1a.idx);
+                    cd.params.idxPath2 = cd.params.idxPath + '/' + it1a.idx;
+                    cd.params.t.items.push (it1a);
+
+
+
+                    // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
+                    var sideLength = 300, length = sideLength, width = sideLength;
+
+                    var shape = new THREE.Shape();
                     shape.moveTo( 0,0 );
                     shape.lineTo( 0, width );
                     shape.lineTo( length, width );
                     shape.lineTo( length, 0 );
                     shape.lineTo( 0, 0 );
 
-                    const extrudeSettings = {
+                    var extrudeSettings = {
                     steps: 2,
-                    depth: 16,
+                    depth: sideLength,
                     bevelEnabled: true,
                     bevelThickness: 1,
                     bevelSize: 1,
@@ -882,109 +1084,321 @@ export class na3D_fileBrowser {
                     bevelSegments: 1
                     };
 
-                    const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+                    var geometry4 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
 
 
                     // parent/current folder :
-                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
-                    var cube = new THREE.Mesh( geometry, materials );
+                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
+                    var cube = new THREE.Mesh( geometry4, materials2a );
                     cd.params.t.scene.add( cube );
                     cd.params.t.s2.push(cube);
                     cube.it = it1a;
                     it1a.model = cube;
                     cd.params.t.items.push (it1a);
+
+
+
+                    var sideLength = 240, length = sideLength, width = sideLength;
+
+                    var shape = new THREE.Shape();
+                    shape.moveTo( 0,0 );
+                    shape.lineTo( 0, width );
+                    shape.lineTo( length, width );
+                    shape.lineTo( length, 0 );
+                    shape.lineTo( 0, 0 );
+
+                    var extrudeSettings = {
+                    steps: 2,
+                    depth: sideLength,
+                    bevelEnabled: true,
+                    bevelThickness: 1,
+                    bevelSize: 1,
+                    bevelOffset: 0,
+                    bevelSegments: 1
+                    };
+
+                    var geometry5 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+
+                    // file mesh display :
+                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2a );
+                    //var cube = new THREE.Mesh( geometry5, materials2 );
+                    //cd.params.t.scene.add( cube );
+                    //cd.params.t.s2.push(cube);
+                    //cube.it = it1a;
+                    //it1a.model2 = cube;
+                    //cd.params.t.items.push (it1a);
+
                 }
             }
 
-
-            // thanks go to https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry
-            const length = 12, width = 8;
-
-            const shape = new THREE.Shape();
-            shape.moveTo( 0,0 );
-            shape.lineTo( 0, width );
-            shape.lineTo( length, width );
-            shape.lineTo( length, 0 );
-            shape.lineTo( 0, 0 );
-
-            const extrudeSettings = {
-            steps: 2,
-            depth: 16,
-            bevelEnabled: true,
-            bevelThickness: 1,
-            bevelSize: 1,
-            bevelOffset: 0,
-            bevelSegments: 1
-            };
-
-            const geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
-
-
-            // parent/current folder :
-            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
-            var cube = new THREE.Mesh( geometry, materials );
-            cd.params.t.scene.add( cube );
-            cd.params.t.s2.push(cube);
-            cube.it = it;
-            it.model = cube;
-            cd.params.t.items.push (it);
         }
     }
     initializeItems_walkValue (cd) {
         //console.log ('initializeItems_walkValue', 'cd', cd);
     }
     
-    onresize (t, levels) {
-        var url = window.moduleURL;
-        var fncn = url+'::'+t.constructor.name+'.onresize()';
-        na.m.waitForCondition (fncn + ' : waiting for other onresize commands to finish',
+
+
+   onresize (t, levels) {
+        if (!t) t = this;
+        //debugger;
+        na.m.waitForCondition ('waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
-            function () { t.onresize_do (t, levels); }, 
+            function () { t.onresize_do (t, levels); },
             50
         );
     }
 
-    
+
     onresize_do(t, callback) {
         t.resizing = true;
         t.overlaps = [];
 
-        let 
+        let
         c = {};
+        t.ld4 = [];
+
+        for (var path in t.ld3) {
+            var found = false;
+            loop :
+            for (var i=0; i<t.ld4.length; i++) {
+                var p1 = t.ld4[i];
+                var path2 = path.split('/');
+                delete path2[path2.length-1];
+                path2 = path2.join('/');
+                path2 = path2.substr(0, path2.length-1);
+                //if (path.indexOf('315')!==-1) debugger;
+                if (path===path2) {
+                    found = true;
+                    t.ld4 = arrayRemove(t.ld4, path2);
+                    break loop;
+                }
+            }
+            //if (!found) {
+
+                t.ld4.push(path)
+            //}
+        }
+        for (var i=0; i<t.ld4.length; i++) {
+            var p1 = t.ld4[i].substr(1).split('/');
+
+            var colorGradientScheme = {
+                themeName: 'naColorgradientScheme_custom__'+p1.join('_'),
+                cssGeneration: {
+                    colorTitle : 'yellow',
+                    colorLegend : '#00BBBB',
+                    colorLegendHREF : '#00EEEE',
+                    colorStatus : 'goldenrod',
+                    colorStatusHREF : 'yellow',
+                    colorLevels: {
+                    0: {
+                        background: '#7A95FF',
+                        color: 'rgb('+(100+Math.random()*150)+','+(100+Math.random()*150)+','+(100+Math.random()*150)+')'
+                    },
+                    100: {
+                        background: 'white',
+                        color: 'rgb('+(100+Math.random()*150)+','+(100+Math.random()*150)+','+(100+Math.random()*150)+')'
+                    }
+                    }
+                },
+                htmlTopLevelTableProps: ' cellspacing="5"',
+                htmlSubLevelTableProps: ' cellspacing="5"',
+                showFooter: true,
+                showArrayKeyValueHeader: false,
+                showArrayStats: true,
+                showArrayPath: true,
+                showArraySiblings: true,
+                jQueryScrollTo: {
+                    duration: 900
+                }
+                }
+
+            var list = naCG.generateList_basic (colorGradientScheme, p1.length);
+            t.ld3[t.ld4[i]].colorList = list;
+            t.ld3[t.ld4[i]].p1 = p1;
+        }
+        {
+            for (var j=0; j<t.items.length; j++) {
+                var p1 = t.items[j].idxPath;
+                var p2 = p1.substr(1).split('/');
+                var list = t.ld3[p1].colorList;
+                var p1 = t.ld3[p1].p1;
+                if (!list) debugger;
+                var it = t.items[j];
+                if (it) {
+                    if (it.name.match(/SABATON/)) debugger;
+                    if (it.parent && it.parent.idx) {
+                        for (var k=0; k<list.length; k++) {
+                            if (p1[k]==it.parent.idx) {
+                                it.color = list[k].color;
+                            }
+                        }
+                    }
+                    if (!it.color) {
+                        for (var k=0; k<list.length; k++) {
+                            if (p1[k]==it.idx)
+                                it.color = list[k].color;
+                        }
+                    }
+                    console.log ('t321', it.name, it.color);
+
+                    var
+                    material = new THREE.MeshBasicMaterial({
+                            color : it.color,
+                            opacity : 0.3,
+                            transparent : true
+                    }),
+                    materials2 = [ material, material, material, material, material, material ],
+                    material = new THREE.MeshBasicMaterial({
+                            color : it.color,
+                            opacity : 0.5,
+                            transparent : true
+                    }),
+                    materials2a = [ material, material, material, material, material, material ],
+                    sideLength = 300, length = sideLength, width = sideLength;
+
+                    var shape = new THREE.Shape();
+                    shape.moveTo( 0,0 );
+                    shape.lineTo( 0, width );
+                    shape.lineTo( length, width );
+                    shape.lineTo( length, 0 );
+                    shape.lineTo( 0, 0 );
+
+                    var extrudeSettings = {
+                    steps: 40,
+                    depth: sideLength,
+                    bevelEnabled: true,
+                    bevelThickness: 40,
+                    bevelSize: 40,
+                    bevelOffset: 0,
+                    bevelSegments: 40
+                    };
+
+                    var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+
+                    // parent/current folder :
+                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+                    var cube = new THREE.Mesh( geometry, materials2a );
+                    t.scene.remove(it.model);
+                    t.scene.add( cube );
+                    t.s2.push(cube);
+                    cube.it = it;
+                    it.model = cube;
+                    //t.items.push (it);
+
+                    var sideLength = 240, length = sideLength, width = sideLength;
+
+                    var shape = new THREE.Shape();
+                    shape.moveTo( 0,0 );
+                    shape.lineTo( 0, width );
+                    shape.lineTo( length, width );
+                    shape.lineTo( length, 0 );
+                    shape.lineTo( 0, 0 );
+
+                    var extrudeSettings = {
+                    steps: 40,
+                    depth: sideLength,
+                    bevelEnabled: true,
+                    bevelThickness: 40,
+                    bevelSize: 40,
+                    bevelOffset: 0,
+                    bevelSegments: 40
+                    };
+
+                    var geometry2 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+
+                    // folder mesh display
+                    //var cube = new THREE.Mesh( geometry2, materials2 );
+                    //t.scene.remove(it.model2);
+                    //t.scene.add( cube );
+                    //cd.params.t.s2.push(cube);
+                    //cube.it = it;
+                    //it.model2 = cube;
+                    //cd.params.t.items.push (it);
+
+                }
+            }
+        }
+        debugger;
+
+
         for (var path in t.ld3) {
             var ld3 = t.ld3[path];
             if (path!=='') {
                 for (var i=0; i<ld3.items.length; i++) {
                     var
                     it = t.items[ld3.items[i]];
-                    
+
                     ld3.rowColumnCount = Math.ceil(Math.sqrt(ld3.itemCount));
+                    ld3.cubeSideLengthCount = ld3.cslc = Math.ceil(Math.cbrt(ld3.itemCount));
                     var
+                    pos = { x : 1, xField : 1, y : 1, yField : 1, z : 1 },
+
+                    // 2D view
+                    columnField = 1,
+                    rowField = 1,
+
+                    // 3D view
                     column = 1,
-                    row = 1;
-                    
+                    row = 1,
+                    depth = 1;
+
+
                     //if (it.filepath=='siteMedia/backgrounds/tiled/active') debugger;
                     for (var j=0; j<ld3.items.length; j++) {
                         var it2 = t.items[ld3.items[j]];
                         if (it2.levelIdx <= it.levelIdx) {
-                            if (column >= ld3.rowColumnCount) {
+                            if (
+                                column >= ld3.cubeSideLengthCount
+                                && row >= ld3.cubeSideLengthCount
+                            ) {
+                                pos.z++;
+                                depth++;
+                                column = 1;
+                                row = 1;
+                            } else if (column >= ld3.cubeSideLengthCount) {
+                                pos.y++;
+                                pos.x = 1;
                                 row++;
                                 column = 1;
-                            } else column++;
-                        } 
+                            } else {
+                                column++;
+                                pos.x++;
+                            }
+
+                            if (column >= ld3.rowColumnCount) {
+                                pos.yField++;
+                                pos.xField = 1;
+                                rowField++;
+                                columnField = 1;
+                            } else {
+                                columnField++;
+                                pos.xField++;
+                            }
+
+
+                        }
                     };
-                    
+
+                    it.rowField = rowField;
+                    it.columnField = columnField;
                     it.row = row;
                     it.column = column;
+                    it.depth = depth;
+                    it.pos = pos;
+                    it.ld3 = ld3;
                     //if (it.name=='gull' || it.name=='owl') debugger;
                 }
             }
+            //debugger;
         }
-        
+
         var
         its = $.extend( [], t.items ),
         its2 = [],
-        compare = function (a, b) { 
+        compare = function (a, b) {
             return a.parent-b.parent;
         },
         compare1 = function (a, b) {
@@ -992,103 +1406,275 @@ export class na3D_fileBrowser {
                 return a.it.level-b.it.level;
             } else return 0;
         };
-        
-        its.sort (compare);
-        
-        
-        /*
-        var 
+
+        its.sort (compare1);
+
+
+        var
         x = t.data, // x[a][b][c].it
         maxLevel = 0;
 
         for (var i=0; i<its.length; i++) {
             if (maxLevel < its[i].level) maxLevel = its[i].level;
             for (var j=0; j<its.length; j++) {
-                if (its[i].parent === its[j].parent) {
+                if (
+                    its[i].idxPath === its[j].idxPath
+                    /*&& its[i].pos.x === its[j].pos.x
+                    && its[i].pos.y === its[j].pos.y
+                    && its[i].pos.z === its[j].pos.z*/
+                ) {
                     var
                     ita = {
                         level : its[i].level,
                         maxColumn : Math.max( its[i].column, its[j].column ),
-                        maxRow : Math.max( its[i].row, its[j].row )
+                        maxRow : Math.max( its[i].row, its[j].row ),
+                        maxDepth : Math.max ( its[i].depth, its[j].depth )
                     };
                     if (ita.maxColumn === its[i].column) ita.maxColumnIt = its[i]; else ita.maxColumnIt = its[j];
                     if (ita.maxRow === its[i].row) ita.maxRowIt = its[i]; else ita.maxRowIt = its[j];
+                    if (ita.maxDepth === its[i].depth) ita.maxDepthIt = its[i]; else ita.maxDepthIt = its[j];
                     its[i].maxColumnIta = ita;
                     its[i].maxRowIta = ita;
+                    its[i].maxDepthIta = ita;
                     its[j].maxColumnIta = ita;
                     its[j].maxRowIta = ita;
-                    
+                    its[j].maxDepthIta = ita;
+
                     its2.push (ita);
                 }
             }
         }
-        */
-        var its2 = $.extend( [], its );
         var
         compare2 = function (a,b) {
             var x = b.maxColumn - a.maxColumn;
             if (x === 0) return b.maxRow - a.maxRow; else return x;
         },
         its3 = its2.sort (compare2);
-        
+
         var pox = {}, poy = {}, poz = {};
         for (var i=0; i<t.items.length; i++) {
             var
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? t.items[it.parent.idx] : null),
-            rndMax = 400,
-            spacing = 300,
+            rndMax = 8000;
 
-            n = it.name.match(/\.mp3$/)
-                ? Object.keys(p.parent.data.folders?p.parent.data.folders:{}).length
-                    + Object.keys(p.parent.data.files?p.parent.data.files:{}).length
-                : p
-                    ? Object.keys(p.data.folders?p.data.folders:{}).length
-                        + Object.keys(p.data.files?p.data.files:{}).length
-                    : Object.keys(it.data.folders?it.data.folders:{}).length
-                        + Object.keys(it.data.files?it.data.files:{}).length,
-
-            colCount = Math.cbrt(n),
-            rowCount = colCount,
-
-            hCount = Math.floor(n / colCount),
-            vCount = hCount,
-            dCount = hCount,
-
-            h = column,// Math.floor(it.levelIdx / hCount),
-            v = row,//(it.levelIdx - h ) / vCount,
-            //d = (it.levelIdx - (hCount + vCount) );
-            d = (n - (hCount + vCount) );
-
-            if (it.parent && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax);
-            if (it.parent && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax);
+            if (it.parent && it.parent.idx && !pox[it.parent.idx]) pox[it.parent.idx] = Math.abs(Math.random() * rndMax * 10);
+            if (it.parent && it.parent.idx && !poy[it.parent.idx]) poy[it.parent.idx] = Math.abs(Math.random() * rndMax * 10);
+            if (it.parent && it.parent.idx && !poz[it.parent.idx]) poz[it.parent.idx] = Math.abs(Math.random() * rndMax * 5);
 
             if (it.parent) var rndx = pox[it.parent.idx]; else var rndx = 0;
             if (it.parent) var rndy = pox[it.parent.idx]; else var rndy = 0;
             if (it.parent) var rndz = poz[it.parent.idx]; else var rndz = 0;
 
-debugger;
-            //it.model.position.x = (h - hCount/2) * spacing;
-            //it.model.position.y = (v - vCount/2) * spacing;
-            //it.model.position.z = -1 * rndz + ( (d - dCount/2) * 200 );
-            it.model.position.x = (h ) * spacing;
-            it.model.position.y = (v ) * spacing;
-            it.model.position.z = -1 * ( (d ) * 200 );
+            if (p && p.parent && t.items[p.parent.idx]) {
+                var
+                it2 = t.items[p.parent.idx],
+                ppLeftRight = it2.leftRight,
+                ppUpDown = it2.upDown;
+            } else {
+                var
+                it2 = null,
+                ppLeftRight = it.leftRight,
+                ppUpDown = it.upDown;
+            };
+
+            if (p) {
+                var
+                itmaxc = it.maxColumnIta.maxColumn,
+                itmaxr = it.maxRowIta.maxRow,
+                itmaxd = it.maxRowIta.maxDepth,
+                itmaxc2 = Math.floor(itmaxc/2),
+                itmaxr2 = Math.floor(itmaxr/2),
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
+                itBackForth = /*p.upDown * */(
+                    it.depth-1 == itmaxd/2
+                    ? 0
+                    : itmaxd===1
+                        ? 0
+                        : itmaxd - it.depth == it.depth - 1
+                            ? 0
+                            : itmaxr - it.depth < it.depth - 1
+                                ? 1
+                                : -1
+                            ),
+                itc = (itmaxc - it.column),
+                itr = (itmaxr - it.row),
+                itd = (itmaxd - it.depth);
+
+                it.columnOffsetValue = itc;//Math.floor(itc);
+                it.rowOffsetValue = itr;//Math.floor(itr);
+                it.depthOffsetValue = itd;//Math.floor(itr);
+                it.leftRight = itLeftRight;
+                it.upDown = itUpDown;
+                it.backForth = itBackForth;
+
+            } else {
+                var mc = 0, mr = 0, p = it;
+
+                var
+                itmaxc = it.maxColumnIta.maxColumn,
+                itmaxr = it.maxRowIta.maxRow,
+                itmaxd = it.maxRowIta.maxDepth,
+                itLeftRight = /*p.leftRight * */(
+                    it.column-1 == itmaxc / 2
+                    ? 0
+                    : itmaxc===1
+                        ? 0
+                        : itmaxc - it.column == it.column -1
+                            ? 0
+                            : itmaxc - it.column < it.column - 1
+                                ? 1
+                                : -1
+                            ),
+                itUpDown = /*p.upDown * */(
+                    it.row-1 == itmaxr/2
+                    ? 0
+                    : itmaxr===1
+                        ? 0
+                        : itmaxr - it.row == it.row - 1
+                            ? 0
+                            : itmaxr - it.row < it.row - 1
+                                ? 1
+                                : -1
+                            ),
+                itBackForth = /*p.upDown * */(
+                    it.depth-1 == itmaxd/2
+                    ? 0
+                    : itmaxd===1
+                        ? 0
+                        : itmaxd - it.depth == it.depth - 1
+                            ? 0
+                            : itmaxr - it.depth < it.depth - 1
+                                ? 1
+                                : -1
+                            ),
+                itc = (itmaxc - it.column),
+                itr = (itmaxr - it.row),
+                itd = (itmaxd - it.depth);
+
+                it.columnOffsetValue = itc;//Math.floor(itc);
+                it.rowOffsetValue = itr;//Math.floor(itr);
+                it.depthOffsetValue = itd;//Math.floor(itr);
+                it.leftRight = itLeftRight;
+                it.upDown = itUpDown;
+                it.backForth = itBackForth;
+                //if (it.name=='landscape') debugger;
+            };
+
+            if (it.model && it.level > 2 && p && p.model) {
+
+                var
+                z = -1 * ((it.level+1) * 2500 ),
+                plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
+                plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
+                ilc = it.leftRight * it.column,// * p.columnOffsetValue,
+                ilr = it.upDown * it.row,// * p.rowOffsetValue,
+
+                min = 6, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1a = 2500, m1 = 2500, m2 = 2500, m2a = 200, n = 0.5, n1 = p.leftRight * p.column, n2 = p.upDown * p.row, o = 50* 1000, s = 1,
+                u = 1 * (p.leftRight===0?ilc:p.leftRight),
+                v = 1,
+                w = 1 * (p.upDown===0?ilr:p.upDown),
+                x = 1,
+                u1 = p.columnOffsetValue/4,
+                v1 = p.rowOffsetValue/4,
+                w1 = p.depthOffsetValue/4,
+                u2 = -1 * p.columnOffsetValue,
+                v2 = -1 * p.rowOffsetValue,
+                w2 = -1 * p.depthOffsetValue;
+//debugger;
+                if (it.name.match(/\.mp3$/)) {
+                    it.model.position.x = Math.round(
+                        p.model.position.x
+                        + (u2 * m1)+(it.column*m1)
+                        + (it.level > min ? (u2 * v * ((o * n))) : 0)
+                        + (it.level > min ? (u2 * v * ((o * s))) : 0)
+                        + (it.level > min ? p.leftRight * rndx : 0)
+                    );
+                    it.model.position.y = Math.round(
+                        p.model.position.y
+                        + (v2 * m2)+(it.row*m2)
+                        + (it.level > min ? (v2 * x * ((o * n))) : 0)
+                        + (it.level > min ? (v2 * x * ((o * s))) : 0)
+                        + (it.level > min ? p.upDown * rndy : 0)
+                    );
+                    it.model.position.z = Math.round(
+                        (p.model.position.z ? p.model.position.z : 0)
+                        + (w1 * m2)+(it.depth*m2)
+                        + (it.level > min ? (w2 * x * ((o * n))) : 0)
+                        + (it.level > min ? (w2 * x * ((o * s))) : 0)
+                        + (it.level > min ? p.backForth * z + rndz : 0)
+                    );
+                    /*it.model2.position.x = it.model.position.x + 30;
+                    it.model2.position.y = it.model.position.y + 30;
+                    it.model2.position.z = it.model.position.z + 30;*/
+                } else {
+                    it.model.position.x = Math.round(
+                        p.model.position.x
+                        + (u1 * m1)+(it.columnField*m1)
+                        + (it.level > min ? (u2 * v * ((o * n))) : 0)
+                        + (it.level > min ? (u2 * v * ((o * s))) : 0)
+                        + (it.level > min ? p.leftRight * rndx : 0)
+                    );
+                    it.model.position.y = Math.round(
+                        p.model.position.y
+                        + (v1 * m2)+(it.rowField*m2)
+                        + (it.level > min ? (v2 * x * ((o * n))) : 0)
+                        + (it.level > min ? (v2 * x * ((o * s))) : 0)
+                        + (it.level > min ? p.upDown * rndy : 0)
+                    );
+                    it.model.position.z = -1 * z - rndz;
+                    /*it.model2.position.x = it.model.position.x + 30;
+                    it.model2.position.y = it.model.position.y + 30;
+                    it.model2.position.z = it.model.position.z + 30;*/
+                };
+                //if (it.name=='space'||it.name=='wood') debugger;
+
+                var x = it.data.it;
+            }else if (it.model) {
+                //debugger;
+                it.model.position.x = it.leftRight * (it.column) * 100;
+                it.model.position.y = it.upDown * (it.row) * 100;
+                it.model.position.z = -1 * (it.level+1) * 100;
+                /*it.model2.position.x = it.model.position.x + 20;
+                it.model2.position.y = it.model.position.y + 20;
+                it.model2.position.z = it.model.position.z + 20;*/
+            }
 
             if (it.model) {
                 var dbg = {
+                    pos : it.pos,
                     px : it.model.position.x,
                     py : it.model.position.y,
                     pz : it.model.position.z,
                     it : it
                 };
-                console.log (it.filepath, it.name, it.levelIdx, dbg);
+                console.log (it.filepath, it.name, dbg);
             }
         }
-        
-        t.onresize_postDo(t);
+
+        t.onresize_postDo(t, true);
     }
 
     nthroot (x, n) {
@@ -1104,8 +1690,11 @@ debugger;
         } catch(e){}
     }
 
-    onresize_postDo (t) {
-        //t.drawLines(t);
+    onresize_postDo (t, animate=false) {
+        t.drawLines(t);
+        setTimeout(function(t) {
+
+        }, 500, t);
 
         if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
 
@@ -1136,6 +1725,12 @@ debugger;
             x : Math.round((t.winners.west + t.winners.east) / 2),
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
+        };
+
+        t.cameraOrigin = {
+            x : t.middle.x,
+            y : t.middle.y,
+            z : 1000
         };
 
         console.log ('t778', t.winners, t.middle);
@@ -1234,6 +1829,7 @@ debugger;
             t.middle.y,
             t.middle.z
         );*/
+        t.cameraControls._target.copy (t.middle);
 
 /*
         const geometry = new THREE.BufferGeometry().setFromPoints( t.points );
@@ -1394,7 +1990,7 @@ debugger;
             if (!t.started) {
                 t.started = true;
                 t.cameraControls.enabled = true;
-                //t.pathAnimation.play(0);
+                if (animate) t.pathAnimation.play(0);
 
 
                 t.renderer.domElement.addEventListener ('pointerdown', function (evt) {
@@ -1461,11 +2057,14 @@ debugger;
 
                     for (let i=0; i<t.items.length; i++) {
                         let it2 = t.items[i];
-                        if (it2.parent === cube.it.parent) {
+                        if (it2.idxPath === cube.it.idxPath) {
                             //debugger;
                             it2.model.position.dragStartX = it2.model.position.x;
                             it2.model.position.dragStartY = it2.model.position.y;
                             it2.model.position.dragStartZ = it2.model.position.z;
+                            it2.model2.position.dragStartX = it2.model2.position.x;
+                            it2.model2.position.dragStartY = it2.model2.position.y;
+                            it2.model2.position.dragStartZ = it2.model2.position.z;
                         }
                     }
 
@@ -1476,11 +2075,15 @@ debugger;
 
                     for (let i=0; i<t.items.length; i++) {
                         let it2 = t.items[i];
-                        if (it2.parent === cube.it.parent) {
+                        if (it2.idxPath === cube.it.idxPath) {
                             //debugger;
                             it2.model.position.x = it2.model.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
                             it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
-                            it2.model.position.z = cube.position.z;
+                            it2.model.position.z = it2.model.position.dragStartZ ;
+
+                             it2.model2.position.x = it2.model2.position.dragStartX - (t.dragndrop.mouseX - t.mouse.layerX);
+                            it2.model2.position.y = it2.model2.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY);
+                            it2.model2.position.z = it2.model2.position.dragStartZ ;
                         }
                     }
                     /*
@@ -1630,63 +2233,67 @@ debugger;
 
         for (var i=1; i<t.items.length; i++) {
             var 
-            it = t.items[i],
-            parent = t.items[it.parent.idx],
-            haveThisLineAlready = false;
-            
-            if (!t.showLines) return false;
-            if (!it.model) return false;
-            
-            if (it.parent.idx===0 || typeof it.parent === 'undefined') continue;
-            
-            for (var j=0; j<t.permaLines.length; j++) {
-                if (t.permaLines[j].it === it) {
-                    haveThisLineAlready = true;
-                    break;
-                }
-            };
-            
-            if (parent && parent.model) {
-                var 
-                p1 = it.model.position, 
-                p2 = parent.model.position;
-                if (p1.x===0 && p1.y===0 && p1.z===0) continue;
-                if (p2.x===0 && p2.y===0 && p2.z===0) continue;
+            it = t.items[i];
 
-                const points = [];
-                points.push( new THREE.Vector3( p1.x, p1.y, p1.z ) );
-                points.push( new THREE.Vector3( p2.x, p2.y, p2.z ) );
-
+            if (it.parent && it.parent.idx) {
                 var
-                geometry = new THREE.BufferGeometry().setFromPoints (points);
+                parent = t.items[it.parent.idx],
+                haveThisLineAlready = false;
 
-                //geometry.dynamic = true;
-                //geometry.vertices.push(p1);
-                //geometry.vertices.push(p2);
-                //geometry.verticesNeedUpdate = true;
-                
-                if (!t.lineColors) t.lineColors = {};
-                if (!t.lineColors[it.parent.idx]) {
-                    var x=Math.round(0xffffff * Math.random()).toString(16);
-                    var y=(6-x.length);
-                    var z="000000";
-                    var z1 = z.substring(0,y);
-                    var color= z1 + x;                    
-                    t.lineColors[it.parent.idx] = color;
-                }
-                var color = t.lineColors[it.parent.idx];
-                
-                var
-                material = new THREE.LineBasicMaterial({ color: '#'+color, linewidth :2 }),
-                line = new THREE.Line( geometry, material );
-                t.scene.add(line);
+                if (!t.showLines) return false;
+                if (!it.model) return false;
 
-                t.permaLines[t.permaLines.length] = {
-                    line : line,
-                    geometry : geometry,
-                    material : material,
-                    it : it
+                if (it.parent.idx===0 || typeof it.parent === 'undefined') continue;
+
+                for (var j=0; j<t.permaLines.length; j++) {
+                    if (t.permaLines[j].it === it) {
+                        haveThisLineAlready = true;
+                        break;
+                    }
                 };
+
+                if (!it.name.match(/\.mp3$/) && parent && parent.model) {
+                    var
+                    p1 = it.model.position,
+                    p2 = parent.model.position;
+                    if (p1.x===0 && p1.y===0 && p1.z===0) continue;
+                    if (p2.x===0 && p2.y===0 && p2.z===0) continue;
+
+                    const points = [];
+                    points.push( new THREE.Vector3( p1.x, p1.y, p1.z ) );
+                    points.push( new THREE.Vector3( p2.x, p2.y, p2.z ) );
+
+                    var
+                    geometry = new THREE.BufferGeometry().setFromPoints (points);
+
+                    //geometry.dynamic = true;
+                    //geometry.vertices.push(p1);
+                    //geometry.vertices.push(p2);
+                    //geometry.verticesNeedUpdate = true;
+
+                    if (!t.lineColors) t.lineColors = {};
+                    if (!t.lineColors[it.parent.idx]) {
+                        var x=Math.round(0xffffff * Math.random()).toString(16);
+                        var y=(6-x.length);
+                        var z="000000";
+                        var z1 = z.substring(0,y);
+                        var color= z1 + x;
+                        t.lineColors[it.parent.idx] = color;
+                    }
+                    var color = t.lineColors[it.parent.idx];
+
+                    var
+                    material = new THREE.LineBasicMaterial({ color: '#'+color, linewidth :1 }),
+                    line = new THREE.Line( geometry, material );
+                    t.scene.add(line);
+
+                    t.permaLines[t.permaLines.length] = {
+                        line : line,
+                        geometry : geometry,
+                        material : material,
+                        it : it
+                    };
+                }
             }
         }
         $.cookie('3DFDM_lineColors', JSON.stringify(t.lineColors), na.m.cookieOptions());
