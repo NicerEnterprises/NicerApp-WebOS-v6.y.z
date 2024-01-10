@@ -441,12 +441,11 @@ export class na3D_fileBrowser {
                         t.hoverOverName = hoveredItem.it.name;
                     //debugger;    
                         var 
-                        it = hoveredItem.it,
-                        parent = t.items[it.parent.idx],
-                        haveLine = false;
+                        it = hoveredItem.it;
                         
                         // draw line to parent(s)
-                        while (it && it.parent && it.parent!==0 && typeof it.parent !== 'undefined') {
+                        while (it && it.parent && typeof it.parent !== 'undefined') {
+                            debugger;
                             var 
                             parent = t.items[it.parent.idx],
                             haveLine = false;
@@ -531,16 +530,19 @@ export class na3D_fileBrowser {
                         done = true;
                     }
                     
-                    hoveredItem = t.items[hoveredItem.parent.idx];
+                    //hoveredItem = t.items[hoveredItem.parent.idx];
                 }
         }
 
+        //debugger;
         if (!t.animPlaying) {
                 // show folder name for item under mouse and closest to the country
-                $('#site3D_label').html(t.hoverOverName).css({display:'flex',opacity:1});
+                $('#site3D_label').css({display:'flex',opacity:1});
 
                 const [hovered] = t.raycaster.intersectObjects(t.s2);
+                console.log ('!t.animPlaying', hovered, t.s2);
                 if (hovered && hovered.object.type!=='Line') {
+                //debugger;
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
                     $('#site3D_label')[0].textContent = hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
@@ -705,6 +707,7 @@ export class na3D_fileBrowser {
         t.onresize(t);
     }
     initializeItems_walkKey (cd) {
+        cd.params.t.s2 = [];
         var ps = cd.path.split('/');
         if (ps[ps.length-1]=='files') {
             console.log ('initializeItems_walkKey', 'files', cd);
@@ -881,11 +884,12 @@ export class na3D_fileBrowser {
             //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
             var cube = new THREE.Mesh( geometry, materials1a );
             cd.params.t.scene.add( cube );
-            cd.params.t.s2.push(cube);
+            //cd.params.t.s2.push(cube);
             cube.it = it;
             it.model = cube;
             cd.params.t.items.push (it);
 
+            /*
             var sideLength = 240, length = sideLength, width = sideLength;
 
             var shape = new THREE.Shape();
@@ -914,6 +918,7 @@ export class na3D_fileBrowser {
             cube.it = it;
             it.model2 = cube;
             //cd.params.t.items.push (it);
+            */
             /*
             const fbxLoader = new FBXLoader();
             fbxLoader.load('/NicerAppWebOS/siteMedia/models/award-027.fbx', (object) => {
@@ -1091,10 +1096,10 @@ export class na3D_fileBrowser {
                     // parent/current folder :
                     //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
                     var cube = new THREE.Mesh( geometry4, materials2a );
-                    cd.params.t.scene.add( cube );
-                    cd.params.t.s2.push(cube);
                     cube.it = it1a;
                     it1a.model = cube;
+                    cd.params.t.scene.add( cube );
+                    cd.params.t.s2.push(it1a.model);
                     cd.params.t.items.push (it1a);
 
 
@@ -1195,11 +1200,11 @@ export class na3D_fileBrowser {
                     colorLevels: {
                     0: {
                         background: '#7A95FF',
-                        color: 'rgb('+(100+Math.random()*150)+','+(100+Math.random()*150)+','+(100+Math.random()*150)+')'
+                        color: 'rgb('+(50+Math.random()*205)+','+(50+Math.random()*205)+','+(50+Math.random()*205)+')'
                     },
                     100: {
                         background: 'white',
-                        color: 'rgb('+(100+Math.random()*150)+','+(100+Math.random()*150)+','+(100+Math.random()*150)+')'
+                        color: 'rgb('+(50+Math.random()*205)+','+(50+Math.random()*205)+','+(50+Math.random()*205)+')'
                     }
                     }
                 },
@@ -1280,15 +1285,16 @@ export class na3D_fileBrowser {
 
 
                     // parent/current folder :
-                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+                    //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2a );
                     var cube = new THREE.Mesh( geometry, materials2a );
-                    t.scene.remove(it.model);
-                    t.scene.add( cube );
-                    t.s2.push(cube);
                     cube.it = it;
                     it.model = cube;
+                    t.scene.remove(it.model);
+                    t.scene.add( cube );
+                    t.s2.push(it.model);
                     //t.items.push (it);
 
+                    /*
                     var sideLength = 240, length = sideLength, width = sideLength;
 
                     var shape = new THREE.Shape();
@@ -1309,6 +1315,7 @@ export class na3D_fileBrowser {
                     };
 
                     var geometry2 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+                    */
 
                     // folder mesh display
                     //var cube = new THREE.Mesh( geometry2, materials2 );
@@ -1322,7 +1329,6 @@ export class na3D_fileBrowser {
                 }
             }
         }
-        debugger;
 
 
         for (var path in t.ld3) {
@@ -1625,7 +1631,7 @@ export class na3D_fileBrowser {
                         + (w2 * m2a)+(it.depth*m2)
                         + (it.level > min ? (w2 * x * ((o * n))) : 0)
                         + (it.level > min ? (w2 * x * ((o * s))) : 0)
-                        + (it.level > min ? p.backForth * z + rndz : 0)
+                        + (it.level > min ? z + rndz : 0)
                     );
                     /*it.model2.position.x = it.model.position.x + 30;
                     it.model2.position.y = it.model.position.y + 30;
@@ -1645,7 +1651,7 @@ export class na3D_fileBrowser {
                         + (it.level > min ? (v2 * x * ((o * s))) : 0)
                         + (it.level > min ? p.upDown * rndy : 0)
                     );
-                    it.model.position.z = -1 * z - rndz;
+                    it.model.position.z = z - rndz;
                     /*it.model2.position.x = it.model.position.x + 30;
                     it.model2.position.y = it.model.position.y + 30;
                     it.model2.position.z = it.model.position.z + 30;*/
@@ -1657,7 +1663,7 @@ export class na3D_fileBrowser {
                 //debugger;
                 it.model.position.x = it.leftRight * (it.column) * 100;
                 it.model.position.y = it.upDown * (it.row) * 100;
-                it.model.position.z = -1 * (it.level+1) * 100;
+                it.model.position.z = (it.level+1) * 100;
                 /*it.model2.position.x = it.model.position.x + 20;
                 it.model2.position.y = it.model.position.y + 20;
                 it.model2.position.z = it.model.position.z + 20;*/
@@ -1865,20 +1871,13 @@ export class na3D_fileBrowser {
                     if ( ! this.isActive() ) return;
 
                     t.curve1.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = t.middle.x;
-                    const lookAtY = t.middle.y;
-                    const lookAtZ = t.middle.z;
-
                     t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
+                        t._tmp.x,
+                        t._tmp.y,
+                        t._tmp.z,
+                        t.middle.x,
+                        t.middle.y,
+                        t.middle.z,
                         false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
                     );
 
@@ -1910,20 +1909,13 @@ export class na3D_fileBrowser {
                     if ( ! this.isActive() ) return;
 
                     t.curve2.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = t.middle.x;
-                    const lookAtY = t.middle.y;
-                    const lookAtZ = t.middle.z;
-
                     t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
+                        t._tmp.x,
+                        t._tmp.y,
+                        t._tmp.z,
+                        t.middle.x,
+                        t.middle.y,
+                        t.middle.z,
                         false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
                     );
 
@@ -1958,20 +1950,13 @@ export class na3D_fileBrowser {
                     if ( ! this.isActive() ) return;
 
                     t.curve3.getPoint ( value, t._tmp );
-                    const cameraX = t._tmp.x;
-                    const cameraY = t._tmp.y;
-                    const cameraZ = t._tmp.z;
-                    const lookAtX = t.middle.x;
-                    const lookAtY = t.middle.y;
-                    const lookAtZ = t.middle.z;
-
                     t.cameraControls.setLookAt(
-                        cameraX,
-                        cameraY,
-                        cameraZ,
-                        lookAtX,
-                        lookAtY,
-                        lookAtZ,
+                        t._tmp.x,
+                        t._tmp.y,
+                        t._tmp.z,
+                        t.middle.x,
+                        t.middle.y,
+                        t.middle.z,
                         false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
                     );
 
