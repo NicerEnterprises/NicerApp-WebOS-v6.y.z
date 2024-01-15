@@ -28,7 +28,7 @@ export class na3D_fileBrowser {
         
         t.autoRotate = false;
         t.showLines = true;
-        t.animationDuration = 5;
+        t.animationDuration = 60;
         
         t.p = parent;
         t.el = el;
@@ -186,8 +186,7 @@ var
             t.items.push (it);
 
         t.s2 = [];
-        t.camera = new THREE.PerspectiveCamera( 90  , $(el).width() / $(el).height(), 0.01, 50 *1000 );
-
+        t.camera = new THREE.PerspectiveCamera( 50, $(el).width() / $(el).height(), 0.01, 100 * 1000 );
         
         t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
         t.renderer.physicallyCorrectLights = true;
@@ -277,15 +276,13 @@ var
 
         // Handle window resize
         window.addEventListener('resize', () => {
-            setTimeout(function() {
-                //const { innerWidth, innerHeight } = window;
-                var innerWidth = $('#siteContent .vividDialogContent').width();
-                var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
+            //const { innerWidth, innerHeight } = window;
+            var innerWidth = $('#siteContent .vividDialogContent').width();
+            var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
 
-                t.renderer.setSize(innerWidth, innerHeight);
-                t.camera.aspect = innerWidth / innerHeight;
-                t.camera.updateProjectionMatrix();
-            }, 800);
+            t.renderer.setSize(innerWidth, innerHeight);
+            t.camera.aspect = innerWidth / innerHeight;
+            t.camera.updateProjectionMatrix();
         });
 
         t.renderer.setAnimationLoop(() => {
@@ -496,8 +493,8 @@ var
 
 
 
-            if (false) var intersects = t.raycaster.intersectObjects (t.s2);
-            if (false && intersects[0] && intersects[0].object.type!=='Line')
+            var intersects = t.raycaster.intersectObjects (t.s2);
+            if (intersects[0] && intersects[0].object.type!=='Line')
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
                 while (hoveredItem && !done) {
@@ -569,7 +566,6 @@ var
                                                 
 
                         // draw lines to children
-                        /*
                         for (var j=0; j<t.items.length; j++) {
                             var child = t.items[j];
                             if (
@@ -606,7 +602,7 @@ var
                                 };
                             }
                         }
-                        */
+
                         done = true;
                     }
                     
@@ -619,94 +615,28 @@ var
                 // show folder name for item under mouse and closest to the country
                 $('#site3D_label').css({display:'flex',opacity:1});
 
-                var hovered = null;
-                delete t.hovered;
-
-                for (var l = 0; l < t.s2.length-1; l++) {
-                    var width = $(t.renderer.domElement).width(), height = $(t.renderer.domElement).height();
-                    var widthHalf = width / 2, heightHalf = height / 2;
-
-                    var pos = t.s2[l].position.clone();
-                    pos.project(t.camera);
-                    pos.x =  ( pos.x * widthHalf ) + widthHalf;
-                    pos.y =  (-1* pos.y * heightHalf ) + heightHalf;
-                    //console.log ('t6553', pos);
-
-                    /*const offset = new THREE.Vector3();
-                    new THREE.Box3().setFromObject(t.s2[l]).getSize(offset);
-                    console.log ('t678', offset);*/
-
-
-                    if (
-                        t.mouse.x > pos.x - 2
-                        && t.mouse.x < pos.x + 2
-                        && t.mouse.y > pos.y - 2
-                        && t.mouse.y < pos.y + 2
-                    //    t.mouse.layerX == pos.x
-                      //  && t.mouse.layerY == pos.y
-                    ) {
-                        hovered = {
-                            object : t.items[l].model
-                        }
-                        t.hovered = hovered;
-                        debugger;
-                        const intersects2 = t.raycaster.intersectObjects (t.s2, l);
-                        console.log ('t567-A', hovered.object.it.name, t.mouse, pos, intersects, t.s2);
-                        //break;
-                    } else if (
-                        t.mouse.x > pos.x - 10
-                        && t.mouse.x < pos.x + 10
-                        && t.mouse.y > pos.y - 10
-                        && t.mouse.y < pos.y + 10
-                    //    t.mouse.layerX == pos.x
-                      //  && t.mouse.layerY == pos.y
-                    ) {
-                        //console.log ('t567-B', t.items[l].name, t.mouse, pos);
-                    }
-                    /*
-                    if (
-                        t.mouse.x  > pos.x - 5
-                        && t.mouse.x  < pos.x  + 5
-                        && t.mouse.y > pos.y  - 5
-                        && t.mouse.y < pos.y  + 5
-                    ) {
-                        hovered = {
-                            object : t.items[l].model
-                        }
-                        t.hovered = hovered;
-                        console.log ('t567', t.mouse, pos, hovered.object.it.name, hovered.object, intersects);
-                        //break;
-                    }*/
-
-                }
-
-                //const [hovered] = t.raycaster.intersectObjects(t.s2);
+                const [hovered] = t.raycaster.intersectObjects(t.s2);
+                console.log ('!t.animPlaying', hovered, t.camera, t.s2);
                 if (hovered && hovered.object.type!=='Line') {
-                    //console.log ('!t.animPlaying', hovered, t.camera, t.s2);
-                    t.drawLines(t);
-
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
-                    $('#site3D_label')[0].textContent =
-                        hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
-                    $('#site3D_label')[0].textContent =
-                        hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+hovered.object.it.name;
+                    $('#site3D_label')[0].textContent = hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
 
                     // Get offset from object's dimensions
-//                     const offset = new THREE.Vector3();
-//                     new THREE.Box3().setFromObject(hovered.object).getSize(offset);
+                    const offset = new THREE.Vector3();
+                    new THREE.Box3().setFromObject(hovered.object).getSize(offset);
 
                     // Move label over hovered element
                     $('#site3D_label').css({
                         display : 'block',
                         left : t.mouse.layerX + 20,
-                        top : t.mouse.layerY + 50
+                        top : t.mouse.layerY + 20
                     });
-                    /*console.log({
-                        name : $('#site3D_label')[0].textContent,
+                    console.log({
+                        name : t.hoverOverName,
                         left : t.mouse.layerX + 20,
                         top : t.mouse.layerY + 20
-                    });*/
+                    });
                 } else {
                     // Reset label
                     t.renderer.domElement.className = '';
@@ -718,9 +648,9 @@ var
                 // Render labels
                 //t.labelRenderer.render(t.scene, t.camera);
 
-//             if (!intersects[0]) {
-//                 $('#site3D_label').fadeOut();
-//             }
+            if (!intersects[0]) {
+                $('#site3D_label').fadeOut();
+            }
         }
 
         for (var i=0; i<t.lines.length; i++) {
@@ -747,34 +677,17 @@ var
     }
 
     onMouseMove( event, t ) {
+        var rect = t.renderer.domElement.getBoundingClientRect();
+        t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;
+        t.mouse.y = - ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;        
 
-//        var rect = t.renderer.domElement.getBoundingClientRect();
-         t.mouse.x = event.layerX;//( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1 + (2 * na.c.d.g.margin);// - $('#siteContent').offset().left;
-         t.mouse.y = event.layerY;// ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
+
+        t.mouse.x = ( event.clientX / window.innerWidth ) - 1;
+        t.mouse.y = ( event.clientY / window.innerHeight )  + 1;
+        t.raycaster.setFromCamera (t.mouse.clone(), t.camera);
+
         t.mouse.layerX =  event.layerX;
         t.mouse.layerY =  event.layerY;
-        t.mouse.clientX = event.clientX;
-        t.mouse.clientY = event.clientY;
-
-         var rect = t.renderer.domElement.getBoundingClientRect();
-         //t.mouse.x = ($('#siteContent').offset().left/rect.left) + ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;// - (($('#siteContent').offset().left / rect.left  )*2);
-
-         //t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;// - (($('#siteContent').offset().left / rect.left  )*2);
-         //t.mouse.y = -1 * ($('#siteContent').offset().top/rect.top) + ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-         //t.mouse.y = -1 * ( ( event.clientY - rect.top- (na.c.d.g.margin) ) / ( rect.bottom - rect.top) ) * 2 + 1;
-                //t.mouse.x = ( event.clientX  / window.innerWidth ) * 2 - 1;
-                //t.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-                      //   t.mouse.x = event.clientX ;//( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1 + (2 * na.c.d.g.margin);// - $('#siteContent').offset().left;
-         //t.mouse.y = event.clientY;// ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-
-
-        //console.log ('t446', t.mouse, rect);
-        //console.log ('t444', t.mouse);
-        //t.mouse.x = ( event.clientX / window.innerWidth ) - 1;
-        //t.mouse.y = ( event.clientY / window.innerHeight )  + 1;
-        t.camera.updateMatrixWorld();
-        t.raycaster.setFromCamera (t.mouse.clone(), t.camera);
 
         //$('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
 
@@ -792,7 +705,7 @@ var
         behind the mouse pointer */; i++) {
             var cit/*clickedItem*/ = intersects[i].object, done = false;
             while (cit && !done) {
-                na.setStatusMsg (cit.it.fullPath, true, 7 * 1000);
+                na.site.setStatusMsg (cit.it.fullPath, true, 7 * 1000);
 
                 var
                 relPath = cit.it.fullPath.split('/');
@@ -869,33 +782,32 @@ var
             console.log ('initializeItems_walkKey', 'files', cd);
         } else if (ps[ps.length-1]=='folders') {
             console.log ('initializeItems_walkKey', 'folders', cd);
+            cd.params.idxPath = cd.params.idxPath2;
+            //cd.params.idxPath = cd.params.idxPath + '/' + cd.params.t.items.length;
 
-            if (typeof previousIdx=='string'   ) {
-                var localIdx = previousIdx;
-                var p1 = previousIdx.split('/');
-                delete p1[p1.length-1];
-                var p2 = p1.join('/');
-                p2 = p2.substr(0, p2.length-2);
-                var lastParent = cd.params.t.items[p1[p1.length-1]];
-                var localIdx = '/0';
-                var lastParent = cd.params.t.items[0];
-            }
-            if (!cd.params.ld2[cd.level]) cd.params.ld2[cd.level] = { levelIdx : 0 };
+            var ps2 = $.extend([],ps);
+            delete ps2[ps2.length-1];
+            var ps2Str = ps2.join('/');
+            var parent = cd.params.t.items[cd.params.t.items.length-1];/*cd.params.t.items[parseInt(ps2[ps2.length-1])];//*///na.m.chaseToPath (cd.root, ps2Str, false);
+            if (parent.name.match(/\.mp3$/)) parent = parent.parent;
+            var level = parent.level/2;//ps2.length;
+            if (!cd.params.ld2[level]) cd.params.ld2[level] = { levelIdx : 0 };
 
 
-            //cd.at[cd.k].idxPath = cd.params.idxPath;
-            //cd.at[cd.k].idx = cd.params.t.items.length;
+
+            cd.at[cd.k].idxPath = cd.params.idxPath;
+            cd.at[cd.k].idx = cd.params.t.items.length;
 
             var
             it = {
                 data : cd.at[cd.k],
-                level : cd.level,
+                level : level + 2,//ps2.length,
                 name : cd.k,
                 idx : cd.params.t.items.length,
-                idxPath : localIdx + '/' + cd.params.t.items.length,
+                idxPath : cd.params.idxPath,// + '/' + cd.params.t.items.length,
                 filepath : cd.path,
-                levelIdx : ++cd.params.ld2[cd.level].levelIdx,
-                parent : lastParent,
+                levelIdx : ++cd.params.ld2[level].levelIdx,
+                parent : parent,
                 leftRight : 0,
                 upDown : 0,
                 columnOffsetValue : 1000,
@@ -914,9 +826,8 @@ var
             if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, items : [] };
             cd.params.t.ld3[it.idxPath].itemCount++;
             cd.params.t.ld3[it.idxPath].items.push (it);
-            //cd.params.idxPath2 = cd.params.idxPath;// + '/' + it.idx;//+= '/' + it.idx;
-            cd.params.t.items.push(it);
-            cd.params.t.s2.push(cube);
+            cd.params.idxPath2 += '/' + it.idx;
+
 /*
             var
             textures = [];
@@ -991,6 +902,7 @@ var
             //cd.params.t.s2.push(cube);
             cube.it = it;
             it.model = cube;
+            cd.params.t.items.push (it);
 
             /*
             var
@@ -1018,22 +930,22 @@ var
                 if (fkey.match(/\.mp3$/)) {
                     var p = null;
 
-                    /*var ps2 = $.extend([],ps);
+                    var ps2 = $.extend([],ps);
                     delete ps2[ps2.length-1];
                     var ps2Str = ps2.join('/');
-                    var parent = it.parent;//na.m.chaseToPath (cd.root, ps2Str+'/files/'+fkey, false);*/
-                    //var level = lastParent.level/2;//ps2.length;
+                    var parent = it.parent;//na.m.chaseToPath (cd.root, ps2Str+'/files/'+fkey, false);
+                    var level = parent.level/2;//ps2.length;
 
 
                     var
                     it1a = {
                         data : it.data.files[fkey],
-                        level : cd.level+1,
+                        level : level+2,
                         name : fkey,
                         idx : cd.params.t.items.length,
                         idxPath : cd.params.idxPath + '/' + it.idx,// + '/' + cd.params.t.items.length,//cd.params.t.items.length,
                         filepath : cd.path+'/'+cd.k,
-                        levelIdx : ++cd.params.ld2[cd.level].levelIdx,
+                        levelIdx : ++cd.params.ld2[level].levelIdx,
                         parent : it,
                         leftRight : 0,
                         upDown : 0,
@@ -1046,6 +958,7 @@ var
                     cd.params.t.ld3[it1a.idxPath].itemCount++;
                     cd.params.t.ld3[it1a.idxPath].items.push (it1a);
                     cd.params.idxPath2 = cd.params.idxPath + '/' + it1a.idx;
+                    cd.params.t.items.push (it1a);
 
 
 
@@ -1079,7 +992,6 @@ var
                     cube.it = it1a;
                     it1a.model = cube;
                     //cd.params.t.scene.add( cube );
-
                     cd.params.t.s2.push(cube);
                     cd.params.t.items.push (it1a);
 
@@ -1269,12 +1181,12 @@ var
                     var
                     ita = {
                         level: its[i].level,
-                        maxColumn : Math.max( its[i].columnField, its[j].columnField ),
-                        maxRow : Math.max( its[i].rowField, its[j].rowField ),
+                        maxColumn : Math.max( its[i].column, its[j].column ),
+                        maxRow : Math.max( its[i].row, its[j].row ),
                         maxDepth : Math.max ( its[i].depth, its[j].depth )
                     };
-                    if (ita.maxColumn === its[i].columnField) ita.maxColumnIt = its[i]; else ita.maxColumnIt = its[j];
-                    if (ita.maxRow === its[i].rowField) ita.maxRowIt = its[i]; else ita.maxRowIt = its[j];
+                    if (ita.maxColumn === its[i].column) ita.maxColumnIt = its[i]; else ita.maxColumnIt = its[j];
+                    if (ita.maxRow === its[i].row) ita.maxRowIt = its[i]; else ita.maxRowIt = its[j];
                     if (ita.maxDepth === its[i].depth) ita.maxDepthIt = its[i]; else ita.maxDepthIt = its[j];
                     its[i].maxColumnIta = ita;
                     its[i].maxRowIta = ita;
@@ -1302,20 +1214,20 @@ var
             p = (it.parent ? it.parent : null),
             rndMax = 4000;
 
-            if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
-            if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
-            if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax);
+            if (p && p.idx && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
+            if (p && p.idx && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
+            if (p && p.idx && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax);
 
             if (p) var rndx = pox[p.idx]; else var rndx = 0;
             if (p) var rndy = poy[p.idx]; else var rndy = 0;
             if (p) var rndz = poz[p.idx]; else var rndz = 0;
- /*
+
             pd = {
                 hor : Math.random() < 0.5 ? -1 : 1,
                 ver : Math.random() < 0.5 ? -1 : 1
             };
 
-
+            /*
             if (p && p.parent && t.items[p.parent.idx]) {
                 var
                 it2 = t.items[p.parent.idx],
@@ -1368,9 +1280,10 @@ var
                                 ? 1
                                 : -1
                             ),
-                itc = (itmaxc - 1 - it.columnField),
-                itr = (itmaxr - 1 - it.rowField),
+                itc = (itmaxc - 1 - it.column),
+                itr = (itmaxr - 1 - it.row),
                 itd = (itmaxd - 1 - it.depth);
+debugger;
                 it.columnOffsetValue = itc;//Math.floor(itc);
                 it.rowOffsetValue = itr;//Math.floor(itr);
                 it.depthOffsetValue = itd;//Math.floor(itr);
@@ -1418,8 +1331,8 @@ var
                                 ? 1
                                 : -1
                             ),
-                itc = (itmaxc - 1 - it.columnField),
-                itr = (itmaxr - 1 - it.rowField),
+                itc = (itmaxc - 1 - it.column),
+                itr = (itmaxr - 1 - it.row),
                 itd = (itmaxd - 1 - it.depth);
 
                 it.columnOffsetValue = itc;//Math.floor(itc);
@@ -1428,13 +1341,14 @@ var
                 it.leftRight = itLeftRight;
                 it.upDown = itUpDown;
                 it.backForth = itBackForth;
+                if (it.upDown!==0) debugger;
                 //if (it.name=='landscape') debugger;
             };
 
 
 
             var
-            z = (((it.level-2)) * 1500 ),
+            z = -1 * (((it.level-2)) * 3500 ),
             //z = -1 * it.depthOffsetValue * 2500,
             //plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
             //plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
@@ -1442,49 +1356,48 @@ var
             ilc = (p?p.columnOffsetValue * m:it.columnOffsetValue*m), //it.leftRight * it.column,// * p.columnOffsetValue,
             ilr = (p?p.rowOffsetValue * m:it.columnOffsetValue*m),//it.upDown * it.row,// * p.rowOffsetValue,
 
-            min = 0, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1 = 500, m2 = 500, m1a = 2500, m2a =  2500, m3a = 500, n = 0.5, n1 = 2500, n2 = 2500, o = 1, s = 1,
+            min = 2, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1 = 500, m2 = 500, m1a = 1000, m2a =  2500, m3a = 500, n = 0.5, n1 = it.columnOffsetValue, n2 = it.rowOffsetValue, o = 500, s = 1,
             u = 1 * (p && p.leftRight===0?ilc:(p?p.leftRight:it.leftRight)),
             v = 1,
             w = 1 * (p && p.upDown===0?ilr:(p?p.upDown:it.upDown)),
             x = 1,
-            u2 = (p?p.columnOffsetValue:it.columnOffsetValue),
-            v2 = (p?p.rowOffsetValue:it.rowOffsetValue),
-            w2 = (p?p.depthOffsetValue:it.depthOffsetValue);
+            u2 = -1 * (p?p.columnOffsetValue:it.columnOffsetValue),
+            v2 = -1 * (p?p.rowOffsetValue:it.rowOffsetValue),
+            w2 = -1 * (p?p.depthOffsetValue:it.depthOffsetValue);
 
-            /*
             if (p) {
-                u = p.leftRight;
-                w = p.upDown;
-                u2 = -1 * p.columnOffsetValue;
-                v2 = -1 * p.rowOffsetValue;
+                u = p.leftRight,
+                w = p.upDown,
+                u2 = -1 * p.columnOffsetValue,
+                v2 = -1 * p.rowOffsetValue,
                 w2 = -1 * p.depthOffsetValue;
-                u2 = p.columnField;
-                v2 = p.rowField;
-                w2 = p.depth;
             }
-*/
+
 
 
             if (it.model) {
+
+
+//debugger;
                 if (it.name.match(/\.mp3$/)) {
                     it.model.position.x = Math.round(
                         p.model.position.x
                         + (u2 * m1a)+(it.column*m1)
                         + (it.level > min ? (u2 * v * ((o * n1))) : 0)
-                        //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
+                        + (it.level > min ? (u2 * v * ((o * n2))) : 0)
                         + (it.level > min ? p.leftRight * rndx : 0)
                     );
                     it.model.position.y = Math.round(
                         p.model.position.y
                         + (v2 * m2a)+(it.row*m2)
                         + (it.level > min ? (v2 * x * ((o * n1))) : 0)
-                        //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
+                        + (it.level > min ? (v2 * x * ((o * n2))) : 0)
                         + (it.level > min ? p.upDown * rndy : 0)
                     );
                     it.model.position.z = Math.round(
                         (p.model.position.z ? p.model.position.z : 0)
                         + (w2 * m3a)+(it.depth*m2)
-                        //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
+                        + (it.level > min ? (w2 * x * ((o * n1))) : 0)
                         + (it.level > min ? (w2 * x * ((o * n2))) : 0)
                         + (it.level > min ? z + rndz : 0)
                     );
@@ -1493,41 +1406,13 @@ var
                     it.model2.position.z = it.model.position.z + 30;*/
 
                 } else if (it.model && p) {
-
-                    it.model.position.z = p.model.position.z + (it.depth * 1000);
-                    it.model.position.x = Math.round(
-                        p.model.position.x
-                        + (u2 * m1a)+(it.column*m1)
-                        + (it.level > min ? (u2 * v * ((o * n1))) : 0)
-                        //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-                        + (it.level > min ? p.leftRight * rndx : 0)
-                    );
-                    it.model.position.y = Math.round(
-                        p.model.position.y
-                        + (v2 * m2a)+(it.row*m2)
-                        + (it.level > min ? (v2 * x * ((o * n1))) : 0)
-                        //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-                        + (it.level > min ? p.upDown * rndy : 0)
-                    );
-                    if (isNaN(it.model.position.y)) debugger;
-                    //it.model.position.x = p.model.position.x + it.columnField * 500;
-                    //it.model.position.y = p.model.position.y + it.rowField * 500;
-                    it.model.position.x = p.model.position.x + (it.leftRight * 400) + it.columnOffsetValue * 500;
-                    it.model.position.y = p.model.position.y + (it.upDown * 400) + it.rowOffsetValue * 500;
-                    it.model.position.z =// p.model.position.z + z + rndz;
-
-                    Math.round(
-                        (p.model.position.z ? p.model.position.z : 0)
-                        + (w2 * m3a)+(it.depth*m2)
-                        + (it.level > min ? (w2 * x * ((o * n1))) : 0)
-                        //+ (it.level > min ? (w2 * x * ((o * n2))) : 0)
-                        + (it.level > min ? z + rndz : 0)
-                    );
-                    console.log ('t555', it.filepath, it.name, it.model.position);
+                    it.model.position.x = p.model.position.x + (p.leftRight * 400) + it.columnOffsetValue * 500;
+                    it.model.position.y = p.model.position.y + (p.upDown * 400) + it.rowOffsetValue * 500;
+                    it.model.position.z = p.model.position.z + (it.depthOffsetValue * 2000);
                 } else if (it.model) {
-                    it.model.position.x = it.columnField  * 500;
-                    it.model.position.y = it.rowField  * 500;
-                    it.model.position.z = 250;
+                    it.model.position.x = it.columnOffsetValue  * 500;
+                    it.model.position.y = it.rowOffsetValue  * 500;
+                    it.model.position.z = (it.depthOffsetValue * 500);
                 }
             }
 
@@ -1568,75 +1453,106 @@ var
             for (var j=0; j<t.items.length; j++) {
                 var p = t.items[j].idxPath;
                 var p2 = p.substr(1).split('/');
-                if (t.ld3[p]) {
-                    var list = t.ld3[p].colorList;
-                    var p1 = t.ld3[p].p1;
-                    var it = t.items[j];
-                    if (it) {
-                        //if (it.name.match(/SABATON/)) debugger;
-                        if (it.parent && it.parent) {
-                            for (var k=0; k<list.length; k++) {
-                                if (p1[k]==it.parent.idx) {
-                                    it.color = list[k].color;
-                                }
+                var list = t.ld3[p].colorList;
+                var p1 = t.ld3[p].p1;
+                var it = t.items[j];
+                if (it) {
+                    //if (it.name.match(/SABATON/)) debugger;
+                    if (it.parent && it.parent) {
+                        for (var k=0; k<list.length; k++) {
+                            if (p1[k]==it.parent.idx) {
+                                it.color = list[k].color;
                             }
-                        }
-                        if (!it.color) {
-                            for (var k=0; k<list.length; k++) {
-                                if (p1[k]==it.idx)
-                                    it.color = list[k].color;
-                            }
-                        }
-                        console.log ('t321', it.name, it.color);
-
-                        var
-                        material = new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                        }),
-                        materials2 = [ material, material, material, material, material, material ]/*,
-                        material = new THREE.MeshBasicMaterial({
-                                color : it.color,
-                                opacity : 0.5,
-                                transparent : true
-                        }),
-                        materials2a = [ material, material, material, material, material, material ],*/
-                        sideLength = 300, length = sideLength, width = sideLength;
-
-                        if (it.parent) {
-                            // parent/current folder :
-                            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2a );
-                            var cube = new THREE.Mesh( geometry, materials2 );
-                            cube.it = it;
-                            cube.position.x = it.model.position.x;
-                            cube.position.y = it.model.position.y;
-                            cube.position.z = it.model.position.z;
-                            t.scene.remove(it.model);
-                            //if (it.name.match('SABATON')) debugger;
-                            it.model = cube;
-                            t.scene.add( cube );
-                            t.s2.push(cube);
-                            //t.items.push (it);
-                        } else {
-                            var cube = new THREE.Mesh( geometry, materials2 );
-                            cube.it = it;
-//                             cube.position.x = it.columnOffsetValue * 500;
-//                             cube.position.y = it.rowOffsetValue * 500;
-//                             cube.position.z = it.model.position.z;
-                            cube.position.x = it.model.position.x;
-                            cube.position.y = it.model.position.y;
-                            cube.position.z = it.model.position.z;
-                            t.scene.remove(it.model);
-                            it.model = cube;
-                            t.scene.add( cube );
-                            t.s2.push(cube);
                         }
                     }
+                    if (!it.color) {
+                        for (var k=0; k<list.length; k++) {
+                            if (p1[k]==it.idx)
+                                it.color = list[k].color;
+                        }
+                    }
+                    console.log ('t321', it.name, it.color);
+
+                    var
+                    material = new THREE.MeshBasicMaterial({
+                            color : it.color,
+                            opacity : 0.5,
+                            transparent : true
+                    }),
+                    materials2 = [ material, material, material, material, material, material ]/*,
+                    material = new THREE.MeshBasicMaterial({
+                            color : it.color,
+                            opacity : 0.5,
+                            transparent : true
+                    }),
+                    materials2a = [ material, material, material, material, material, material ],*/
+                    sideLength = 300, length = sideLength, width = sideLength;
+
+                    if (it.parent) {
+
+                        // parent/current folder :
+                        //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2a );
+                        var cube = new THREE.Mesh( geometry, materials2 );
+                        cube.it = it;
+                        cube.position.x = it.model.position.x;
+                        cube.position.y = it.model.position.y;
+                        cube.position.z = it.model.position.z;
+                        t.scene.remove(it.model);
+                        //if (it.name.match('SABATON')) debugger;
+                        it.model = cube;
+                        t.scene.add( cube );
+                        t.s2.push(cube);
+                        //t.items.push (it);
+                    } else {
+                        var cube = new THREE.Mesh( geometry, materials2 );
+                        cube.it = it;
+                        cube.position.x = it.columnOffsetValue * 500;
+                        cube.position.y = it.rowOffsetValue * 500;
+                        cube.position.z = it.model.position.z;
+                        t.scene.remove(it.model);
+                        if (it.name.match('SABATON')) debugger;
+                        it.model = cube;
+                        t.scene.add( cube );
+                        t.s2.push(cube);
+                    }
+
+                    /*
+                    var sideLength = 240, length = sideLength, width = sideLength;
+
+                    var shape = new THREE.Shape();
+                    shape.moveTo( 0,0 );
+                    shape.lineTo( 0, width );
+                    shape.lineTo( length, width );
+                    shape.lineTo( length, 0 );
+                    shape.lineTo( 0, 0 );
+
+                    var extrudeSettings = {
+                    steps: 40,
+                    depth: sideLength,
+                    bevelEnabled: true,
+                    bevelThickness: 40,
+                    bevelSize: 40,
+                    bevelOffset: 0,
+                    bevelSegments: 40
+                    };
+
+                    var geometry2 = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+                    */
+
+                    // folder mesh display
+                    //var cube = new THREE.Mesh( geometry2, materials2 );
+                    //t.scene.remove(it.model2);
+                    //t.scene.add( cube );
+                    //cd.params.t.s2.push(cube);
+                    //cube.it = it;
+                    //it.model2 = cube;
+                    //cd.params.t.items.push (it);
+
                 }
             }
         }
 
+debugger;
         t.onresize_postDo(t, true);
     }
 
@@ -1655,16 +1571,8 @@ var
 
     onresize_postDo (t, animate=false) {
         t.drawLines(t);
-        t.cameraControls._camera.lookAt (t.s2[0].position);
-        t.cameraOrigin = $.extend({}, t.camera.position);
 
-        if (t.cameraOrigin) {
-            t.cameraControls._camera.position.x = t.cameraOrigin.x;
-            t.cameraControls._camera.position.y = t.cameraOrigin.y;
-            t.cameraControls._camera.position.z = t.cameraOrigin.z;
-
-        }
-
+        if (!t.cameraOrigin) t.cameraOrigin = $.extend({}, t.camera.position);
 
         t.winners = {
             north : 0,
@@ -1686,9 +1594,9 @@ var
         };
         var
         tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-        ol = 5 * 1000,
+        ol = 8* 1000,
         numPoints = 720,
-        radius = 7*1000;
+        radius = 25*1000;
         t.middle = {
             x : Math.round((t.winners.west + t.winners.east) / 2),
             y : Math.round((t.winners.north + t.winners.south) / 2),
@@ -1698,7 +1606,7 @@ var
         t.cameraOrigin = {
             x : t.middle.x,
             y : t.middle.y,
-            z : 24 * 1000
+            z : 5000
         };
         t.cameraControls.setLookAt(
             t.cameraOrigin.x,
@@ -1710,8 +1618,7 @@ var
             false, // IMPORTANT! disable cameraControls's transition and leave it to gsap.
         );
 
-
-        //console.log ('t778', t.winners, t.middle);
+        console.log ('t778', t.winners, t.middle);
 
 
         t.curve1b = new THREE.CatmullRomCurve3( [
@@ -2115,19 +2022,20 @@ var
             l.geometry.dispose();
             l.material.dispose();
         };
-        t.lineColors = {};
+
         for (var i=1; i<t.items.length; i++) {
             var 
             it = t.items[i];
 
-//            debugger;
-            if (it.parent) {
+            if (it.parent && it.parent.idx) {
                 var
-                parent = it.parent,
+                parent = t.items[it.parent.idx],
                 haveThisLineAlready = false;
 
                 if (!t.showLines) return false;
                 if (!it.model) return false;
+
+                if (!it.parent) continue;
 
                 for (var j=0; j<t.permaLines.length; j++) {
                     if (t.permaLines[j].it === it) {
@@ -2135,25 +2043,13 @@ var
                         break;
                     }
                 };
+                if (parent) {
 
-                for (var p1 in t.ld3) {
-                    if (p1==it.idxPath) {
-                        var p1s = p1.split('/');
-                        var idx = p1s[p1s.length-2];
-                        if (typeof idx=='number') var color = t.items[parseInt(idx)].color; else var color = null;
-                    }
-                }
-
-                if (
-                    parent
-                    && (
-                        !it.name.match(/\.mp3$/)
-                        || (t.hovered && t.hovered.object.it===it)
-                    )
-                ) {
                     var
                     p1 = it.model.position,
                     p2 = parent.model.position;
+                    //if (p1.x===0 && p1.y===0 && p1.z===0) continue;
+                    //if (p2.x===0 && p2.y===0 && p2.z===0) continue;
 
                     const points = [];
                     points.push( new THREE.Vector3( p1.x+150, p1.y+150, p1.z+150 ) );
@@ -2161,17 +2057,25 @@ var
 
                     var
                     geometry = new THREE.BufferGeometry().setFromPoints (points);
-                    if (!t.lineColors) t.lineColors = {};
-                    if (!t.lineColors[it.parent.idx] && color) {
-                        t.lineColors[it.parent.idx] = color;
-                    } else {
-                        var color = t.lineColors[it.parent.idx];
-                    }
 
-                    if (!color) color = 'rgb(255,255,255)';
+                    //geometry.dynamic = true;
+                    //geometry.vertices.push(p1);
+                    //geometry.vertices.push(p2);
+                    //geometry.verticesNeedUpdate = true;
+
+                    if (!t.lineColors) t.lineColors = {};
+                    if (!t.lineColors[it.parent.idx]) {
+                        var x=Math.round(0xffffff * Math.random()).toString(16);
+                        var y=(6-x.length);
+                        var z="000000";
+                        var z1 = z.substring(0,y);
+                        var color= z1 + x;
+                        t.lineColors[it.parent.idx] = color;
+                    }
+                    var color = t.lineColors[it.parent.idx];
 
                     var
-                    material = new THREE.LineBasicMaterial({ color: color, linewidth :1, opacity : 0.5, transparent : true }),
+                    material = new THREE.LineBasicMaterial({ color: '#'+color, linewidth :1 }),
                     line = new THREE.Line( geometry, material );
                     t.scene.add(line);
 
@@ -2184,7 +2088,7 @@ var
                 }
             }
         }
-        //$.cookie('3DFDM_lineColors', JSON.stringify(t.lineColors), na.m.cookieOptions());
+        $.cookie('3DFDM_lineColors', JSON.stringify(t.lineColors), na.m.cookieOptions());
     }
     
     useNewArrangement () {

@@ -134,8 +134,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
         });
 
         na.c.d.s.visibleDivs.push('#siteTaskbar');
-        na.c.d.s.visibleDivs.push('#siteToolbarThemeEditor');
+        //na.c.d.s.visibleDivs.push('#siteToolbarThemeEditor');
         na.c.d.s.visibleDivs.push('#siteContent');
+        na.c.d.s.visibleDivs.push('#siteToolbarRight');
         var cr = $.extend( {}, na.components.desktop.settings.negotiateOptions );
         while (JSON.stringify(cr).match('conditions')) {
             var cr = t.parseOptions(t, cr);
@@ -147,9 +148,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
        cr.order = [];
         //c.order.push ('#siteStatusbar');
        cr.order.push ('#siteTaskbar');
-       cr.order.push ('#siteToolbarThemeEditor');
-        //c.order.push ('#siteToolbarLeft');
-        //c.order.push ('#siteToolbarRight');
+       //cr.order.push ('#siteToolbarThemeEditor');
+       //cr.order.push ('#siteToolbarLeft');
+       cr.order.push ('#siteToolbarRight');
         //c.order.push ('#siteToolbarTop');
         //c.order.push ('#siteErrors');
         //c.order.push ('#siteComments');
@@ -281,7 +282,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                             na.c.d.s.visibleDivs.includes('#siteComments')
                             || na.c.d.s.visibleDivs.includes('#siteToolbarRight')
                         ) {
-                            divs[divID].width -= ( na.c.d.g.margin );
+                            //divs[divID].width -= ( na.c.d.g.margin );
                         }
                         break;
                     case '#siteVideo':
@@ -290,9 +291,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                         break;
                     case '#siteVideoSearch':
                     case '#siteToolbarRight':
-                        divs[divID].left -= na.c.d.g.margin;
-                        divs[divID].top += na.c.d.g.margin;
-                        divs[divID].height -= (3 * na.c.d.g.margin);
+                        divs[divID].height -= na.c.d.g.margin;
                         break;
                     case '#siteComments':
                         divs[divID].height -= (2*na.c.d.g.margin);
@@ -325,6 +324,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                 for (var divID2 in divs) if (divID2==divID) shown = true;
                 //if (shown) debugger;
                 if (shown) $(divID).css({ display : 'block' });
+                else $(divID).css({ display : 'none' });
             }
 
             var divsDone = [];
@@ -415,9 +415,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                             na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i)
                                         }
                                 };
-                                if (na.c.d.s.animate && na.site.settings.current.siteInitialized)
+                                if (na.c.d.s.animate) {
                                     $(divID).stop(true,true,false).animate(na.c.d.g.defaultPos[divID],options);
-                                else {
+                                } else {
                                     na.c.d.s.animatingDivs[divID] = false;
                                     $(divID).stop(true,true,false).css(na.c.d.g.defaultPos[divID]);
                                 }

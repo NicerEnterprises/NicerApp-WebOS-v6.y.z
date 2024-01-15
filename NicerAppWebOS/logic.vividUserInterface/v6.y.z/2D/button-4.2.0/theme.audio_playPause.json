@@ -39,7 +39,7 @@
         ".roundIcon_svg" : {
             "layerID" : "b.theme.layers['.roundIcon_svg']",
             "animType" : "svg",
-            "src" : "/NicerAppWebOS/logic.userInterface/naVividButton4/btn.audioVideo.playPause.svg",
+            "src" : "/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0/btn.audioVideo.playPause.svg",
             "srcVars" : {
                 "{$fillColor}" : "lime"
             },

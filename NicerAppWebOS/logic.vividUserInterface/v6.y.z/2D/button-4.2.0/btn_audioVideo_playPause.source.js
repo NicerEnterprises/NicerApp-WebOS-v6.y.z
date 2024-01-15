@@ -42,7 +42,7 @@ vui.vividButton.buttonTypes['btn_audioVideo_playPause'] = {
             layerID : 'b.btnCode.layers.circleIcon_svg',
             animType : 'svg',
             //src : '/NicerAppWebOS/logic.userInterface/naVividButton-4.0.0/btn.audioVideo.playPause.svg',
-            src : '/NicerAppWebOS/logic.userInterface/vividButton-4.1.0/btn_audioVideo_playPause.svg',
+            src : '/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0/btn_audioVideo_playPause.svg',
             startupCode : function () {
                 //$('#from_pause_to_play')[0].beginElement();
                 //$('#line2').addClass('atPlay');

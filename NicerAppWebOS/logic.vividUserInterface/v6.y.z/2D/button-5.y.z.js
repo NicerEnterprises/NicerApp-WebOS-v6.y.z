@@ -803,6 +803,8 @@ class naVividButton_icon_svg {
             htmlID = 'btnLayer_'+t.settings.buttonIdx;
 
             if (l.img_src) style += 'background-image:url('+l.img_src+');';
+            if (l.src) style += 'background-image:url('+l.src+');';
+
 
             if (layerClass=='circleIcon_svg') {
                 var
@@ -834,11 +836,13 @@ class naVividButton_icon_svg {
                 };
             } else var loadLayer = null;
 
-            html += '<div class="'+htmlID+' '+b.class+' '+ccState+' '+ccCircumstance+' '+layerClass+'" '+(style!==''?'style="'+style+'"':'')+'>'+htmlInner+'</div>';
+
+            html += '<div class="'+htmlID+' '+b.class+' '+ccState+' '+ccCircumstance+' '+layerClass+'" '+/*(style!==''?'style="'+style+'"':'')+*/'>'+htmlInner+'</div>';
         }
         html += '</div>';
 
         $(b.el).html(html).attr('buttonClass', b.btnCode.selfAttrButtonClass);
+
         if (typeof loadLayer == 'function') {
             await loadLayer()
         }

@@ -6827,7 +6827,6 @@ jQuery.extend( {
 				if ( isCustomProp ) {
 					style.setProperty( name, value );
 				} else {
-					var x = console.trace();
 					style[ name ] = value;
 				}
 			}

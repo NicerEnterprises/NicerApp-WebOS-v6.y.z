@@ -5,11 +5,13 @@ export class naApp_mediaPlayer {
     $('#siteContent > .vividDialogContent h1')
       .addClass('animatedText_orangeYellow')
       .css({
+        display : 'none',
         fontFamily : 'Arial'
       });
     $('#siteContent > .vividDialogContent h2')
       .addClass('animatedText_ivory')
       .css({
+        display : 'none',
         fontFamily : 'Arial'
       });
 

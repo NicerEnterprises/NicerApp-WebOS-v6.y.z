@@ -41,7 +41,7 @@ vui.vividButton.buttonTypes['btn_audioVideo_shuffle'] = {
         circleIcon_svg : {
             layerID : 'b.btnCode.layers.circleIcon_svg',
             animType : 'svg',
-            src : '/NicerAppWebOS/logic.userInterface/vividButton-4.1.0/btn_audioVideo_shuffle.svg'
+            src : '/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0/btn_audioVideo_shuffle.svg'
         }
     },
     states : {

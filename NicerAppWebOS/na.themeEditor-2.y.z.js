@@ -1,3 +1,4 @@
+import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
 import { vividUserInterface_2D_menu } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/menu.js';
 import { naVividMenu__behavior_rainbowPanels as naVividMenu } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/vividMenu-5.y.z--behavior-rainbowPanels-1.1.0.js';
 
@@ -910,9 +911,9 @@ export class naThemeEditor {
     
     hide  (event) {
         if (!$(this).is('.disabled')) { 
-            if (!na.c.d.settings.visibleDivs.includes('#siteContent')) na.c.d.settings.visibleDivs.push('#siteContent');
+            if (!na.c.d.g.visibleDivs.includes('#siteContent')) na.c.d.g.visibleDivs.push('#siteContent');
             
-            arrayRemove (na.c.d.settings.visibleDivs, '#siteToolbarThemeEditor');
+            na.c.d.g.visibleDivs = arrayRemove (na.c.d.g.visibleDivs, '#siteToolbarThemeEditor');
             na.settings.activeDivs=['#siteContent'];
             na.c.d.resize();
         }        

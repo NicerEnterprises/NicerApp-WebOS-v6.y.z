@@ -540,6 +540,7 @@ export class naMisc {
 
     walkArray  (rt, a, keyCallback, valueCallback, callKeyForValues, callbackParams, k, level, path) {
         if (!path) path = '';
+        if (!level) level = 1;
         if (typeof a !== 'object') {
             //debugger;
         } else {

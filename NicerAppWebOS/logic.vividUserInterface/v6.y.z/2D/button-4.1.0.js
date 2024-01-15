@@ -351,7 +351,7 @@ export class vividUserInterface_2D_button_v4 {
         ccCircumstance = ccState+'--circumstance-'+b.circumstance,
         html = '<div class="vividButton_currentState">';
         
-        //debugger;
+        debugger;
         
         for (var layerClass in cl) {
             na.ui.vb.settings.buttonIdx++;
@@ -362,7 +362,8 @@ export class vividUserInterface_2D_button_v4 {
             scl = cl[layerClass],
             l = na.ui.vb.getLayer(b, scl.layerID),
             htmlID = 'btnLayer_'+na.ui.vb.settings.buttonIdx;
-            
+
+debugger;
             if (l.img_src) style += 'background-image:url('+l.img_src+');';
             
             if (layerClass=='circleIcon_svg') {

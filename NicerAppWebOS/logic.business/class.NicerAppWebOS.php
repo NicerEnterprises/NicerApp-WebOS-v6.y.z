@@ -820,7 +820,7 @@ class NicerAppWebOS {
     }
 
     public function getVividButtonCSSfiles () {
-        $path = $this->path.'/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.1.0';
+        $path = $this->path.'/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0';
         if (!file_exists($path)) {
             $msg = $this->cn.'->getVividButtonCSSfiles() : $path='.$path.' does not exist.';
             trigger_error ($msg, E_USER_ERROR);
@@ -833,11 +833,11 @@ class NicerAppWebOS {
             $files[$idx] = str_replace($this->path, '', $file);
         }
         sort($files);
-        return array_merge ([ '/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.1.0/themes.css' ], $files);
+        return array_merge ([ '/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0/themes.css' ], $files);
     }
 
     public function getVividButtonJavascriptFiles () {
-        $path = $this->path.'/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.1.0';
+        $path = $this->path.'/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-4.2.0';
         if (!file_exists($path)) {
             $msg = $this->cn.'->getVividButtonCSSfiles() : $path='.$path.' does not exist.';
             trigger_error ($msg, E_USER_ERROR);
