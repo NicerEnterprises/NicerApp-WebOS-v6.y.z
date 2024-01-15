@@ -28,7 +28,7 @@ export class na3D_fileBrowser {
         
         t.autoRotate = false;
         t.showLines = true;
-        t.animationDuration = 5;
+        t.animationDuration = 20;
         
         t.p = parent;
         t.el = el;
@@ -620,70 +620,8 @@ var
 
                 delete t.hovered;
                 const intersects2 = t.raycaster.intersectObjects (t.s2, true);
-                if (intersects2 && intersects2[0]) {
-                    console.log ('t567-A', intersects2[0].object.it.name, t.mouse);
-                    t.hovered = intersects2[0];
-                    debugger;
-                }
-
-
-/*
-                for (var l = 0; l < t.s2.length-1; l++) {
-                    var width = $(t.renderer.domElement).width(), height = $(t.renderer.domElement).height();
-                    var widthHalf = width / 2, heightHalf = height / 2;
-
-                    var pos = t.s2[l].position.clone();
-                    pos.project(t.camera);
-                    pos.x =  ( pos.x * widthHalf ) + widthHalf;
-                    pos.y =  (-1* pos.y * heightHalf ) + heightHalf;
-                    //console.log ('t6553', pos);
-
-
-                    if (
-                        t.mouse.x > pos.x - 2
-                        && t.mouse.x < pos.x + 2
-                        && t.mouse.y > pos.y - 2
-                        && t.mouse.y < pos.y + 2
-                    //    t.mouse.layerX == pos.x
-                      //  && t.mouse.layerY == pos.y
-                    ) {
-                        hovered = {
-                            object : t.items[l].model
-                        }
-                        t.hovered = hovered;
-                        intersects2 = t.raycaster.intersectObjects (t.s2);
-                        console.log ('t567-A', hovered.object.it.name, t.mouse, pos, intersects2, t.s2);
-                        //break;
-                    } else if (
-                        t.mouse.x > pos.x - 10
-                        && t.mouse.x < pos.x + 10
-                        && t.mouse.y > pos.y - 10
-                        && t.mouse.y < pos.y + 10
-                    //    t.mouse.layerX == pos.x
-                      //  && t.mouse.layerY == pos.y
-                    ) {
-                        //console.log ('t567-B', t.items[l].name, t.mouse, pos);
-                    }
-                    /*
-                    if (
-                        t.mouse.x  > pos.x - 5
-                        && t.mouse.x  < pos.x  + 5
-                        && t.mouse.y > pos.y  - 5
-                        && t.mouse.y < pos.y  + 5
-                    ) {
-                        hovered = {
-                            object : t.items[l].model
-                        }
-                        t.hovered = hovered;
-                        console.log ('t567', t.mouse, pos, hovered.object.it.name, hovered.object, intersects);
-                        //break;
-                    }* /
-
-                }*/
-
-                //const [hovered] = t.raycaster.intersectObjects(t.s2);
+                if (intersects2 && intersects2[0]) t.hovered = intersects2[0];
                 if (t.hovered && t.hovered.object.type!=='Line') {
-                    //console.log ('!t.animPlaying', hovered, t.camera, t.s2);
                     t.drawLines(t);
 
                     // Setup label
@@ -692,10 +630,6 @@ var
                       //  t.hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
                     $('#site3D_label')[0].textContent =
                         t.hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+t.hovered.object.it.name;
-
-                    // Get offset from object's dimensions
-//                     const offset = new THREE.Vector3();
-//                     new THREE.Box3().setFromObject(hovered.object).getSize(offset);
 
                     // Move label over hovered element
                     $('#site3D_label').css({
@@ -715,13 +649,6 @@ var
                     //t.label.visible = false;
                     //t.labelDiv.textContent = '';
                 }
-
-                // Render labels
-                //t.labelRenderer.render(t.scene, t.camera);
-
-//             if (!intersects[0]) {
-//                 $('#site3D_label').fadeOut();
-//             }
         }
 
         for (var i=0; i<t.lines.length; i++) {
@@ -1666,9 +1593,9 @@ var
         };
         var
         tf = t.winners.behind + Math.round((t.winners.behind - t.winners.front) / 2),
-        ol = 5 * 1000,
+        ol = 4 * 1000,
         numPoints = 720,
-        radius = 7*1000;
+        radius = 5*1000;
         t.middle = {
             x : Math.round((t.winners.west + t.winners.east) / 2),
             y : Math.round((t.winners.north + t.winners.south) / 2),
@@ -1678,7 +1605,7 @@ var
         t.cameraOrigin = {
             x : t.middle.x,
             y : t.middle.y,
-            z : 24 * 1000
+            z : 20 * 1000
         };
         t.cameraControls.setLookAt(
             t.cameraOrigin.x,
@@ -1981,8 +1908,8 @@ var
                 t.dragndrop = new DragControls(
                     objs, t.camera, t.renderer.domElement
                 );
-                //t.dragndrop.activate();
-
+                t.dragndrop.activate();
+debugger;
                 $(t.renderer.domElement).contextmenu(function() {
                     return false;
                 });
@@ -2004,7 +1931,7 @@ var
                     for (let i=0; i<t.items.length; i++) {
                         let it2 = t.items[i];
                         if (it2.idxPath === cube.it.idxPath) {
-                            //debugger;
+                            debugger;
                             it2.model.position.dragStartX = it2.model.position.x;
                             it2.model.position.dragStartY = it2.model.position.y;
                             it2.model.position.dragStartZ = it2.model.position.z;
@@ -2018,10 +1945,12 @@ var
 
                 t.dragndrop.addEventListener( 'drag', function (event) {
                     let cube = event.object;
+                    debugger;
 
                     //if (false)
                     for (let i=0; i<t.items.length; i++) {
                         let it2 = t.items[i];
+                        debugger;
                         if (it2.idxPath === cube.it.idxPath) {
                             it2.model.position.x = it2.model.position.dragStartX + (t.dragndrop.mouseX - t.mouse.layerX) * 10;
                             it2.model.position.y = it2.model.position.dragStartY + (t.dragndrop.mouseY - t.mouse.layerY) * 10;
