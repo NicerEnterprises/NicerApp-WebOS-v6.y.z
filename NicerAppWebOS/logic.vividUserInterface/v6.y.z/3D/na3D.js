@@ -622,6 +622,14 @@ var
                 var hovered = null;
                 delete t.hovered;
 
+                var intersects2 = t.raycaster.intersectObjects (t.s2);
+                if (intersects2[0]) {
+                    console.log ('t567-A', intersects2[0].object.it.name, t.mouse);
+                    t.hovered = intersects2[0];
+                }
+
+
+
                 for (var l = 0; l < t.s2.length-1; l++) {
                     var width = $(t.renderer.domElement).width(), height = $(t.renderer.domElement).height();
                     var widthHalf = width / 2, heightHalf = height / 2;
@@ -631,10 +639,6 @@ var
                     pos.x =  ( pos.x * widthHalf ) + widthHalf;
                     pos.y =  (-1* pos.y * heightHalf ) + heightHalf;
                     //console.log ('t6553', pos);
-
-                    /*const offset = new THREE.Vector3();
-                    new THREE.Box3().setFromObject(t.s2[l]).getSize(offset);
-                    console.log ('t678', offset);*/
 
 
                     if (
@@ -649,9 +653,8 @@ var
                             object : t.items[l].model
                         }
                         t.hovered = hovered;
-                        debugger;
-                        const intersects2 = t.raycaster.intersectObjects (t.s2, l);
-                        console.log ('t567-A', hovered.object.it.name, t.mouse, pos, intersects, t.s2);
+                        intersects2 = t.raycaster.intersectObjects (t.s2);
+                        console.log ('t567-A', hovered.object.it.name, t.mouse, pos, intersects2, t.s2);
                         //break;
                     } else if (
                         t.mouse.x > pos.x - 10
@@ -681,7 +684,7 @@ var
                 }
 
                 //const [hovered] = t.raycaster.intersectObjects(t.s2);
-                if (hovered && hovered.object.type!=='Line') {
+                if (t.hovered && t.hovered.object.type!=='Line') {
                     //console.log ('!t.animPlaying', hovered, t.camera, t.s2);
                     t.drawLines(t);
 
