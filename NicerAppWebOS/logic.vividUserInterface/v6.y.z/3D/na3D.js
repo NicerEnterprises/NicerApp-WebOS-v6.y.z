@@ -273,7 +273,6 @@ var
         t.mouse = new THREE.Vector2();
         t.mouse.x = 0;
         t.mouse.y = 0;
-        t.mouse.z = 0;
 
         // Handle window resize
         window.addEventListener('resize', () => {
@@ -619,17 +618,16 @@ var
                 // show folder name for item under mouse and closest to the country
                 $('#site3D_label').css({display:'flex',opacity:1});
 
-                var hovered = null;
                 delete t.hovered;
-
-                var intersects2 = t.raycaster.intersectObjects (t.s2);
-                if (intersects2[0]) {
+                const intersects2 = t.raycaster.intersectObjects (t.s2, true);
+                if (intersects2 && intersects2[0]) {
                     console.log ('t567-A', intersects2[0].object.it.name, t.mouse);
                     t.hovered = intersects2[0];
+                    debugger;
                 }
 
 
-
+/*
                 for (var l = 0; l < t.s2.length-1; l++) {
                     var width = $(t.renderer.domElement).width(), height = $(t.renderer.domElement).height();
                     var widthHalf = width / 2, heightHalf = height / 2;
@@ -679,9 +677,9 @@ var
                         t.hovered = hovered;
                         console.log ('t567', t.mouse, pos, hovered.object.it.name, hovered.object, intersects);
                         //break;
-                    }*/
+                    }* /
 
-                }
+                }*/
 
                 //const [hovered] = t.raycaster.intersectObjects(t.s2);
                 if (t.hovered && t.hovered.object.type!=='Line') {
@@ -690,10 +688,10 @@ var
 
                     // Setup label
                     t.renderer.domElement.className = 'hovered';
+                    //$('#site3D_label')[0].textContent =
+                      //  t.hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
                     $('#site3D_label')[0].textContent =
-                        hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
-                    $('#site3D_label')[0].textContent =
-                        hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+hovered.object.it.name;
+                        t.hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+t.hovered.object.it.name;
 
                     // Get offset from object's dimensions
 //                     const offset = new THREE.Vector3();
@@ -750,38 +748,17 @@ var
     }
 
     onMouseMove( event, t ) {
-
-//        var rect = t.renderer.domElement.getBoundingClientRect();
-         t.mouse.x = event.layerX;//( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1 + (2 * na.c.d.g.margin);// - $('#siteContent').offset().left;
-         t.mouse.y = event.layerY;// ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
         t.mouse.layerX =  event.layerX;
         t.mouse.layerY =  event.layerY;
         t.mouse.clientX = event.clientX;
         t.mouse.clientY = event.clientY;
 
-         var rect = t.renderer.domElement.getBoundingClientRect();
-         //t.mouse.x = ($('#siteContent').offset().left/rect.left) + ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;// - (($('#siteContent').offset().left / rect.left  )*2);
+        var rect = t.renderer.domElement.getBoundingClientRect();
+        t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.right - rect.left ) ) * 2 - 1;
+        t.mouse.y = -1 * ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
 
-         //t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1;// - (($('#siteContent').offset().left / rect.left  )*2);
-         //t.mouse.y = -1 * ($('#siteContent').offset().top/rect.top) + ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-         //t.mouse.y = -1 * ( ( event.clientY - rect.top- (na.c.d.g.margin) ) / ( rect.bottom - rect.top) ) * 2 + 1;
-                //t.mouse.x = ( event.clientX  / window.innerWidth ) * 2 - 1;
-                //t.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-                      //   t.mouse.x = event.clientX ;//( ( event.clientX - rect.left ) / ( rect.width - rect.left ) ) * 2 - 1 + (2 * na.c.d.g.margin);// - $('#siteContent').offset().left;
-         //t.mouse.y = event.clientY;// ( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
-
-
-        //console.log ('t446', t.mouse, rect);
-        //console.log ('t444', t.mouse);
-        //t.mouse.x = ( event.clientX / window.innerWidth ) - 1;
-        //t.mouse.y = ( event.clientY / window.innerHeight )  + 1;
         t.camera.updateMatrixWorld();
-        t.raycaster.setFromCamera (t.mouse.clone(), t.camera);
-
-        //$('#site3D_label').html(t.hoverOverName).css({ position:'absolute', padding : 10, zIndex : 5000, top : event.layerY + 10, left : event.layerX + 30 });
-
-
+        t.raycaster.setFromCamera (t.mouse, t.camera);
     }
     
     onMouseWheel( event, t ) {
