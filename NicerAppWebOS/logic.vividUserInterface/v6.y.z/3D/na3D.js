@@ -1544,13 +1544,14 @@ var
         g.setAttribute("sides", new THREE.Float32BufferAttribute(sides, 1));
 
         var m = new THREE.MeshStandardMaterial({
-        roughness: 0.25,
-        metalness: 0.75,
+        //roughness: 0.25,
+        //metalness: 0.75,
         color : '0x0000FF',
+        emissive : '0x00ff00',
         opacity : 0.5,
-        map : t.createTexture(),
+        //map : t.createTexture(),
         transparent : true,
-        onBeforeCompile: shader => {
+        /*onBeforeCompile: shader => {
             shader.vertexShader = `
             attribute float sides;
             ${shader.vertexShader}
@@ -1563,7 +1564,7 @@ var
             `
             );
             console.log(shader.vertexShader);
-        }
+        }*/
         });
         var o = new THREE.Mesh(g, m);
 
