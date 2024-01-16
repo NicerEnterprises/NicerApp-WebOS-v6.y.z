@@ -928,9 +928,9 @@ var
 
 
             // parent/current folder :
-            var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(0.5), materials1a );
+            //var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(0.5), materials1a );
 
-            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+            var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials1a );
             //var cube = cd.params.t.model_folder.clone();//new THREE.Mesh( geometry, materials1a );
             cd.params.t.scene.add( cube );
             cd.params.t.s2.push(cube);
