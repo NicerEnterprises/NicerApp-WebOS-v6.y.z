@@ -14,12 +14,11 @@ import { CameraControls, approxZero } from '/NicerAppWebOS/3rd-party/3D/libs/thr
 
 import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
 
-/*
   import {
     CSS2DRenderer,
     CSS2DObject,
   } from 'https://unpkg.com/three@0.125.2/examples/jsm/renderers/CSS2DRenderer.js';
-*/
+
 
 export class na3D_fileBrowser {
     constructor(el, parent, parameters) {
@@ -178,20 +177,13 @@ var
         
         t.scene = new THREE.Scene();
             // parent/current folder :
-            var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(0.5), materials1a );
-            //var cube = new THREE.Mesh( geometry, materials1a );
-
-                t.model_folder = cube;
-                t.scene.add (cube);
-                cube.it = it;
-                it.model = cube;
-                t.items.push (it);
-
-                //t.updateTextureEncoding(t, cube);
-
-
-            //t.scene.add( cube );
+            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
+            var cube = new THREE.Mesh( geometry, materials1a );
+            t.scene.add( cube );
             //t.s2.push(cube);
+            cube.it = it;
+            it.model = cube;
+            t.items.push (it);
 
         t.s2 = [];
         t.camera = new THREE.PerspectiveCamera( 90  , $(el).width() / $(el).height(), 0.01, 50 *1000 );
@@ -255,6 +247,8 @@ var
             clearInterval(t.zoomInterval);
         });
         
+        t.loader = new GLTFLoader();
+
         const light1  = new THREE.AmbientLight(0xFFFFFF, 0.3);
         light1.name = 'ambient_light';
         light1.intensity = 0.3;
@@ -305,8 +299,8 @@ var
         t.clock = new THREE.Clock();
         t.lookClock = -1;
         t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        t.orbitControls.enabled = false;
-        //t.orbitControls.listenToKeyEvents( window ); // optional
+        t.orbitControls.enabled = true;
+        t.orbitControls.listenToKeyEvents( window ); // optional
 
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
         t.cameraControls.enabled = true;
@@ -317,13 +311,11 @@ var
         t.flyControls.rollSpeed = Math.PI / 24;
         t.flyControls.autoMove = true;
         //t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
-        setTimeout(function() {
-            t.initializeItems (t);
-            t.camera.lookAt (t.s2[0].position);
-            t.cameraControls._camera.lookAt (t.s2[0].position);
+        t.initializeItems (t);
+        t.camera.lookAt (t.s2[0].position);
+        t.cameraControls._camera.lookAt (t.s2[0].position);
 
-            t.animate(t, null);
-        }, 1500);
+        t.animate(this, null);
     }
     
     animate(t, evt) {
@@ -364,7 +356,7 @@ var
                 t.flyControls.updateMovementVector();
             } else {
                 t.cameraControls.enabled = true;
-                //t.orbitControls.enabled = true;
+                t.orbitControls.enabled = true;
                 //t.onresize_postDo(t);
             }
 
@@ -382,11 +374,6 @@ var
                         tar.z,
                         false
                     );
-                    t.orbitControls.center = {
-                        x : t.flyControls.object.position.x,
-                        y : t.flyControls.object.position.y,
-                        z : t.flyControls.object.position.z
-                    };
                 }
                 if (t.debug) console.log ('animate() : calling t.cameraControls.update()');
                 //if (t.cameraControls._isUserControllingTruck) debugger;
@@ -406,7 +393,7 @@ var
                 //if (t.debug) console.log ('t.flyControls.disabled, t.cameraControls.enabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
-                //t.orbitControls.enabled = true;
+                t.orbitControls.enabled = true;
             }
 
 
@@ -452,7 +439,6 @@ var
                             t.lookClock = -1;
                             t.flyControls.enabled = false;
                             t.cameraControls.enabled = true;
-                            //t.orbitControls.enabled = true;
                         //}
                     } else {
                         var intersects = t.raycaster.intersectObjects (t.s2);
@@ -509,8 +495,8 @@ var
 
 
 
-            var intersects = t.raycaster.intersectObjects (t.s2);
-            if (intersects[0] && intersects[0].object.type!=='Line')
+            if (false) var intersects = t.raycaster.intersectObjects (t.s2);
+            if (false && intersects[0] && intersects[0].object.type!=='Line')
             for (var i=0; i<1/*intersects.length <-- this just gets an endless series of hits from camera into the furthest reaches of what's visible behind the mouse pointer */; i++) {
                 var hoveredItem = intersects[i].object, done = false;
                 while (hoveredItem && !done) {
@@ -549,9 +535,10 @@ var
                                     p2 = parent.model.position;
                                     //if (p1.x===0 && p1.y===0 && p1.z===0) continue;
                                     //if (p2.x===0 && p2.y===0 && p2.z===0) continue;
+
                                     const points = [];
-                                    points.push( new THREE.Vector3( p1.x+150, p1.y+150, p1.z+150 ) );
-                                    points.push( new THREE.Vector3( p2.x+150, p2.y+150, p2.z+150 ) );
+                                    points.push( new THREE.Vector3( p1.x, p1.y, p1.z ) );
+                                    points.push( new THREE.Vector3( p2.x, p2.y, p2.z ) );
 
                                     var
                                     geometry = new THREE.BufferGeometry().setFromPoints (points);
@@ -642,12 +629,8 @@ var
                     t.renderer.domElement.className = 'hovered';
                     //$('#site3D_label')[0].textContent =
                       //  t.hovered.object.it.name.replace(/-\s*[\w]+\.mp3/, '.mp3');
-                    var l =
-                        t.hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+t.hovered.object.it.name.replace(/\s*-\s*[-_\w]+\.mp3$/,'.mp3');
-                    l = l.replace(/folders\//g, '');
-                    console.log ('t234', l);
-                    $('#site3D_label')[0].textContent = l;
-
+                    $('#site3D_label')[0].textContent =
+                        t.hovered.object.it.filepath.replace('/0/filesAtRoot/folders/','')+'/'+t.hovered.object.it.name;
 
                     $('#site3D_label').css({
                         display : 'block',
@@ -811,22 +794,6 @@ var
 
             //cd.at[cd.k].idxPath = cd.params.idxPath;
             //cd.at[cd.k].idx = cd.params.t.items.length;
-                for (var i=0; i<cd.params.t.items.length; i++) {
-                    var itemCheck = cd.params.t.items[i];
-//debugger;
-                    //console.log ('t457', cd.path.replace(/\/.*?\/.*?$/, ''), 't456a', itemCheck.filepath);
-
-                    var rcp1 = cd.path.split('/')
-                    delete rcp1[rcp1.length-1];
-                    delete rcp1[rcp1.length-1];
-                    var rcp = rcp1.join('/');
-                    rcp = rcp.substr(0, rcp.length-1);
-                    //console.log ('t458', rcp, 't456a', itemCheck.filepath);
-
-                    if (itemCheck.filepath === rcp) {
-                        var lastParent = itemCheck;
-                    }
-                }
 
             var
             it = {
@@ -843,7 +810,6 @@ var
                 columnOffsetValue : 1000,
                 rowOffsetValue : 1000
             };
-            //debugger;
 
             for (var i=0; i<cd.params.t.items.length; i++) {
                 var it2 = cd.params.t.items[i];
@@ -928,12 +894,10 @@ var
 
 
             // parent/current folder :
-            var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(0.5), materials1a );
-
             //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials );
-            //var cube = cd.params.t.model_folder.clone();//new THREE.Mesh( geometry, materials1a );
-            cd.params.t.scene.add( cube );
-            cd.params.t.s2.push(cube);
+            var cube = new THREE.Mesh( geometry, materials1a );
+            //cd.params.t.scene.add( cube );
+            //cd.params.t.s2.push(cube);
             cube.it = it;
             it.model = cube;
 
@@ -1117,6 +1081,7 @@ var
                     it = t.items[ld3.items[i].idx];
 
                     ld3.rowColumnCount = Math.ceil(Math.sqrt(ld3.itemCount));
+                    debugger;
                     ld3.cubeSideLengthCount = ld3.cslc = Math.ceil(Math.cbrt(ld3.itemCount));
                     var
                     pos = { x : 1, xField : 1, y : 1, yField : 1, z : 1 },
@@ -1245,9 +1210,9 @@ var
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? it.parent : null),
-            rndMax = 5000;
+            rndMax = 14000;
 
-            if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax * 2);
+            if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax);
 
@@ -1387,7 +1352,7 @@ var
             ilc = (p?p.columnOffsetValue * m:it.columnOffsetValue*m), //it.leftRight * it.column,// * p.columnOffsetValue,
             ilr = (p?p.rowOffsetValue * m:it.columnOffsetValue*m),//it.upDown * it.row,// * p.rowOffsetValue,
 
-            min = -1, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1 = 500, m2 = 500, m1a = 2500, m2a =  2500, m3a = 5000, m3b = Math.random() * 1500, n = 0.5, n1 = 2500, n2 = 2500, o = 1, s = 1,
+            min = -1, m0 = (it.level-2) < 5 ? it.level-2 : 4, m1 = 500, m2 = 500, m1a = 2500, m2a =  2500, m3a = 1500, m3b = Math.random() * 1500, n = 0.5, n1 = 2500, n2 = 2500, o = 1, s = 1,
             u = 1 * (p && p.leftRight===0?ilc:(p?p.leftRight:it.leftRight)),
             v = 1,
             w = 1 * (p && p.upDown===0?ilr:(p?p.upDown:it.upDown)),
@@ -1428,7 +1393,7 @@ var
                     );
                     it.model.position.z = Math.round(
                         (p.model.position.z ? p.model.position.z : 0)
-                        + (w2 * m3a)+(it.depth*m2)
+                        + (w2 * m3b)+(it.depth*m2)
                         //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
                         + (it.level > min ? (w2 * x * ((o * n2))) : 0)
                         + (it.level > min ? -1 * z - rndz : 0)
@@ -1439,7 +1404,7 @@ var
 
                 } else if (it.model && p) {
 
-
+                    it.model.position.z = p.model.position.z + (it.depth * 1000);
                     it.model.position.x = Math.round(
                         p.model.position.x
                         + (u2 * m1a)+(it.columnField*m1)
@@ -1460,14 +1425,14 @@ var
                     //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
                     it.model.position.z =// p.model.position.z + z + rndz;
-                        Math.round(
-                            (p.model.position.z ? p.model.position.z : 0)
-                            + (w2 * m3b)+(it.depth*m2)
-                            + (it.level > min ? (w2 * x * ((o * n1))) : 0)
-                            //+ (it.level > min ? (w2 * x * ((o * n2))) : 0)
-                            + (it.level > min ? -1 * z - rndz : 0)
-                        );
-                    it.model.position.z = p.model.position.z + (it.depth * 1000);
+
+                    Math.round(
+                        (p.model.position.z ? p.model.position.z : 0)
+                        + (w2 * m3b)+(it.depth*m2)
+                        + (it.level > min ? (w2 * x * ((o * n1))) : 0)
+                        //+ (it.level > min ? (w2 * x * ((o * n2))) : 0)
+                        + (it.level > min ? -1 * z - rndz : 0)
+                    );
                     console.log ('t555', it.filepath, it.name, it.model.position);
                 } else if (it.model) {
                     it.model.position.x = it.columnField  * 500;
@@ -1484,7 +1449,7 @@ var
                     pz : it.model.position.z,
                     it : it
                 };
-                //console.log ('t750', it.filepath, it.name, dbg);
+                console.log (it.filepath, it.name, dbg);
             }
         }
 
@@ -1507,65 +1472,7 @@ var
         bevelSegments: 40
         };
 
-        //var geometry = new THREE.DodecahedronGeometry(10);
-
-        var g = new THREE.DodecahedronGeometry(5);
-
-        const base = new THREE.Vector2(0, 0.5);
-        const center = new THREE.Vector2();
-        const angle = THREE.MathUtils.degToRad(72);
-        var baseUVs = [
-        base.clone().rotateAround(center, angle * 1).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 2).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 3).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 4).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 0).addScalar(0.5)
-        ];
-
-        var uvs = [];
-        var sides = [];
-        for (var i = 0; i < 12; i++){
-        uvs.push(
-            baseUVs[1].x, baseUVs[1].y,
-            baseUVs[2].x, baseUVs[2].y,
-            baseUVs[0].x, baseUVs[0].y,
-
-            baseUVs[2].x, baseUVs[2].y,
-            baseUVs[3].x, baseUVs[3].y,
-            baseUVs[0].x, baseUVs[0].y,
-
-            baseUVs[3].x, baseUVs[3].y,
-            baseUVs[4].x, baseUVs[4].y,
-            baseUVs[0].x, baseUVs[0].y
-        );
-        sides.push(i, i, i, i, i, i, i, i, i);
-        }
-        g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
-        g.setAttribute("sides", new THREE.Float32BufferAttribute(sides, 1));
-
-        var m = new THREE.MeshStandardMaterial({
-        roughness: 0.25,
-        metalness: 0.75,
-        map: t.createTexture(),
-        onBeforeCompile: shader => {
-            shader.vertexShader = `
-            attribute float sides;
-            ${shader.vertexShader}
-            `.replace(
-            `#include <uv_vertex>`,
-            `
-                #include <uv_vertex>
-
-                vUv.x = (1./16.) * (vUv.x + sides);
-            `
-            );
-            console.log(shader.vertexShader);
-        }
-        });
-        var o = new THREE.Mesh(g, m);
-
-
-
+        var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
 
        {
             for (var j=0; j<t.items.length; j++) {
@@ -1590,50 +1497,21 @@ var
                                     it.color = list[k].color;
                             }
                         }
-                        //console.log ('t321', it.name, it.color);
+                        console.log ('t321', it.name, it.color);
 
-                        var sideLength = 300, length = sideLength, width = sideLength;
                         var
-                        materials2 = [
-                            new THREE.MeshBasicMaterial({
+                        material = new THREE.MeshBasicMaterial({
                                 color : it.color ? it.color : 'rgb(0,0,255)',
                                 opacity : 0.5,
                                 transparent : true
-                            }),
-                            new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                            }),
-                            new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                            }),
-                            new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                            }),
-                            new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                            }),
-                            new THREE.MeshBasicMaterial({
-                                color : it.color ? it.color : 'rgb(0,0,255)',
-                                opacity : 0.5,
-                                transparent : true
-                            })
+                        }),
+                        materials2 = [ material, material, material, material, material, material ],
+                        sideLength = 300, length = sideLength, width = sideLength;
 
-                        ];
                         if (it.parent) {
                             // parent/current folder :
-                            if (it.name.match(/\.mp3$/)) {
-                                var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
-                            } else {
-                                var cube = new THREE.Mesh( g, m );
-                            }
+                            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2a );
+                            var cube = new THREE.Mesh( geometry, materials2 );
                             cube.it = it;
                             cube.position.x = it.model.position.x;
                             cube.position.y = it.model.position.y;
@@ -1645,7 +1523,7 @@ var
                             t.s2.push(cube);
                             //t.items.push (it);
                         } else {
-                            var cube = new THREE.Mesh( g, m);
+                            var cube = new THREE.Mesh( geometry, materials2 );
                             cube.it = it;
 //                             cube.position.x = it.columnOffsetValue * 500;
 //                             cube.position.y = it.rowOffsetValue * 500;
@@ -1664,25 +1542,6 @@ var
         }
 
         t.onresize_postDo(t, true);
-    }
-
-    createTexture(){
-    let c = document.createElement("canvas");
-    let step = 64;
-    c.width = step * 16;
-    c.height = step;
-    let ctx = c.getContext("2d");
-    ctx.fillStyle = "#7f7f7f";
-    ctx.fillRect(0, 0, c.width, c.height);
-    ctx.font = "40px Arial";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "aqua";
-    ctx.textBaseline = "middle";
-    for (let i = 0; i < 12; i++){
-        ctx.fillText(i + 1, step * 0.5 + step * i, step * 0.5);
-    }
-
-    return new THREE.CanvasTexture(c);
     }
 
     nthroot (x, n) {
@@ -2192,7 +2051,6 @@ debugger;
                 }
 
                 if (
-                    false &&
                     parent
                     && (
                         !it.name.match(/\.mp3$/)
