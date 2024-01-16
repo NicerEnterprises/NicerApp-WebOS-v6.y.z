@@ -1546,7 +1546,10 @@ var
         var m = new THREE.MeshStandardMaterial({
         roughness: 0.25,
         metalness: 0.75,
-        map: t.createTexture(),
+        color : '0x0000FF',
+        opacity : 0.5,
+        map : t.createTexture(),
+        transparent : true,
         onBeforeCompile: shader => {
             shader.vertexShader = `
             attribute float sides;
@@ -1667,22 +1670,22 @@ var
     }
 
     createTexture(){
-    let c = document.createElement("canvas");
-    let step = 64;
-    c.width = step * 16;
-    c.height = step;
-    let ctx = c.getContext("2d");
-    ctx.fillStyle = "#7f7f7f";
-    ctx.fillRect(0, 0, c.width, c.height);
-    ctx.font = "40px Arial";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "aqua";
-    ctx.textBaseline = "middle";
-    for (let i = 0; i < 12; i++){
-        ctx.fillText(i + 1, step * 0.5 + step * i, step * 0.5);
-    }
+        let c = document.createElement("canvas");
+        let step = 250;
+        c.width = step * 16;
+        c.height = step;
+        let ctx = c.getContext("2d");
+        ctx.fillStyle = "#7f7f7f";
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "aqua";
+        ctx.textBaseline = "middle";
+        for (let i = 0; i < 12; i++){
+            ctx.fillText(i + 1, step * 0.5 + step * i, step * 0.5);
+        }
 
-    return new THREE.CanvasTexture(c);
+        return new THREE.CanvasTexture(c);
     }
 
     nthroot (x, n) {
