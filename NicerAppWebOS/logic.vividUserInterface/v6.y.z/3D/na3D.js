@@ -305,8 +305,8 @@ var
         t.clock = new THREE.Clock();
         t.lookClock = -1;
         t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        t.orbitControls.enabled = false;
-        //t.orbitControls.listenToKeyEvents( window ); // optional
+        t.orbitControls.enabled = true;
+        t.orbitControls.listenToKeyEvents( window ); // optional
 
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
         t.cameraControls.enabled = true;
@@ -364,7 +364,7 @@ var
                 t.flyControls.updateMovementVector();
             } else {
                 t.cameraControls.enabled = true;
-                //t.orbitControls.enabled = true;
+                t.orbitControls.enabled = true;
                 //t.onresize_postDo(t);
             }
 
@@ -406,7 +406,7 @@ var
                 //if (t.debug) console.log ('t.flyControls.disabled, t.cameraControls.enabled');
                 t.flyControls.enabled = false;
                 t.cameraControls.enabled = true;
-                //t.orbitControls.enabled = true;
+                t.orbitControls.enabled = true;
             }
 
 
@@ -928,9 +928,9 @@ var
 
 
             // parent/current folder :
-            //var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(0.5), materials1a );
+            var cube = new THREE.Mesh( new THREE.DodecahedronGeometry(250), materials1a );
 
-            var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials1a );
+            //var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials1a );
             //var cube = cd.params.t.model_folder.clone();//new THREE.Mesh( geometry, materials1a );
             cd.params.t.scene.add( cube );
             cd.params.t.s2.push(cube);
@@ -1509,37 +1509,37 @@ var
 
         //var geometry = new THREE.DodecahedronGeometry(10);
 
-        var g = new THREE.DodecahedronGeometry(5);
+        var g = new THREE.DodecahedronGeometry(250);
 
         const base = new THREE.Vector2(0, 0.5);
         const center = new THREE.Vector2();
         const angle = THREE.MathUtils.degToRad(72);
         var baseUVs = [
-        base.clone().rotateAround(center, angle * 1).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 2).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 3).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 4).addScalar(0.5),
-        base.clone().rotateAround(center, angle * 0).addScalar(0.5)
+            base.clone().rotateAround(center, angle * 1).addScalar(0.5),
+            base.clone().rotateAround(center, angle * 2).addScalar(0.5),
+            base.clone().rotateAround(center, angle * 3).addScalar(0.5),
+            base.clone().rotateAround(center, angle * 4).addScalar(0.5),
+            base.clone().rotateAround(center, angle * 0).addScalar(0.5)
         ];
 
         var uvs = [];
         var sides = [];
-        for (var i = 0; i < 12; i++){
-        uvs.push(
-            baseUVs[1].x, baseUVs[1].y,
-            baseUVs[2].x, baseUVs[2].y,
-            baseUVs[0].x, baseUVs[0].y,
+        for (var i = 0; i < 12; i++) {
+            uvs.push(
+                baseUVs[1].x, baseUVs[1].y,
+                baseUVs[2].x, baseUVs[2].y,
+                baseUVs[0].x, baseUVs[0].y,
 
-            baseUVs[2].x, baseUVs[2].y,
-            baseUVs[3].x, baseUVs[3].y,
-            baseUVs[0].x, baseUVs[0].y,
+                baseUVs[2].x, baseUVs[2].y,
+                baseUVs[3].x, baseUVs[3].y,
+                baseUVs[0].x, baseUVs[0].y,
 
-            baseUVs[3].x, baseUVs[3].y,
-            baseUVs[4].x, baseUVs[4].y,
-            baseUVs[0].x, baseUVs[0].y
-        );
-        sides.push(i, i, i, i, i, i, i, i, i);
-        }
+                baseUVs[3].x, baseUVs[3].y,
+                baseUVs[4].x, baseUVs[4].y,
+                baseUVs[0].x, baseUVs[0].y
+            );
+            sides.push(i, i, i, i, i, i, i, i, i);
+        };
         g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
         g.setAttribute("sides", new THREE.Float32BufferAttribute(sides, 1));
 
