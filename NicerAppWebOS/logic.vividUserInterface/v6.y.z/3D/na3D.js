@@ -1546,11 +1546,11 @@ var
         var m = new THREE.MeshStandardMaterial({
         //roughness: 0.25,
         //metalness: 0.75,
-        color : '0x0000FF',
-        emissive : '0x00ff00',
+        color : '#0000FF',
+        emissive : '#00FF00',
         opacity : 0.5,
         //map : t.createTexture(),
-        transparent : true,
+        transparent : true
         /*onBeforeCompile: shader => {
             shader.vertexShader = `
             attribute float sides;
@@ -1636,7 +1636,14 @@ var
                             if (it.name.match(/\.mp3$/)) {
                                 var cube = new THREE.Mesh( new THREE.BoxGeometry( 300, 300, 300 ), materials2 );
                             } else {
-                                var cube = new THREE.Mesh( g, m );
+                                /*var m1 = m.clone();
+                                m1.color.b = 1;
+                                m1.color.g = 0;
+                                m1.color.r = 0;
+                                m1.emissive.b = 1;
+                                m1.emissive.g = 0;
+                                m1.emissive.r = 0;*/
+                                var cube = new THREE.Mesh( g.clone(), m.clone() );
                             }
                             cube.it = it;
                             cube.position.x = it.model.position.x;
@@ -1649,7 +1656,14 @@ var
                             t.s2.push(cube);
                             //t.items.push (it);
                         } else {
-                            var cube = new THREE.Mesh( g, m);
+                                /*var m1 = m.clone();
+                                m1.color.b = 1;
+                                m1.color.g = 0;
+                                m1.color.r = 0;
+                                m1.emissive.b = 1;
+                                m1.emissive.g = 0;
+                                m1.emissive.r = 0;*/
+                                var cube = new THREE.Mesh( g.clone(), m.clone() );
                             cube.it = it;
 //                             cube.position.x = it.columnOffsetValue * 500;
 //                             cube.position.y = it.rowOffsetValue * 500;
