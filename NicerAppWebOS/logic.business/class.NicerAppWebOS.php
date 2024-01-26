@@ -366,7 +366,8 @@ class NicerAppWebOS {
                     }
                     //echo '<pre style="color:purple;background:cyan;">'; var_dump ($view); echo '</pre>'; exit();
 
-                    $viewsFolder = $view['appFolder'];
+                    foreach ($view['apps'] as $appName => $viewApp) break;
+                    $viewsFolder = $viewApp['appFolder'];
 
                     //foreach ($view as $viewsFolder => $viewSettings) {
                         if (!file_exists($this->basePath.'/'.$viewsFolder)) {
@@ -529,7 +530,7 @@ class NicerAppWebOS {
                 global $toArray;
                 $view = $toArray($dataRecord['viewSettings']);
             }
-            //echo '<pre style="color:green">'; var_dump ($view);exit();
+            echo '<pre style="color:green">'; var_dump ($view);exit();
             $this->view = $view;
 
             // render the view
