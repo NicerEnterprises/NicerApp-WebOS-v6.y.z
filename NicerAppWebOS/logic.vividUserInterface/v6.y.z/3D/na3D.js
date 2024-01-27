@@ -1197,7 +1197,7 @@ export class na3D_fileBrowser {
 
 
             var
-            z = 1500,//(it.level < 2 ? 1 : it.level-2) * 200 / 2,
+            z = 700,//(it.level < 2 ? 1 : it.level-2) * 200 / 2,
             //z = -1 * it.depthOffsetValue * 2500,
             //plc = p.columnOffsetValue === 0 ? 0.01 : p.columnOffsetValue,
             //plr = p.rowOffsetValue === 0 ? 0.01 : p.rowOffsetValue,
@@ -1269,8 +1269,8 @@ export class na3D_fileBrowser {
                     it.model.position.x = Math.round(
                         p.model.position.x
                         + (/*u2*/it.columnOffsetValue * 500)//+(it.columnField*m1)
-                        + (it.columnField * 500)
-                        + rndx
+                        //+ (it.columnField * 500)
+                        //+ rndx
                         //+ (p.columnOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
@@ -1280,8 +1280,8 @@ export class na3D_fileBrowser {
                     it.model.position.y = Math.round(
                         p.model.position.y
                         + (it.rowOffsetValue /* * v2*/ * 500)//+(it.rowField*m2)
-                        + (it.rowField * 500)
-                        + rndy
+                        //+ (it.rowField * 500)
+                        //+ rndy
                         //+ (p.rowOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
