@@ -876,6 +876,95 @@ class class_NicerAppWebOS_database_API_couchdb_3_2 {
         echo 'Created and populated database '.$dataSetName.'<br/>'.PHP_EOL;
     }
     
+    public function createDataSet_desktopDefinitions($myRoot) {
+        // TODO : error handling
+
+        $dataSetName = $this->dataSetName('desktopDefinitions');
+        try { $this->cdb->deleteDatabase ($dataSetName); } catch (Exception $e) { };
+        $this->cdb->setDatabase($dataSetName, true);
+        //if ($this->debug) { echo '<pre style="color:orange;background:navy;">'; var_dump ($cdb); echo '</pre>';  }
+        //if ($this->debug) { echo '<pre style="color:orange;background:navy;">'; var_dump (css_to_array(file_get_contents(dirname(__FILE__).'/themes/nicerapp_default.css'))); echo '</pre>';}
+
+        try {
+            $call = $this->cdb->setSecurity ($this->security_guest);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        global $naWebOS;
+        if (file_exists($myRoot) && is_dir($myRoot)) {
+            $rp_domain = $myRoot;
+        } else {
+            $rp_domain = $naWebOS->path.'/NicerAppWebOS/domainConfigs/'.$this->domain;
+        }
+        $rec = array(
+            '_id' => cdb_randomString(20),
+            'lastUsed' => time(),
+            'specificityName' => 'site (for all viewers)',
+            'orientation' => 'portrait',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
+            'theme' => 'default',
+            'view' => $naWebOS->view,
+            'desktopDefinition' => safeLoadJSONfile($rp_domain.'/index.desktopDefinition.json')
+        );
+        if ($this->debug) { echo '<pre style="color:yellow;background:navy">'; var_dump ($rec);/* var_dump ($this->cdb);*/ echo '</pre>'; exit(); }
+        try {
+            $this->cdb->post($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        $rec = array(
+            '_id' => cdb_randomString(20),
+            'lastUsed' => time(),
+            'specificityName' => 'site (for all viewers)',
+            'orientation' => 'landscape',
+            'role' => $this->translate_plainGroupName_to_couchdbGroupName('Guests'),
+            'theme' => 'default',
+            'view' => $naWebOS->view,
+            'desktopDefinition' => safeLoadJSONfile($rp_domain.'/index.desktopDefinition.json')
+        );
+        if ($this->debug) { echo '<pre style="color:yellow;background:navy">'; var_dump ($rec);/* var_dump ($this->cdb);*/ echo '</pre>'; exit(); }
+        try {
+            $this->cdb->post($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+
+        $rec = [
+            'index' => [
+                'fields' => [ 'theme', 'lastUsed', 'view', 'url', 'role', 'user', 'ip', 'ua' ]
+            ],
+            'name' => 'primaryIndex',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+        $rec = [
+            'index' => [
+                //'fields' => [ '_id', 'lastUsed', 'app', 'user', 'role', 'view', 'theme', 'url', 'themeSettings', 'apps', 'background', 'backgroundSearchKey', 'textBackgroundOpacity', 'changeBackgroundsAutomatically', 'backgroundChange_hours', 'backgroundChange_minutes']
+                //'fields' => [ 'lastUsed', 'user', 'role', 'view', 'app', 'url', 'specificityName', 'ip' ]
+                'fields' => [ 'lastUsed' ]
+                //'fields' => [ 'user', 'role', 'view', 'app', 'url', 'specificityName', 'ip', 'lastUsed' ]
+            ],
+            'name' => 'sortIndex_lastUsed',
+            'type' => 'json'
+        ];
+        try {
+            $this->cdb->setIndex ($rec);
+        } catch (Exception $e) {
+            if ($this->debug) { echo '<pre style="color:red">'; var_dump ($e); echo '</pre>'; exit(); }
+        }
+
+
+        echo 'Created and populated database '.$dataSetName.'<br/>'.PHP_EOL;
+    }
+
     public function resetDataSet_data_themes() {
         // TODO : error handling
 

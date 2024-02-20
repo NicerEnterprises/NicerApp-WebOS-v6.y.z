@@ -15,7 +15,7 @@
     which can *also* be combined with vividButton_icon_text
 ---*/
 
-export class vividUserInterface_2D_button {
+class vividUserInterface_2D_button {
     constructor(cmd) {
         var t = this;
         t.cmd = cmd;

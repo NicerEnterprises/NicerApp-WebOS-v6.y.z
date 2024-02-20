@@ -1,5 +1,5 @@
 /*--- LICENSE : https://opensource.org/licenses/MIT
------ Copyright 2002-2024 by Nicer Enterprises
+----- Copyright 2002-2024 Rene A.J.M. Veerman, rene.veerman.netherlands@gmail.com
 ---*/
 
 import * as THREE from '/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js';
@@ -16,6 +16,8 @@ import { FirstPersonControls } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/e
 import gsap from "https://unpkg.com/gsap@3.12.2/index.js";
 import { CameraControls, approxZero } from '/NicerAppWebOS/3rd-party/3D/libs/three.js/dist_camera-controls.module.js';
 
+
+import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
 
 /*
   import {
@@ -50,12 +52,11 @@ export class na3D_fileBrowser {
         t.itemsFolders = [];
         t.meshLength = 100;
 
-        //na.d.s.visibleDivs.push ('#siteToolbarLeft');
-        na.d.s.visibleDivs.push ('#siteToolbarRight');
-        na.desktop.resize();
+        na.c.d.s.visibleDivs.push ('#siteToolbarLeft');
+        na.c.d.s.visibleDivs.push ('#siteToolbarRight');
+        na.c.desktop.resize();
 
         var it = {
-            id : na.m.randomString(),
             name : 'music',
             idx : 0,
             levelIdx : 0,
@@ -146,8 +147,8 @@ export class na3D_fileBrowser {
         
         t.scene = new THREE.Scene();
         t.scene.add(cube)
-        t.scene.add(new THREE.AxesHelper(5000))
-        t.camera = new THREE.PerspectiveCamera( 90  , $(el).width() / $(el).height(), 0.01, 100*1000 );
+        t.scene.add(new THREE.AxesHelper(5))
+        t.camera = new THREE.PerspectiveCamera( 90  , $(el).width() / $(el).height(), 0.01, 50 *1000 );
 
         
         t.renderer = new THREE.WebGLRenderer({alpha:true, antialias : true});
@@ -246,14 +247,6 @@ export class na3D_fileBrowser {
                 t.camera.updateProjectionMatrix();
             }, 800);
         });
-        setTimeout (function() {
-                            var innerWidth = $('#siteContent .vividDialogContent').width();
-                var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
-
-                t.renderer.setSize(innerWidth, innerHeight);
-                t.camera.aspect = innerWidth / innerHeight;
-                t.camera.updateProjectionMatrix();
-        }, 1000);
 
         t.renderer.setAnimationLoop(() => {
             //controls.update();
@@ -266,13 +259,9 @@ export class na3D_fileBrowser {
         CameraControls.install ({ THREE : THREE });
         t.clock = new THREE.Clock();
         t.lookClock = -1;
-
         t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
         t.orbitControls.enabled = true;
-        //t.orbitControls.listenToKeyEvents( window ); // optional
-
-        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
-        t.cameraControls.enabled = false;
+        t.orbitControls.listenToKeyEvents( window ); // optional
 
         t.flyControls = new FlyControls (t.camera, t.renderer.domElement, t.cameraControls);
         t.flyControls.enabled = false;
@@ -281,26 +270,24 @@ export class na3D_fileBrowser {
         t.flyControls.rollSpeed = Math.PI / 24;
         t.flyControls.autoMove = false;
 
+        t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
+        t.cameraControls.enabled = false;
+
         t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
         t.fpControls.enabled = false;
         t.fpControls.movementSpeed = 3000;
-        t.fpControls.lookSpeed = Math.PI/24;
+        t.fpControls.lookSpeed = 0.1;
         t.fpControls.activeLook = false;
         t.fpControls.mouseDragOn = false;
         t.fpControls.moveForward = false;
         setTimeout(function() {
             t.initializeItems (t);
-            //t.initializeFolderList (t, t.data);
-
+            t.initializeFolderList (t, t.data);
             //t.camera.lookAt (t.s2[0].position);
             //t.cameraControls._camera.lookAt (t.s2[0].position);
 
-            na.m.waitForCondition('animate?', function() {
-                return t.items.length > 2 && t.winners
-            }, function() {
-                t.animate(t, null);
-            }, 2)
-        }, 25);
+            t.animate(t, null);
+        }, 50);
     }
     /*
     animate(t, evt) {
@@ -442,69 +429,23 @@ export class na3D_fileBrowser {
                 t.fpControls.update(delta);
             }*/
 
-            if (t.cameraOrigin && t.cameraOrigin.x && t.middle && t.middle.x) {
-                if (t.cameraControls.enabled && t.cameraOrigin && t.cameraOrigin.x) {
-                    /*
-                    t.cameraControls.setLookAt (
-                        t.cameraOrigin.x,
-                        t.cameraOrigin.y,
-                        t.cameraOrigin.z,
-                        t.middle.x,
-                        t.middle.y,
-                        t.middle.z,
-                        false
-                    );*/
-                }
-
-                if (t.middle && t.middle.x) {
-                    /*t.orbitControls.center =  new THREE.Vector3(
-                        t.middle.x,
-                        t.middle.y,
-                        t.middle.z
-                    );*/
-
-                    if (!t.started3) {
-                        t.camera.position.x = 0;
-                        t.camera.position.y = t.middle.y
-                        t.camera.position.z = 5000;//5 * t.middle.z ;
-                        t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
-                        t.started3 = true;
-                    }
-                };
-            }
-
-            /*
-            if (t.middle && t.middle.x) {
+                t.orbitControls.center =  new THREE.Vector3(
+                    t.middle.x,
+                    t.middle.y,
+                    t.middle.z
+                );
+            if (!t.started3) {
                 t.camera.position.x = t.middle.x;
                 t.camera.position.y = t.middle.y;
-                t.camera.position.z = t.middle.z;
-                /*t.camera.setViewOffset(
-                    $('#siteContent > .vividDialogContent').width(),
-                    $('#siteContent > .vividDialogContent').height(),
-                    t.middle.x, t.middle.y, 1920, 800
-                );* /
-            }
-
-            if (t.cameraOrigin && t.cameraOrigin.x) {
-                t.camera.position.x = t.cameraOrigin.x;
-                t.camera.position.y = t.cameraOrigin.y;
-                t.camera.position.z = t.cameraOrigin.z;
-                /*t.camera.setViewOffset(
-                    $('#siteContent > .vividDialogContent').width(),
-                    $('#siteContent > .vividDialogContent').height(),
-                    t.middle.x, t.middle.y, 1920, 800
-                );* /
-            }*/
-            if (t.orbitControls.enabled/* && t.middle && t.middle.x*/) {
-                //t.orbitControls.target.set(t.middle.x, t.middle.y, t.middle.z);
+                t.camera.position.z = 3 * t.middle.z ;
+                t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
+                t.started3 = true;
+            };
+            if (t.orbitControls.enabled) {
                 t.orbitControls.update(delta);
             };
-            if (t.flyControls.enabled && t.middle && t.middle.x) {
-                //t.flyControls.object.set (t.middle.x, t.middle.y, t.middle.z);
+            if (t.flyControls.enabled) {
                 t.flyControls.update(delta);
-            };
-            if (t.fpControls.enabled) {
-                t.fpControls.update(delta);
             };
 
 
@@ -738,39 +679,18 @@ export class na3D_fileBrowser {
     }
 
     onPointerUp( event, t ) {
-        if (false) {
-            if (t.flyControls.enabled) {
-                t.flyControls.enabled = false;
-                t.orbitControls.enabled = true;
-                t.orbitControls.object.position.x = t.flyControls.object.position.x;
-                t.orbitControls.object.position.y = t.flyControls.object.position.y;
-                t.orbitControls.object.position.z = t.flyControls.object.position.z;
-            } else {
-                t.flyControls.enabled = true;
-                t.flyControls.object.position.x = t.orbitControls.object.position.x;
-                t.flyControls.object.position.y = t.orbitControls.object.position.y;
-                t.flyControls.object.position.z = t.orbitControls.object.position.z;
-                t.orbitControls.enabled = false;
-            }
+        if (t.flyControls.enabled) {
+            t.flyControls.enabled = false;
+            t.orbitControls.enabled = true;
+            t.orbitControls.object.position.x = t.flyControls.object.position.x;
+            t.orbitControls.object.position.y = t.flyControls.object.position.y;
+            t.orbitControls.object.position.z = t.flyControls.object.position.z;
         } else {
-            if (t.orbitControls.enabled) {
-                t.orbitControls.enabled = false;
-                t.flyControls.enabled = true;
-                t.flyControls.object.position.x = t.orbitControls.object.position.x;
-                t.flyControls.object.position.y = t.orbitControls.object.position.y;
-                t.flyControls.object.position.z = t.orbitControls.object.position.z;
-
-            } else {
-                t.orbitControls.enabled = true;
-                t.flyControls.enabled = false;
-
-                t.orbitControls.object.position.x = t.flyControls.object.position.x;
-                t.orbitControls.object.position.y = t.flyControls.object.position.y;
-                t.orbitControls.object.position.z = t.flyControls.object.position.z;
-
-            }
-
-
+            t.flyControls.enabled = true;
+            t.flyControls.object.position.x = t.orbitControls.object.position.x;
+            t.flyControls.object.position.y = t.orbitControls.object.position.y;
+            t.flyControls.object.position.z = t.orbitControls.object.position.z;
+            t.orbitControls.enabled = false;
         }
 
         //t.fpControls.activeLook = false;
@@ -843,7 +763,7 @@ export class na3D_fileBrowser {
             ol = 10 * 1000,
             numPoints = 720,
             radius = 10*1000;
-
+            debugger;
 
 
             t.curve4b = new THREE.CatmullRomCurve3( [
@@ -925,13 +845,6 @@ export class na3D_fileBrowser {
         var p = { t : t, ld2 : {}, idxPath : '', idxPath2 : '/0' };
         t.s2 = [];
         na.m.walkArray (t.data, t.data, t.initializeItems_walkKey, t.initializeItems_walkValue, false, p);
-
-        var innerWidth = $('#siteContent .vividDialogContent').width();
-        var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
-        t.renderer.setSize(innerWidth, innerHeight);
-        t.camera.aspect = innerWidth / innerHeight;
-        t.camera.updateProjectionMatrix();
-
         t.onresize(t);
     }
     initializeItems_walkKey (cd) {
@@ -1333,6 +1246,7 @@ export class na3D_fileBrowser {
         t.ld4 = [];
         t.s2 = [];
 
+        debugger;
         for (var path in t.ld3) {
             t.ld4.push(path)
         }
@@ -1386,11 +1300,10 @@ export class na3D_fileBrowser {
             for (var i=0; i<t.ld4.length; i++) {
                 if (!t.ld3[t.ld4[i]].colorList) return false;
             };
-            var r = t.items.length > 2;
-            return r;
+            return true;
         }, function() {
             t.onresize_do_phase2 (t, callback);
-        }, 25);
+        }, 100);
     }
 
     onresize_do_phase2(t, callback) {
@@ -1559,28 +1472,21 @@ export class na3D_fileBrowser {
         its3 = its2.sort (compare2);
 
         var pox = {}, poy = {}, poz = {}, pd = {};
-        if (t.items.length > 2)
         for (var i=0; i<t.items.length; i++) {
             var
             offsetXY = 200,
             it = t.items[i],
             p = (it.parent ? it.parent : null),
             p1 = (it.parent && it.parent.parent ? it.parent.parent : null),
-            rndMax = 500 + (it.ld3 ? (it.ld3.cubeSideLengthCount * (Math.random() * 1500)) : 0);
+            rndMax = 3500;
 
             if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
-            if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax / 3);
-
-            //if (p && !pox[p.idx]) pox[p.idx] = it.level * p.columnOffsetValue;
-            //if (p && !poy[p.idx]) poy[p.idx] = it.level * p.rowOffsetValue;
-            //if (p && !poz[p.idx]) poz[p.idx] = it.level * 500;
+            if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax);
 
             if (p) var rndx = pox[p.idx]; else var rndx = 0;
             if (p) var rndy = poy[p.idx]; else var rndy = 0;
             if (p) var rndz = poz[p.idx]; else var rndz = 0;
-            it.rndx = rndx;
-            it.rndy = rndy;
             it.rndz = rndz;
 
             if (p) {
@@ -1752,7 +1658,7 @@ export class na3D_fileBrowser {
                             + (it.depth*500)
                             //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (w2a * x * ((o * n2))) : 0)
-                            + (it.level > min ? z - rndz : 0)
+                            + (it.level > min ? -1 * z - rndz : 0)
                         );
                         /*it.model2.position.x = it.model.position.x + 30;
                         it.model2.position.y = it.model.position.y + 30;
@@ -1773,7 +1679,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.columnField * rndx : 0)
+                        + (it.level > min ? p.columnOffsetValue * rndx : 0)
 
                         //+ (it.columnField * 500)
                     );
@@ -1788,7 +1694,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.rowField * rndy : 0)
+                        + (it.level > min ? p.rowOffsetValue * rndy : 0)
 
                         //+ (it.rowField * 500)
                     );
@@ -1822,7 +1728,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.columnField * rndx : 0)
+                        + (it.level > min ? p.columnOffsetValue * rndx : 0)
 
                         //+ (it.columnField * 500)
                     );
@@ -1837,7 +1743,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.rowField * rndy : 0)
+                        + (it.level > min ? p.rowOffsetValue * rndy : 0)
 
                         //+ (it.rowField * 500)
                     );
@@ -2070,6 +1976,7 @@ export class na3D_fileBrowser {
         t.drawLines(t);
         //t.cameraControls._camera.lookAt (t.s2[0].position);
 
+
         t.winners = {
             north : 0,
             east : 0,
@@ -2099,15 +2006,14 @@ export class na3D_fileBrowser {
             z : Math.round((t.winners.front + t.winners.behind) /2)
         };
 
-        t.cameraOrigin = {
-            x : t.middle.x,
-            y : t.middle.y,
-            z : t.middle.z * 5
-        };
-
         if (false) {
             if (!t.started) {
 
+                t.cameraOrigin = {
+                    x : 0,
+                    y : t.middle.y,
+                    z : -10*1000
+                };
                 t.fpControls.object.position.x = 0;
                 t.fpControls.object.position.y = t.middle.y;
                 t.fpControls.object.position.z = -10*1000;
@@ -2370,7 +2276,7 @@ export class na3D_fileBrowser {
 
                 if (!t.started2) {
                     t.started2 = true;
-                    //t.cameraControls.enabled = true;
+                    t.cameraControls.enabled = true;
                     //if (animate) t.pathAnimation.play(0);
                     //t.camera.lookAt (t.s2[0].position);
                     //t.cameraControls._camera.lookAt (t.s2[0].position);
@@ -2513,10 +2419,6 @@ export class na3D_fileBrowser {
             }, 50);
         };
 
-        if (!t.started4) {
-            t.started4 = true;
-            t.onresize();
-        };
         if (typeof callback=='function') callback(t);
     }
     

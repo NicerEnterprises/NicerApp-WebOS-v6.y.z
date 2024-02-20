@@ -1566,7 +1566,7 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? it.parent : null),
             p1 = (it.parent && it.parent.parent ? it.parent.parent : null),
-            rndMax = 500 + (it.ld3 ? (it.ld3.cubeSideLengthCount * (Math.random() * 1500)) : 0);
+            rndMax = 500 + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0);
 
             if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
@@ -1729,31 +1729,34 @@ export class na3D_fileBrowser {
                     if (!t.showFiles) { /*delete it.model;*/} else {
                         it.model.position.x = Math.round(
                             p.model.position.x
-                            //+ (p.columnField * 500)
-                            + (p.columnOffsetValue * m3c)
                             + (it.column*500)
+
+                            //+ (p.columnField * 500)
+                            //+ (p.columnOffsetValue * m3c)
                             //- (it.columnOffsetValue * 2500)
                             //- (u2 * m1a)+(it.columnOffsetValue*m1)
                             //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                             //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-                            + (it.level > min ? p.leftRight * rndx : 0)
+                            //+ (it.level > min ? p.leftRight * rndx : 0)
                         );
                         it.model.position.y = Math.round(
                             p.model.position.y
-                            //+ (p.rowField * 500)
-                            + (p.rowOffsetValue * m3c)
                             + (it.row*500)
+
+                            //+ (p.rowField * 500)
+                            //+ (p.rowOffsetValue * m3c)
                             //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-                            + (it.level > min ? p.upDown * rndy : 0)
+                            //+ (it.level > min ? p.upDown * rndy : 0)
                         );
                         it.model.position.z = Math.round(
                             (p.model.position.z ? p.model.position.z : 0)
-                            + (it.depth*500)
+                            - (it.depth*500)
                             //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (w2a * x * ((o * n2))) : 0)
-                            + (it.level > min ? z - rndz : 0)
+                            //+ (it.level > min ? -1 * z - rndz : 0)
                         );
+                        if (it.name.match(/Infected/)) debugger;
                         /*it.model2.position.x = it.model.position.x + 30;
                         it.model2.position.y = it.model.position.y + 30;
                         it.model2.position.z = it.model.position.z + 30;*/
@@ -1764,8 +1767,8 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round(
                         p.model.position.x
-                        + (/*u2*/it.columnOffsetValue * m3c)//+(it.columnField*m1)
-                        //+ (p.columnField * 500)
+                        //+ (/*u2*/it.columnOffsetValue * m3c)//+(it.columnField*m1)
+                        + (p.columnField * 500)
                         //+ (p.columnOffsetValue * m3c)
 
                         //+ rndx
@@ -1773,22 +1776,22 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.columnField * rndx : 0)
+                        //+ (it.level > min ? p.columnOffsetValue * rndx : 0)
 
                         //+ (it.columnField * 500)
                     );
                     it.model.position.y = Math.round(
                         p.model.position.y
-                        + (it.rowOffsetValue /* * v2*/ * m3c)//+(it.rowField*m2)
+                        + (-1 * p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
                         //+ (p.rowField * 500)
-                        //+ (p.rowOffsetValue * m3c)
+                        + (-1 * p.rowOffsetValue * 200)
 
                         //+ rndy
                         //+ (p.rowOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.rowField * rndy : 0)
+                        //+ (it.level > min ? p.rowOffsetValue * rndy : 0)
 
                         //+ (it.rowField * 500)
                     );
@@ -1796,7 +1799,8 @@ export class na3D_fileBrowser {
                     //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
                     //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
-                    it.model.position.z = p.model.position.z + (p.backForth * rndz);// - rndz;
+                    it.model.position.z = p.model.position.z + (-1 * it.level * p.depth * 500); //(p.backForth * rndz);// - rndz;
+                    if (it.name.match('Early')) debugger;
                     /*
                         Math.round(
                             (p.model.position.z ? p.model.position.z : 0)
@@ -1813,31 +1817,31 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round(
                         p.model.position.x
-                        + (/*u2*/it.columnOffsetValue * 500)//+(it.columnField*m1)
-                        //+ (p.columnField * 500)
-                        //+ (p.columnOffsetValue * m3c)
+                        //+ (/*u2*/it.columnOffsetValue * 500)//+(it.columnField*m1)
+                        + (p.columnOffsetValue * 500)
+                        + (-1 * it.columnField * 500)
 
                         //+ rndx
                         //+ (p.columnOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.columnField * rndx : 0)
+                        + (it.level > min ? p.columnOffsetValue * rndx : 0)
 
                         //+ (it.columnField * 500)
                     );
                     it.model.position.y = Math.round(
                         p.model.position.y
-                        + (it.rowOffsetValue /* * v2*/ * 500)//+(it.rowField*m2)
+                        + (-1 * it.rowField /* * v2*/ * 500)//+(it.rowField*m2)
                         //+ (p.rowField * 500)
-                        //+ (p.rowOffsetValue * m3c)
+                        + (p.rowOffsetValue * 500)
 
                         //+ rndy
                         //+ (p.rowOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.rowField * rndy : 0)
+                        //+ (it.level > min ? p.rowOffsetValue * rndy : 0)
 
                         //+ (it.rowField * 500)
                     );
@@ -1845,7 +1849,7 @@ export class na3D_fileBrowser {
                     //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
                     //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
-                    it.model.position.z = p.model.position.z + (p.backForth * rndz);
+                    it.model.position.z = p.model.position.z + (-1 * it.level * p.depth * 500);//(p.backForth * rndz);
                     /*
                         Math.round(
                             (p.model.position.z ? p.model.position.z : 0)
@@ -1857,6 +1861,7 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p', it.filepath, it.name, it.model.position);
+                    if (it.name.match('1970s') || it.name.match('Early')) debugger;
                 } else if (it.model) {
                     it.model.position.x = it.columnField  * 500;
                     it.model.position.y = it.rowField  * 500;

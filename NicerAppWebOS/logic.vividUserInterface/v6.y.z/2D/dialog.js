@@ -1,9 +1,5 @@
-import { vividUserInterface_2D_component } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/_component.js';
-
-
-export class vividUserInterface_2D_dialog extends vividUserInterface_2D_component {
+class vividUserInterface_2D_dialog {
     constructor (cmd) {
-        super ({});
         var t = this;
         t.cmd = cmd;
 
@@ -25,8 +21,10 @@ export class vividUserInterface_2D_dialog extends vividUserInterface_2D_componen
         }
         t.borderVideo = $('video',t.cmd.el)[0];
         t.backgroundVideo = $('video',t.cmd.el)[1];
-        if (t.cmd.el[0].id=='siteTaskbar') t.init_borderVideo(t);
-        t.init_vividUserInterface_2D_dialogBorder_lavaLamp(t);
+        if (t.borderVideo) {
+            t.init_borderVideo(t);
+            t.init_vividUserInterface_2D_dialogBorder_lavaLamp(t);
+        };
         return this;
     }
 
@@ -60,7 +58,7 @@ export class vividUserInterface_2D_dialog extends vividUserInterface_2D_componen
         }
     }
 
-    drawImage(t) {
+    drawImage (t) {
         const ctx = t.canvas.getContext('2d');
         ctx.canvas.width = $('#siteTaskbar').width();
         ctx.canvas.height = $('#siteTaskbar').height();
@@ -118,7 +116,7 @@ export class vividUserInterface_2D_dialog extends vividUserInterface_2D_componen
     }
 }
 
-export class vividUserInterface_2D_borderVideo extends HTMLVideoElement {
+class vividUserInterface_2D_borderVideo extends HTMLVideoElement {
     constructor (cmd) {
         super ({});
         var t = this;

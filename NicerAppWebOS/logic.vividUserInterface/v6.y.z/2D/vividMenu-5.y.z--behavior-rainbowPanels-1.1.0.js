@@ -1,12 +1,8 @@
-// Copyright (C) 2002-2023, MIT-licensed by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
-import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
-import { vividUserInterface_2D_button as naVividButton } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/button-5.y.z.js';
-
-
-export class naVividMenu__behavior_rainbowPanels {
+// Copyright (C) 2002-2024, MIT-licensed by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
+class naVividMenu__behavior_rainbowPanels {
     constructor(el, callback7) {
         var t = this;
-        na.settings.menus['#'+el.id] = this;
+        na.site.c.menus['#'+el.id] = this;
         t.el = el;
         t.el.t = t;
         t.theme = $(el).attr('theme');
@@ -17,7 +13,7 @@ export class naVividMenu__behavior_rainbowPanels {
         t.fadingSpeed = 'fast';
         t.sensitivitySpeed = 400;
         t.percentageFor_rainbowPanels =
-            !na.settings.theme || na.settings.theme.menusUseRainbowPanels
+            !na.site.settings.theme || na.site.settings.theme.menusUseRainbowPanels
             ? 100
             : 0;
         t.items = [];
@@ -227,7 +223,7 @@ export class naVividMenu__behavior_rainbowPanels {
         it = t.items[i];
 
         el.idx = i;
-        it.b = new naVividButton({
+        it.b = new vividUserInterface_2D_button({
             el:el,
             html:null,
             parent:t.el,

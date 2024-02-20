@@ -1,15 +1,11 @@
-import { naMisc, arrayRemove } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/na.miscellaneous.js';
-import { vividUserInterface_2D_menu } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/menu.js';
-import { naVividMenu__behavior_rainbowPanels as naVividMenu } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/vividMenu-5.y.z--behavior-rainbowPanels-1.1.0.js';
-
-export class naThemeEditor {
+class naThemeEditor {
     settings = {
         current : { 
             firstRun : true, 
             forDialogID : 'siteContent',
             //selectedButtonID : 'btnSelectBackgroundColor', // OBSOLETED
             selectedSetting : 'selectorSet',
-            selectedThemeName : na.globals.themeName,
+            selectedThemeName : na.site.globals.themeName,
             elementsCSS : {}
         } 
     }
@@ -40,7 +36,7 @@ export class naThemeEditor {
         
         $('.themeEditorComponent, .themeEditorComponent_containerDiv2').css({display:'none'});
         //na.te.makeThemesList( na.te.s.c.selectedThemeName );
-        for (var appName in na.globals.app) break;
+        for (var appName in na.site.globals.app) break;
         $('#span_cb_app').html ('<b>App : </b>'+appName);
 
         $('#siteToolbarThemeEditor__specificity_dropdown > .vividDropDownBox_selected').css({
@@ -56,8 +52,8 @@ export class naThemeEditor {
                         new naVividMenu ($('#siteToolbarThemeEditor__selector')[0], true);
         //}, 1000);
         */
-        delete na.c.menus['#textFontFamily'];
-        na.c.menus['#textFontFamily'] =
+        delete na.site.c.menus['#textFontFamily'];
+        na.site.c.menus['#textFontFamily'] =
             new naVividMenu ($('#textFontFamily')[0], true);
 
 
@@ -73,7 +69,7 @@ export class naThemeEditor {
         });
 
 
-        na.c.d.registerProgress ('[ThemeEditor]', function() {
+        na.desktop.registerProgress ('[ThemeEditor]', function() {
             var
             itEl = $('#textFontFamily')[0],
             t = na.c.menus['#textFontFamily'];
@@ -101,7 +97,7 @@ export class naThemeEditor {
                 );
             }*/
         });
-        na.c.d.registerCallback ('[ThemeEditor]', '#siteToolbarThemeEditor', function() {
+        na.desktop.registerCallback ('[ThemeEditor]', '#siteToolbarThemeEditor', function() {
             var
             itEl = $('#textFontFamily')[0],
             t = na.c.menus['#textFontFamily'];
@@ -429,7 +425,7 @@ export class naThemeEditor {
         });
         //if (na.te.s.c.selectedButtonID!=='btnSelectBorderSettings') $('#borderColorpicker').next().css({display:x});
         
-        //if ($(window).width() < na.globals.reallySmallDeviceWidth) $('.sp-container').css({width:$(window).width()-35});
+        //if ($(window).width() < na.site.globals.reallySmallDeviceWidth) $('.sp-container').css({width:$(window).width()-35});
         //$('.sp-container').addClass('themeEditorComponent').css({position:'absolute'});
 
         na.te.s.c.borderColor = c2;
@@ -481,14 +477,14 @@ export class naThemeEditor {
 
 
         if (!na.te.s.c.specificity) {
-            na.te.s.c.specificity = na.globals.themeDBkeys;
+            na.te.s.c.specificity = na.site.globals.themeDBkeys;
         }
 
         var s = na.te.s.c.specificity;
         if (!s || (!s.role && !s.user)) {
-            na.c.buttons['#btnDeleteSpecificity'].disable();
+            na.site.components.buttons['#btnDeleteSpecificity'].disable();
         } else {
-            na.c.buttons['#btnDeleteSpecificity'].enable();
+            na.site.components.buttons['#btnDeleteSpecificity'].enable();
         }
         
         $('#btnViewResult .vividButton_icon_borderCSS_50x50').css({
@@ -498,7 +494,7 @@ export class naThemeEditor {
         var tabPage = na.te.s.c.selectedSetting;
         na.te.whichSettingSelected(tabPage);
 
-        var theme = na.globals.themes[ $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html() ];
+        var theme = na.site.globals.themes[ $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html() ];
         na.te.s.c.selectedBoxShadowID = (theme && theme.selectedBoxShadowID) || 'boxShadow_0';
         na.te.s.c.selectedTextShadowID = (theme && theme.selectedTextShadowID) || 'textShadow_0';
         //if (!na.te.s.c.boxSettings) na.te.s.c.boxSettings = $(na.te.s.c.selectedBoxShadowID)[0];
@@ -724,25 +720,25 @@ export class naThemeEditor {
         $('#siteToolbarThemeEditor .navbar .vividButton_icon_50x50').each(function(idx,el) {
             switch (el.id) {
                 case 'btnSelectSelectorSet' : break;
-                default : na.c.buttons['#'+el.id].disable(); break;
+                default : na.site.components.buttons['#'+el.id].disable(); break;
             }
         });
         $('#siteToolbarThemeEditor .naNavBar_darkenedBG .vividButton_icon_50x50').each(function(idx,el) {
-            na.c.buttons['#'+el.id].disable();
+            na.site.components.buttons['#'+el.id].disable();
         });
     }
 
     enableButtons (buttons) {
         for (var i=0; i<buttons.length; i++) {
-            na.c.buttons[buttons[i]].enable();
+            na.site.components.buttons[buttons[i]].enable();
         }
     }
 
     transform_siteGlobalsThemes_to_jsTree (specifier) {
         var
-        themeName = na.globals.themeName,
-        inputData = na.globals.themes[themeName];
-        if (!inputData) inputData = na.globals.themes.default;
+        themeName = na.site.globals.themeName,
+        inputData = na.site.globals.themes[themeName];
+        if (!inputData) inputData = na.site.globals.themes.default;
         inputData = inputData.themeSettings;
 
         var
@@ -983,9 +979,9 @@ export class naThemeEditor {
             if (b) b.deselect();
         }
         
-        var b = na.c.buttons['#'+el.id];
+        var b = na.site.components.buttons['#'+el.id];
         if (b) {
-            na.te.s.c.selectedButtonID = el.id;
+            na.te.settings.current.selectedButtonID = el.id;
             b.select();
             $('#'+el.id).click(event);
         }
@@ -1037,18 +1033,18 @@ export class naThemeEditor {
     
     specificitySelected  (event) {
         na.te.s.c.specificity = null;
-        na.globals.themeSpecificityName = null;
+        na.site.globals.themeSpecificityName = null;
 
         var sn = $(event.currentTarget).html();
 
-        for (var idx in na.globals.themesDBkeys)
-            if (na.globals.themesDBkeys[idx].specificityName === sn) break;
-        if (na.globals.themesDBkeys[idx].specificityName !== sn) idx = null;
+        for (var idx in na.site.globals.themesDBkeys)
+            if (na.site.globals.themesDBkeys[idx].specificityName === sn) break;
+        if (na.site.globals.themesDBkeys[idx].specificityName !== sn) idx = null;
         if (idx) {
-           var s = na.te.s.c.specificity = na.globals.themesDBkeys[idx];
-           na.globals.themeSpecificityName = sn;
-           na.globals.specificityName = sn;
-           na.globals.themeName = s.themeName;
+           var s = na.te.s.c.specificity = na.site.globals.themesDBkeys[idx];
+           na.site.globals.themeSpecificityName = sn;
+           na.site.globals.specificityName = sn;
+           na.site.globals.themeName = s.themeName;
             if (!s || (!s.role && !s.user)) {
                 na.c.buttons['#btnDeleteSpecificity'].disable();
             } else {
@@ -1067,8 +1063,8 @@ export class naThemeEditor {
     }
     /*
     themeSelected  (event) {
-        na.globals.themeName = $(event.currentTarget)[0].innerText;
-        $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html (na.globals.themeName);
+        na.site.globals.themeName = $(event.currentTarget)[0].innerText;
+        $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html (na.site.globals.themeName);
 
         na.loadTheme (function () { // **POSSIBLY** NOT NEEDED
             var btn = $('#'+na.te.s.c.selectedButtonID)[0];
@@ -1159,11 +1155,11 @@ export class naThemeEditor {
                 $('.na_themes_dropdown__themes > .vividDropDownBox_selector').html(data);
                 var t = $('.na_themes_dropdown__themes > .vividDropDownBox_selector > div');
                 for (var i=0; i<t.length; i++) {
-                    if ((!themeName || themeName=='default') && $(t[i]).attr('value')==na.globals.themeName) { $(t[i]).addClass('selected'); break; }
+                    if ((!themeName || themeName=='default') && $(t[i]).attr('value')==na.site.globals.themeName) { $(t[i]).addClass('selected'); break; }
                     if (themeName && $(t[i]).attr('value')==themeName) { $(t[i]).addClass('selected'); break; }
                 }
 
-                na.te.s.c.selectedThemeName = themeName || na.globals.themeName;
+                na.te.s.c.selectedThemeName = themeName || na.site.globals.themeName;
                 $('#theme_'+i).html (na.te.s.c.selectedThemeName);
                 
                 na.setSiteLoginLogout();
@@ -1178,7 +1174,7 @@ export class naThemeEditor {
     themeSelected  (evt) {
         var
         //theme = $(evt.currentTarget).html();
-        themeName = na.globals.themeName;
+        themeName = na.site.globals.themeName;
         //$('#themeName').val(theme);
 
         na.saveTheme(function() {
@@ -1192,7 +1188,7 @@ export class naThemeEditor {
                     if (btn) na.te.onclick(btn, false);
 
                     na.te.s.c.selectedThemeName = theme;
-                    na.globals.themeName = theme;
+                    na.site.globals.themeName = theme;
                 }, theme);
             }, 100, theme);
         },themeName);
@@ -1228,9 +1224,9 @@ export class naThemeEditor {
     }
     themeNameSelected  (themeID) {
         var themeName = $('#'+themeID).val();
-        if (themeName === na.globals.themeName) return false;
+        if (themeName === na.site.globals.themeName) return false;
         na.saveTheme (function() {
-            na.globals.themeName = themeName;
+            na.site.globals.themeName = themeName;
             na.te.s.c.selectedThemeName = themeName;
             
             $('.themeItem').removeClass('onfocus');
@@ -1248,7 +1244,7 @@ export class naThemeEditor {
                 }, themeName);
             }, 200);
         
-        }, na.globals.themeName);
+        }, na.site.globals.themeName);
     }
     themeNameChanged  (themeIdx, themeNameID) {
         var
@@ -1275,7 +1271,7 @@ export class naThemeEditor {
                         if ($(optEl)[0].innerText === oldThemeName) $(optEl).html(newThemeName);
                     });
                     $('.na_themes_dropdown__themes > .vividDropDownBox_selected').html(newThemeName);
-                    na.globals.themeName = newThemeName;
+                    na.site.globals.themeName = newThemeName;
                     na.te.s.c.selectedThemeName = newThemeName;
                 };                    
             },
@@ -1997,7 +1993,7 @@ debugger;
                     backgroundSize : na.te.s.c.scaleX+'px '+na.te.s.c.scaleY+'px' 
                 });
             } else {
-                na.backgrounds.next ('#siteBackground', na.globals.backgroundSearchKey, src);
+                na.backgrounds.next ('#siteBackground', na.site.globals.backgroundSearchKey, src);
             }
             /*if (na.te.s.c.fireSaveTheme) */
             setTimeout (na.saveTheme, 200);

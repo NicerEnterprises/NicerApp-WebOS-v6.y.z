@@ -1,5 +1,5 @@
 // Copyright (C) 2002-2024 by Rene AJM Veerman <rene.veerman.netherlands@gmail.com>
-export class vividUserInterface_2D_button_v4 {
+class vividUserInterface_2D_button_v4 {
     
     globals = {
         debug : false,
@@ -27,14 +27,14 @@ export class vividUserInterface_2D_button_v4 {
             return false;
         }
         
-        na.ui.vb.settings.buttons['#'+buttonHTMLid] = {
+        na.site.components.buttons['#'+buttonHTMLid] = {
             el : el,
             type : buttonType,
             btnCode : btnCode,
             circumstance : 'normal',
             to : { circumstance : 'hover' }
         };
-        let b = na.ui.vb.settings.buttons['#'+buttonHTMLid];
+        let b = na.site.components.buttons['#'+buttonHTMLid];
         
         b.state = b.btnCode.startupState;
         b.circumstance = b.btnCode.startupCircumstance;
@@ -81,9 +81,9 @@ export class vividUserInterface_2D_button_v4 {
         b.to.circumstance = 'hover';
 
         /*
-        clearTimeout (na.ui.vb.settings.timeoutSetHoverClass);
-        na.ui.vb.settings.timeoutSetHoverClass = setTimeout(function(){
-            if (na.ui.vb.settings.hoverOutFiredRecently) {
+        clearTimeout (na.site.components.timeoutSetHoverClass);
+        na.site.components.timeoutSetHoverClass = setTimeout(function(){
+            if (na.site.components.hoverOutFiredRecently) {
                 var l2 = b.btnCode.layers.circleIcon_svg;
                 if (typeof l2.onmouseout=='function') l2.onmouseout();
             } else {
@@ -123,10 +123,10 @@ export class vividUserInterface_2D_button_v4 {
         b.to.circumstance = 'normal';
 
         /*
-        na.ui.vb.settings.hoverOutFiredRecently = true;
-        clearTimeout (na.ui.vb.settings.timeoutSetHoverOut);
-        na.ui.vb.settings.timeoutSetHoverOut = setTimeout(function(){
-            na.ui.vb.settings.hoverOutFiredRecently = false;
+        na.site.components.hoverOutFiredRecently = true;
+        clearTimeout (na.site.components.timeoutSetHoverOut);
+        na.site.components.timeoutSetHoverOut = setTimeout(function(){
+            na.site.components.hoverOutFiredRecently = false;
         }, 1000);*/
         
         var 
@@ -169,7 +169,7 @@ export class vividUserInterface_2D_button_v4 {
     }
     
     onclick (evt) {
-        var b = na.ui.vb.settings.buttons['#'+$(evt.currentTarget)[0].id];
+        var b = na.site.components.buttons['#'+$(evt.currentTarget)[0].id];
         var selected = (b.state == b.btnCode.selectedState);
         
         b.circumstance = 'normal';
@@ -185,7 +185,7 @@ export class vividUserInterface_2D_button_v4 {
         
         var
         buttonType = $(b.el).attr('buttonType'),
-        b = na.ui.vb.settings.buttons['#'+b.el.id];
+        b = na.site.components.buttons['#'+b.el.id];
 
         
         //$('.circleIcon_background', b.el)[0].style.background = ato.steps[0];
@@ -221,8 +221,8 @@ export class vividUserInterface_2D_button_v4 {
 
         //if (!selected) {
             $(b.el).addClass('recentlyClicked');
-            clearTimeout (na.ui.vb.settings.timeoutRecentlyClicked);
-            na.ui.vb.settings.timeoutRecentlyClicked = setTimeout(function() {
+            clearTimeout (na.site.components.timeoutRecentlyClicked);
+            na.site.components.timeoutRecentlyClicked = setTimeout(function() {
                 $(b.el).removeClass('recentlyClicked');
             }, 3000);
         //}
@@ -354,14 +354,14 @@ export class vividUserInterface_2D_button_v4 {
         debugger;
         
         for (var layerClass in cl) {
-            na.ui.vb.settings.buttonIdx++;
+            na.site.components.buttonIdx++;
 
             var 
             htmlInner = '',
             style = '',
             scl = cl[layerClass],
             l = na.ui.vb.getLayer(b, scl.layerID),
-            htmlID = 'btnLayer_'+na.ui.vb.settings.buttonIdx;
+            htmlID = 'btnLayer_'+na.site.components.buttonIdx;
 
 debugger;
             if (l.img_src) style += 'background-image:url('+l.img_src+');';

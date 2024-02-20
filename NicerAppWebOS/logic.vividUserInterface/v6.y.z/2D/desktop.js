@@ -1,14 +1,10 @@
-import { vividUserInterface_2D_component } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/_component.js';
-
-export class vividUserInterface_2D_desktop extends vividUserInterface_2D_component {
-    constructor (settings) {
-        super(settings);
-
+if (typeof na!=='object') { var NicerApp_WebOS = nicerapp = na = {}; }
+na.desktop = na.d = {
+    initialize (settings) {
         var t = this;
         t.g = {
             animationSpeed : 300,//'slow',
             divs : [ '#siteTaskbar', '#siteDateTime', '#siteErrors', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteVideo', '#siteVideoSearch', '#siteComments', '#siteStatusbar', '#siteToolbarThemeEditor', '#siteToolbarLeft', '#siteToolbarRight', '#siteToolbarTop' ],
-            visibleDivs : [ '#siteDateTime', '#btnOptions', '#btnLoginLogout', '#btnChangeBackground', '#siteContent', '#siteStatusbar' ],
             configs : {
                 'background' : [ ],
                 'all' : [ '#siteContent', '#siteVideo', '#siteVideoSearch', '#siteStatusbar' ],
@@ -94,28 +90,29 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
             },
             margin : 25
         };
-        t.s = $.extend( {
+
+        t.s = t.settings = $.extend( {
             animate : !na.m.userDevice.isPhone,
             animating : true,
             showVideoBackgroundControls : false,
-            visibleDivs : [ '#btnOptions' ],
             masterCallbacks : [],
             callbacks : [],
             callbacksProgress : [],
-            cmds : []
-        }, t.settings);
+            cmds : [],
+            visibleDivs : [ '#siteContent', '#siteStatusbar' ]
+        }, settings);
 
         $(window).resize(t.resize);
         setTimeout (t.resize, 10);
 
-    }
+    },
 
-    resize (callback, animate, reset) {
+    resize : function (callback, animate, reset) {
         var
         fncn = 'na.components.desktop.resize()',
-        t = na.components.desktop;
+        t = na.desktop;
 
-        na.c.d.s.animating = true;
+        na.d.s.animating = true;
         if (reset === undefined) reset = true;
 
         $('#siteBackground, #siteBackground iframe, #siteBackground img, #siteBackground div').css({
@@ -133,28 +130,20 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
             bottom : -100
         });
 
-        na.c.d.s.visibleDivs.push('#siteTaskbar');
-        //na.c.d.s.visibleDivs.push('#siteToolbarThemeEditor');
-        na.c.d.s.visibleDivs.push('#siteContent');
-        na.c.d.s.visibleDivs.push('#siteToolbarLeft');
-        na.c.d.s.visibleDivs.push('#siteToolbarRight');
-        var cr = $.extend( {}, na.components.desktop.settings.negotiateOptions );
+        na.d.s.visibleDivs.push('#siteTaskbar');
+        //na.d.s.visibleDivs.push('#siteToolbarThemeEditor');
+        na.d.s.visibleDivs.push('#siteContent');
+
+        var cr = $.extend( {}, na.desktop.settings.negotiateOptions );
         while (JSON.stringify(cr).match('conditions')) {
             var cr = t.parseOptions(t, cr);
         }
-        var calculationResults = na.components.desktop.settings.calculationResults = {
+        var calculationResults = na.desktop.settings.calculationResults = {
             calculationResults_visible : cr
         };
 
        cr.order = [];
-        //c.order.push ('#siteStatusbar');
        cr.order.push ('#siteTaskbar');
-       //cr.order.push ('#siteToolbarThemeEditor');
-       cr.order.push ('#siteToolbarLeft');
-       cr.order.push ('#siteToolbarRight');
-        //c.order.push ('#siteToolbarTop');
-        //c.order.push ('#siteErrors');
-        //c.order.push ('#siteComments');
        cr.order.push ('#siteContent');
 
         if (cr['#siteContent']) {
@@ -171,6 +160,10 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
             for (var j=0; j<sectionKeys.length; j++) {
                 if (sectionKeys[j]===sectionID) var sectionIdx = j;
             };
+
+            for (var divID in na.d.g.defaultPos) {
+                $(divID).css(na.d.g.defaultPos[divID]);
+            }
 
             for (var i=0; i<section.order.length; i++) {
                 var divID = section.order[i];
@@ -189,46 +182,46 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                     //if (divID=='#siteToolbarThemeEditor') debugger;
                     switch (sn.edge) {
                         case 'top':
-                            if (sn.element==='body') divs[divID].top = na.c.d.g.margin; else divs[divID].top = divs[sn.element].top + na.c.d.g.margin;
+                            if (sn.element==='body') divs[divID].top = na.d.g.margin; else divs[divID].top = divs[sn.element].top + na.d.g.margin;
                             break;
                         case 'bottom':
                             if (sn.element==='body') {
                                 divs[divID].top = $(window).height() - $(divID).height();
                             } else {
-                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).height() + na.c.d.g.margin;
+                                if (divs[sn.element]) divs[divID].top = divs[sn.element].top + $(sn.element).height() + na.d.g.margin;
                             }
                             break;
                         case 'left':
-                            if (sn.element==='body') divs[divID].left = na.c.d.g.margin;
-                            else divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.c.d.g.margin;
+                            if (sn.element==='body') divs[divID].left = na.d.g.margin;
+                            else divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin;
                             break;
                         case 'right':
                             if (sn.element=='body') {
-                                divs[divID].left = $(window).width() - $(divID).width() - na.c.d.g.margin+ offsetX;
+                                divs[divID].left = $(window).width() - $(divID).width() - na.d.g.margin+ offsetX;
                             } else {
                                 if (!divs[sn.element]) debugger;
-                                divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.c.d.g.margin + offsetX;
+                                divs[divID].left = divs[sn.element].left + $(sn.element).width() + na.d.g.margin + offsetX;
                             }
                             break;
                         case 'rightNegative':
                             if (!divs[sn.element]) debugger;
-                            divs[divID].left = divs[sn.element].left - $(divID).width() - na.c.d.g.margin + offsetX;
+                            divs[divID].left = divs[sn.element].left - $(divID).width() - na.d.g.margin + offsetX;
                             break;
                     }
                 }
 
                 switch (section[0][divID].growTo) {
                     case 'max':
-                        divs[divID].width = $(window).width() - divs[divID].left - na.c.d.g.margin;
+                        divs[divID].width = $(window).width() - divs[divID].left - na.d.g.margin;
                         divs[divID].height = $(window).height() - divs[divID].top;
                         break;
                     case 'maxX':
-                        divs[divID].width = $(window).width() - divs[divID].left - na.c.d.g.margin;
+                        divs[divID].width = $(window).width() - divs[divID].left - na.d.g.margin;
                         divs[divID].height = $(divID).height();
                         break;
                     case 'maxY':
-                        if ($(window).width() < na.globals.reallySmallDeviceWidth)
-                            divs[divID].width = $(window).width() - (2 * na.c.d.g.margin)
+                        if ($(window).width() < na.site.globals.reallySmallDeviceWidth)
+                            divs[divID].width = $(window).width() - (2 * na.d.g.margin)
                         else
                             divs[divID].width = $(divID).width();
 
@@ -255,62 +248,62 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
 
                 switch (divID) {
                     case '#siteMenu':
-                        //divs[divID].top += na.c.d.g.margin;
-                        divs[divID].left += na.c.d.g.margin;
+                        //divs[divID].top += na.d.g.margin;
+                        divs[divID].left += na.d.g.margin;
                         break;
                     case '#btnOptions':
-                        if ($('#siteDateTime').css('display')!=='none') divs[divID].left += na.c.d.g.margin;
-                        //divs[divID].top += na.c.d.g.margin;
+                        if ($('#siteDateTime').css('display')!=='none') divs[divID].left += na.d.g.margin;
+                        //divs[divID].top += na.d.g.margin;
                         break;
                     case '#siteDateTime':
                     case '#btnLoginLogout':
                     case '#btnChangeBackground':
-                        //divs[divID].top += na.c.d.g.margin;
+                        //divs[divID].top += na.d.g.margin;
                         break;
                     case '#siteToolbarLeft':
                     case '#siteToolbarThemeEditor':
-                        divs[divID].height -= (1*na.c.d.g.margin);
+                        divs[divID].height -= (1*na.d.g.margin);
                         break;
                     case '#siteContent':
-                        divs[divID].height -= (2 * na.c.d.g.margin) - 6;
-                        //divs[divID].left += na.c.d.g.margin;
-                        divs[divID].width -= (na.c.d.g.margin);
+                        divs[divID].height -= (2 * na.d.g.margin) - 6;
+                        //divs[divID].left += na.d.g.margin;
+                        divs[divID].width -= (na.d.g.margin);
                         //if (visibleDivs.includes('#siteDateTime')) {
-                            //divs[divID].top += na.c.d.g.margin;
-                            //divs[divID].height -= na.c.d.g.margin;
+                            //divs[divID].top += na.d.g.margin;
+                            //divs[divID].height -= na.d.g.margin;
                         //}
                         if (
-                            na.c.d.s.visibleDivs.includes('#siteComments')
-                            || na.c.d.s.visibleDivs.includes('#siteToolbarRight')
+                            na.d.s.visibleDivs.includes('#siteComments')
+                            || na.d.s.visibleDivs.includes('#siteToolbarRight')
                         ) {
-                            //divs[divID].width -= ( na.c.d.g.margin );
+                            //divs[divID].width -= ( na.d.g.margin );
                         }
                         break;
                     case '#siteVideo':
-                        divs[divID].left -= (na.c.d.g.margin);
-                        divs[divID].top += (2 * na.c.d.g.margin );
+                        divs[divID].left -= (na.d.g.margin);
+                        divs[divID].top += (2 * na.d.g.margin );
                         break;
                     case '#siteVideoSearch':
                     case '#siteToolbarRight':
-                        divs[divID].height -= na.c.d.g.margin;
+                        divs[divID].height -= na.d.g.margin;
                         break;
                     case '#siteComments':
-                        divs[divID].height -= (2*na.c.d.g.margin);
-                        divs[divID].left += na.c.d.g.margin;
-                        divs[divID].width -= (2 * na.c.d.g.margin);
-                        if (na.c.d.s.visibleDivs.includes('#siteVideo')) divs[divID].top += na.c.d.g.margin;
+                        divs[divID].height -= (2*na.d.g.margin);
+                        divs[divID].left += na.d.g.margin;
+                        divs[divID].width -= (2 * na.d.g.margin);
+                        if (na.d.s.visibleDivs.includes('#siteVideo')) divs[divID].top += na.d.g.margin;
                         //if (visibleDivs.includes('#siteDateTime')) {
-                            divs[divID].top += (2 * na.c.d.g.margin );
-                            divs[divID].height -= (2 * na.c.d.g.margin );
+                            divs[divID].top += (2 * na.d.g.margin );
+                            divs[divID].height -= (2 * na.d.g.margin );
                         //}
-                        if (na.c.d.s.visibleDivs.includes('#siteStatusbar')) {
-                            divs[divID].height -= (na.c.d.g.margin );
+                        if (na.d.s.visibleDivs.includes('#siteStatusbar')) {
+                            divs[divID].height -= (na.d.g.margin );
                         }
                         break;
                     case '#siteTaskbar':
-                        divs[divID].top -= na.c.d.g.margin;
-                        //divs[divID].left += na.c.d.g.margin;
-                        //divs[divID].width -= (2 * na.c.d.g.margin);
+                        divs[divID].top -= na.d.g.margin;
+                        //divs[divID].left += na.d.g.margin;
+                        //divs[divID].width -= (2 * na.d.g.margin);
                         divs[divID].height = 'auto';
                         break;
                 }
@@ -320,8 +313,8 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
 
 
 
-            for (var i=0; i<na.c.d.g.divs.length; i++) {
-                var divID = na.c.d.g.divs[i], shown = false;
+            for (var i=0; i<na.d.g.divs.length; i++) {
+                var divID = na.d.g.divs[i], shown = false;
                 for (var divID2 in divs) if (divID2==divID) shown = true;
                 //if (shown) debugger;
                 if (shown) $(divID).css({ display : 'block' });
@@ -332,15 +325,15 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
 
 
             // DIV position and dimensions calculations are done, now start to animate everything :
-            na.c.d.s.masterCallbackIdx = 0;
-            if (reset) na.c.d.s.animatingDivs = {};
+            na.d.s.masterCallbackIdx = 0;
+            if (reset) na.d.s.animatingDivs = {};
 
             //debugger;
 
             if (reset)
             for (var masterCallbackIdx=0; masterCallbackIdx<section.order.length; masterCallbackIdx++) {
                 let divID = section.order[masterCallbackIdx];
-                na.c.d.s.animatingDivs[divID] = true;
+                na.d.s.animatingDivs[divID] = true;
             };
 
             /*
@@ -365,7 +358,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                     divsDone.push(divID);
                     /*na.m.waitForCondition ('ready to animate divID='+divID,
                         function () {
-                            return na.c.d.s.masterCallbackIdx < masterCallbackIdx
+                            return na.d.s.masterCallbackIdx < masterCallbackIdx
                         },
                         function () {
                         */
@@ -396,7 +389,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                         && divs[divID].left < divs[divID2].left
                                         && divs[divID].left + divs[divID].width > divs[divID2].left
                                     ) {
-                                        var w1 = divs[divID2].left - divs[divID].left - na.c.d.g.margin;
+                                        var w1 = divs[divID2].left - divs[divID].left - na.d.g.margin;
                                         console.log ('t6543210:'+divID+':'+w1);
                                         divs[divID].width = w1;
                                     }
@@ -409,24 +402,24 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                             if (!shown /*|| !visibleDivs.includes(divID)*/) {
                                 var options = {
                                         queue : false,
-                                        duration : na.c.d.g.animationSpeed,
+                                        duration : na.d.g.animationSpeed,
                                         easing : 'swing',
                                         complete : function() {
-                                            na.c.d.s.animatingDivs[divID] = false;
-                                            na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i)
+                                            na.d.s.animatingDivs[divID] = false;
+                                            na.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i)
                                         }
                                 };
-                                if (na.c.d.s.animate) {
-                                    $(divID).stop(true,true,false).animate(na.c.d.g.defaultPos[divID],options);
+                                if (na.d.s.animate) {
+                                    $(divID).stop(true,true,false).animate(na.d.g.defaultPos[divID],options);
                                 } else {
-                                    na.c.d.s.animatingDivs[divID] = false;
-                                    $(divID).stop(true,true,false).css(na.c.d.g.defaultPos[divID]);
+                                    na.d.s.animatingDivs[divID] = false;
+                                    $(divID).stop(true,true,false).css(na.d.g.defaultPos[divID]);
                                 }
                             } else {
                                 // for mobile phones, use plain $(...).css() calls, for desktops, use $(...).animate() calls,
                                 // and don't forget to call the callback functions of course
                                 if (divID=='#siteContent') {
-                                    if (na.c.d.s.animate) {
+                                    if (na.d.s.animate) {
                                         $(divID).css ({
                                             display : 'flex'
                                         }).animate ({
@@ -437,21 +430,21 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                             opacity : 1
                                         }, {
                                             queue : false,
-                                            duration : na.c.d.g.animationSpeed,
+                                            duration : na.d.g.animationSpeed,
                                             complete : function () {
-                                                na.c.d.s.animatingDivs[divID] = false;
-                                                na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
+                                                na.d.s.animatingDivs[divID] = false;
+                                                na.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
                                             }
                                         });
-                                        if (na.settings.na3D)
-                                        for (var id in na.settings.na3D) {
-                                            var el = na.settings.na3D[id];
+                                        if (na.site.settings.na3D)
+                                        for (var id in na.site.settings.na3D) {
+                                            var el = na.site.settings.na3D[id];
                                             $('canvas', el.p)
                                                 .animate (
                                                     { width : $(el.p).width(), height : $(el.p).height() },
                                                 {
                                                     queue : false,
-                                                    duration : na.c.d.g.animationSpeed
+                                                    duration : na.d.g.animationSpeed
                                                 }
                                                 ).attr('width', $(el.p).width())
                                                 .attr('height', $(el.p).height());
@@ -470,7 +463,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                             opacity : 1
                                         }, {
                                         queue : false,
-                                            duration : na.c.d.g.animationSpeed,
+                                            duration : na.d.g.animationSpeed,
                                             easing : 'swing',
                                             progress : function () {
                                                 /*
@@ -481,9 +474,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                                 */
                                             },
                                             complete : function () {
-                                                if (na.settings.na3D)
-                                                for (var id in na.settings.na3D) {
-                                                    var el = na.settings.na3D[id];
+                                                if (na.site.settings.na3D)
+                                                for (var id in na.site.settings.na3D) {
+                                                    var el = na.site.settings.na3D[id];
                                                     $('canvas', el.p)
                                                         .css ({ width : $(el.p).width(), height : $(el.p).height() })
                                                         .attr('width', $(el.p).width())
@@ -492,12 +485,12 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                                     el.camera.updateProjectionMatrix();
                                                     el.renderer.setSize  ($(el.p).width(), $(el.p).height());
                                                 };
-                                                na.c.d.s.animatingDivs[divID] = false;
-                                                na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
+                                                na.d.s.animatingDivs[divID] = false;
+                                                na.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
                                             }
                                         });
                                     }
-                                } else if (!na.c.d.s.animate) {
+                                } else if (!na.d.s.animate) {
                                     var props = {
                                         top : divs[divID].top,
                                         left : divs[divID].left,
@@ -507,8 +500,8 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                     };
                                     if (divID.substr(0,4)!=='#btn' || !na.m.userDevice.isPhone) props.opacity = 1;
                                     $(divID).css(props);
-                                    na.c.d.s.animatingDivs[divID] = false;
-                                    na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
+                                    na.d.s.animatingDivs[divID] = false;
+                                    na.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i);
 
                                 } else {
                                     var props = {
@@ -518,7 +511,7 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                         height : divs[divID].height
                                     }, options = {
                                         queue : false,
-                                        duration : na.c.d.g.animationSpeed,
+                                        duration : na.d.g.animationSpeed,
                                         easing : 'swing',
                                         progress : function () {
                                             /*
@@ -528,8 +521,8 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                                             }*/
                                         },
                                         complete : function() {
-                                            na.c.d.s.animatingDivs[divID] = false;
-                                            na.c.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i)
+                                            na.d.s.animatingDivs[divID] = false;
+                                            na.d.masterCallback(callback, $(divID)[0], calculationResults, sectionIdx, section, i)
                                         }
                                     };
                                     if (divID.substr(0,4)!=='#btn' || !na.m.userDevice.isPhone) props.opacity = 1;
@@ -544,14 +537,12 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
             }
 
         }
-    }
+    },
 
-    masterCallback (callbackFunction, div, calculationResults, sectionIdx, section, divOrderIdx) {
-        return false;
-
+    masterCallback : function (callbackFunction, div, calculationResults, sectionIdx, section, divOrderIdx) {
         var
         fncn = 'na.c.desktop.masterCallback()',
-        eh = na.site.settings.current.eventHandlers;
+        eh = na.site.settings.eventHandlers;
         //na.m.log (15, 'na.c.desktop.masterCallback (divID='+div.id+')');
         if (eh) {
             for (var i=0; i<eh.length; i++) {
@@ -568,25 +559,26 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
         }
 
         var allCompleted = true;
-        for (var did in na.c.d.s.visibleDivs) {
-            var ds = na.c.d.s.animatingDivs[did];
+        for (var i=0; i<na.d.s.visibleDivs.length; i++) {
+            var did = na.d.s.visibleDivs[i];
+            var ds = na.d.s.animatingDivs[did];
             if (ds) allCompleted = false;
         }
-        //na.m.log (556, fncn + ' : na.c.desktop.settings.animatingDivs='+JSON.stringify(na.c.d.s.animatingDivs, null, 2), false);
+        //na.m.log (556, fncn + ' : na.c.desktop.settings.animatingDivs='+JSON.stringify(na.d.s.animatingDivs, null, 2), false);
         //debugger;
         //na.m.log (50, fncn + ' : allCompleted='+(allCompleted?'true':'false')+', na.m.HTMLidle()='+(na.m.HTMLidle()?'true':'false'), false);
         if (!allCompleted) {
-            na.c.d.s.animating = true;
+            na.d.s.animating = true;
             return false;
         } else {
-            na.c.d.s.animating = false;
+            na.d.s.animating = false;
         }
 
 
         // call desktop.registerCallback() callbackFunctions,
         //  same as jQuery.animate({progress:callbackFunction});
-        for (var i=0; i<na.c.d.s.callbacks.length; i++) {
-            var cb = na.c.d.s.callbacks[i];
+        for (var i=0; i<na.d.s.callbacks.length; i++) {
+            var cb = na.d.s.callbacks[i];
             if (cb.divID=='#'+div.id && typeof cb.callback=='function') cb.callback(cb, div, calculationResults, sectionIdx, section, divOrderIdx);
         };
 
@@ -595,16 +587,16 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
         //  for all #div.id, AFTER allCompleted==true and na.m.HTMLidle()===true
         na.m.waitForCondition('na.c.desktop.masterCallback() : #'+div.id+' : na.m.desktopIdle()?',
             na.m.desktopIdle, function () {
-                na.c.desktop.masterCallback_do (div, calculationResults, sectionIdx, section, divOrderIdx);
+                na.desktop.masterCallback_do (div, calculationResults, sectionIdx, section, divOrderIdx);
             },
         50);
 
-        if (allCompleted) na.c.d.s.masterCallbacks = [];
+        if (allCompleted) na.d.s.masterCallbacks = [];
         /*
         na.m.waitForCondition('na.c.desktop.masterCallback() : na.m.desktopIdle() && all masterCallbacks called?', function () {
             var allDone = allCompleted;
-            for (var i=0; i < na.c.d.s.masterCallbacks.length; i++) {
-                var cf = na.c.d.s.masterCallbacks[i];
+            for (var i=0; i < na.d.s.masterCallbacks.length; i++) {
+                var cf = na.d.s.masterCallbacks[i];
                 for (var divID in calculationResults.calculationResults_visible) {
                     //debugger;
                     if ( divID == 'mode' || divID == 'order') continue;
@@ -617,16 +609,16 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
             //debugger;
             return allDone;
         }, function () {
-            na.c.d.s.masterCallbacks = [];
+            na.d.s.masterCallbacks = [];
         }, 50);
         */
-        na.c.d.s.masterCallbackIdx++;
-    }
+        na.d.s.masterCallbackIdx++;
+    },
 
-    masterCallback_do (div, calculationResults, sectionIdx, section, divOrderIdx) {
+    masterCallback_do : function (div, calculationResults, sectionIdx, section, divOrderIdx) {
         //na.m.log (15, 'na.c.desktop.masterCallback_do (divID='+div.id+')',false);
-        for (var i=0; i < na.c.d.s.masterCallbacks.length; i++) {
-            var cf = na.c.d.s.masterCallbacks[i];
+        for (var i=0; i < na.d.s.masterCallbacks.length; i++) {
+            var cf = na.d.s.masterCallbacks[i];
             if (!cf) debugger;
             if (!cf.masterCallbacksCalled) {
                 cf.masterCallbacksCalled = {};
@@ -640,34 +632,34 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                 cf.masterCallbacksCalled['#'+div.id] = true;
             }
         }
-    }
+    },
 
-    registerProgress (name, func) {
+    registerProgress : function (name, func) {
         var entry = { name : name, callback : func };
-        na.c.d.deleteProgress(name);
-        na.c.d.s.callbacksProgress.push (entry); // na.c.d.s = na.c.d.sktop.settings
-    }
+        na.d.deleteProgress(name);
+        na.d.s.callbacksProgress.push (entry); // na.d.s = na.d.sktop.settings
+    },
 
-    deleteProgress (name) {
-        for (var i=0; i<na.c.d.s.callbacksProgress.length; i++) {
-            if (na.c.d.s.callbacksProgress[i].name == name) { na.c.d.s.callbacksProgress.splice(i,1); i--; if (i==na.c.d.s.callbacksProgress.length-1) break;}
+    deleteProgress : function (name) {
+        for (var i=0; i<na.d.s.callbacksProgress.length; i++) {
+            if (na.d.s.callbacksProgress[i].name == name) { na.d.s.callbacksProgress.splice(i,1); i--; if (i==na.d.s.callbacksProgress.length-1) break;}
         }
-    }
+    },
 
-    registerCallback (name, divID, func) {
+    registerCallback : function (name, divID, func) {
         var entry = { name : name, divID : divID, callback : func };
-        na.c.d.s.callbacks.push (entry); // na.c.d.s = na.c.d.sktop.settings
-    }
+        na.d.s.callbacks.push (entry); // na.d.s = na.d.sktop.settings
+    },
 
-    deleteCallback (name) {
-        for (var i=0; i<na.c.d.s.callbacks.length; i++) {
-            if (na.c.d.s.callbacks[i].name == name) { na.c.d.s.callbacks.splice(i,1); i--; if (i==na.c.d.s.callbacks.length-1) break;}
+    deleteCallback : function (name) {
+        for (var i=0; i<na.d.s.callbacks.length; i++) {
+            if (na.d.s.callbacks[i].name == name) { na.d.s.callbacks.splice(i,1); i--; if (i==na.d.s.callbacks.length-1) break;}
         }
-    }
+    },
 
 
 
-    parseOptions (t, desktopDefinition) {
+    parseOptions : function (t, desktopDefinition) {
         var dd = $.extend({}, desktopDefinition);
 
         var p = { t : t, ld2 : {}, idxPath : '', idxPath2 : '/0' };
@@ -681,9 +673,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
         }
 
         return dd3;
-    }
+    },
 
-    parseOptions_walkValue (cd) {
+    parseOptions_walkValue : function (cd) {
         if (typeof cd.v == 'object')
             for (var k1 in cd.v) {
                 if (k1=='conditions') {
@@ -692,17 +684,17 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
                     return true;
                 }
             }
-    }
+    },
 
-    parseOptions_conditions (cd) {
+    parseOptions_conditions : function (cd) {
         for (var i=0; i < cd.v.conditions.length; i++) {
             var clauseResult = cd.params.t.parseOptions_clauseResult (cd, i);
             if (!clauseResult) return false;
         }
         return true;
-    }
+    },
 
-    parseOptions_clauseResult (cd, i) {
+    parseOptions_clauseResult : function (cd, i) {
         if (typeof cd.v.conditions[i].jsVar=='string') {
             if (!cd.v.conditions[i].jsVar.match(/[\w\.]+/)) {
                 return false;
@@ -722,9 +714,9 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
         ) return true;
 
         return false;
-    }
+    },
 
-     arrayUnique(array) {
+     arrayUnique : function (array) {
         var a = array.concat();
         for(var i=0; i<a.length; ++i) {
             for(var j=i+1; j<a.length; ++j) {
@@ -738,7 +730,4 @@ export class vividUserInterface_2D_desktop extends vividUserInterface_2D_compone
 
         return a;
     }
-
-
 }
-

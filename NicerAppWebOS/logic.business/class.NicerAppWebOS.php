@@ -377,9 +377,12 @@ class NicerAppWebOS {
                                 //.' BACKTRACE='.json_encode(debug_backtrace(), JSON_PRETTY_PRINT);
                             trigger_error ($msg, E_USER_WARNING);
                         } else {
+                            $dbInitPHP = $this->basePath.'/'.$viewsFolder.'/db_init.php';
+                            if (file_exists($dbInitPHP)) execPHP ($dbInitPHP);
+
                             $files = getFilePathList ($this->basePath.'/'.$viewsFolder, true, '/app.*/', null, array('file'), 1, 1, true);
                             if (!array_key_exists('files', $files)) {
-                                $msg = 'FATAL ERROR : no files matching app.* in "'.$viewsFolder.'"';
+                                $msg = 'HTTP error 404 : no files matching app.* in "'.$viewsFolder.'"';
                                 trigger_error ($msg, E_USER_ERROR);
                                 echo $msg;
                                 exit();
@@ -401,7 +404,7 @@ class NicerAppWebOS {
                     //}
                 } elseif ($view==='["NOT FOUND"]') {
                     // serve up the front page!
-                    $ret = ['siteContent' => $viewID ];
+                    $ret = ['siteContent' => 'HTTP error 404 : "'.$viewID.'" could not be found.' ];
                 }
 
 

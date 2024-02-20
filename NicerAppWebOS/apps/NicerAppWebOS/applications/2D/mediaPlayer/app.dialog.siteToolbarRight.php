@@ -2,6 +2,16 @@
 global $naWebOS;
 ?>
   <link href="/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/mediaPlayer/index.css"/>
+  <script type="text/javascript">
+    na.m.waitForCondition ('mediaPlayer load', function() {
+        return na.d && na.d.s && na.d.s.negotiateOptions;
+    }, function () {
+        if (!na.d.s.visibleDivs.includes('#siteToolbarRight')) {
+            na.d.s.visibleDivs.push('#siteToolbarRight');
+            na.d.resize();
+        }
+    }, 20);
+  </script>
 	<div class="naAudioPlayerUI">
             <div class="audioPlayerButtons">
                 <div id="btnPlayPause" class="vividButton4" buttonType="btn_audioVideo_playPause" onclick="na.musicPlayer.playpause()"></div>

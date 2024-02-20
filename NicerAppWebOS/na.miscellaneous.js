@@ -1,72 +1,26 @@
-/*
+
 na.apps = {
     loaded : {}
 };
-*/
 
-export class naMisc {
-        globals = {
-            debugEvents : false
-        };
+na.m = {
+    globals : {
+        debugEvents : false
+    },
 
-        settings = {
-            debugLevel : 1099,// max level shown, use the following to show all msgs (leads to cluttering of console.log) : //'show all',
-            debugCategoriesVisible : [ 'all' ],
-            waitForCondition : {},
-            cloneObject : {
-                circulars : []
-            },
-            cloneObjectAsync : {
-                commands : []
-            }
-        };
+    settings : {
+        debugLevel : 1099,// max level shown, use the following to show all msgs (leads to cluttering of console.log) : //'show all',
+        debugCategoriesVisible : [ 'all' ],
+        waitForCondition : {},
+		cloneObject : {
+			circulars : []
+		},
+		cloneObjectAsync : {
+			commands : []
+		}
+    },
 
-        userDevice = {
-            isPhone :
-                        navigator.userAgent === 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1' // iPhone 8 and iPhone 8 Plus
-                        || navigator.userAgent === 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1' // iPhone 7 and iPhone 7 Plus
-                        || navigator.userAgent === 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36' // iPhoneX and iPhoneX Plus
-                        || navigator.userAgent.match(/Moto/)
-                || navigator.userAgent.match(/iPhone/i)
-                || navigator.userAgent.match(/iPad/i)
-                || navigator.userAgent.match(/Mobile Safari/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/PlayStation/i)
-                || navigator.userAgent.match(/IEMobile/i)
-                || navigator.userAgent.match(/Windows CE/i)
-                || navigator.userAgent.match(/Windows Phone/i)
-                || navigator.userAgent.match(/SymbianOS/i)
-                || navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/PalmOS/i)
-                || navigator.userAgent.match(/PalmSource/i)
-                || navigator.userAgent.match(/SonyEricsson/i)
-                || navigator.userAgent.match(/Opera Mini/i)
-                || navigator.userAgent.match(/Vodafone/i)
-                || navigator.userAgent.match(/DoCoMo/i)
-                || navigator.userAgent.match(/AvantGo/i)
-                || navigator.userAgent.match(/J-PHONE/i)
-                || navigator.userAgent.match(/UP.Browser/i)
-        }
-
-    construction (cmd) {
-        var t = this;
-
-        debugger;
-        return this;
-    }
-
-    myName (t) {
-        var e = new Error('dummy');
-        var stack = e.stack
-                .split('\n')[2]
-                // " at functionName ( ..." => "functionName"
-                .replace(/^\s+at\s(.+?)(?:\s.*:|:)(.*?):(.*?)?$/g, '$1 ($2:$3)' );
-        return t.moduleURL+'::'+t.constructor.name+'.'+stack+'()';
-    }
-
-
-
-    handleGalleryLinkClick (e){
+    handleGalleryLinkClick : function(e){
         e.preventDefault();
         const $thisLink = e.currentTarget;
         const linkID = $thisLink.dataset.id;
@@ -86,9 +40,9 @@ export class naMisc {
             //then resubmit the local storage entry as a string...
             localStorage.setItem("visitedItems", curStorage.toString());
         }
-    }
+    },
 
-    adjustColorOpacity  (el, opacityValue) {
+    adjustColorOpacity : function (el, opacityValue) {
         var
         rgbaRegEx = /rgba\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\,\s*([\d\.]+)\)(.*)/,
         rgbRegEx = /rgb\((\d{1,3})\,\s*(\d{1,3})\,\s*(\d{1,3})\)(.*)/,
@@ -107,9 +61,9 @@ export class naMisc {
                 var rgba = false;
             return rgba;
         }
-    }
+    },
 
-	preventScreenLock  () {
+	preventScreenLock : function () {
 		// Create the root video element
 		var video = document.createElement('video');
 		video.setAttribute('loop', '');
@@ -154,17 +108,17 @@ export class naMisc {
 				}
 			});
 		}, 1000);
-	}
+	},
 
-    base64_encode_url  (str) {
+    base64_encode_url : function (str) {
         var str2 = btoa(str);
         str2 = str2.replace (/=/g, '');
         str2 = str2.replace ('+', '-');
         str2 = str2.replace ('/', '_');
         return str2;
-    }
+    },
 
-    base64_decode_url  (str) {
+    base64_decode_url : function (str) {
         var str2 = str;
         str2 = str2.replace ('-', '+');
         str2 = str2.replace ('_', '/');
@@ -174,25 +128,25 @@ export class naMisc {
             var r = '{-- na.m.base64_decode_url() : str is not valid base64 data when URL decoded. str='+str+', error.message='+error.message + ' --}';
         };
         return r;
-    }
+    },
 
-    is_null  (val) {
+    is_null : function (val) {
         return (val === null);
-    }
+    },
 
-    is_string  (val) {
+    is_string : function (val) {
         return typeof val == 'string' && val !== '';
-    }
+    },
 
-    cookieOptions  () {
+    cookieOptions : function () {
         var d = new Date();
         return {
             expires : new Date(d.getTime() + 10 * 365 * 24 * 60 * 60 * 1000), // 10 years from now
             path : '/'
         };
-    }
+    },
 
-    clearCookies  () {
+    clearCookies : function () {
         var fncn = 'na.site.clearCookies()';
         $.cookie('AuthSession', null, na.m.cookieOptions());
         $.cookie('siteBackground_search', 'landscape', na.m.cookieOptions());
@@ -263,13 +217,13 @@ export class naMisc {
         setTimeout (function() {
             $.ajax(ac2);
         }, 50);
-    }
+    },
 
-    randomString  () {
+    randomString : function () {
         return Math.random().toString(36).substr(2, 20);
-    }
+    },
 
-	secondsToTime  (secs) {
+	secondsToTime : function (secs) {
 		//thx
 		// http://codeaid.net/javascript/convert-seconds-to-hours-minutes-and-seconds-%28javascript%29
 		//and
@@ -291,9 +245,9 @@ export class naMisc {
 		};
 
 		return obj;
-	}
+	},
 
-	secondsToTimeString  (secs) {
+	secondsToTimeString : function (secs) {
 		var d = na.m.secondsToTime(secs);
 		var s = '';
 		if (d.days>0) {
@@ -316,9 +270,9 @@ export class naMisc {
 			s += d.milliSeconds + 'ms';
 		};
 		return s;
-	}
+	},
 
-    dateObj_toDateString  (dateObj, includeTimezone) {
+    dateObj_toDateString : function (dateObj, includeTimezone) {
         var dns = Date.locale.en.day_names;
 
         //includeTimezone = false; // uncomment this if you want to reduce console.log line length
@@ -336,9 +290,9 @@ export class naMisc {
                     ? ' (UTC' + (-1*dateObj.getTimezoneOffset())+'m)'
                     : ''
             );
-    }
+    },
 
-    log  (level, msg, includeBacktrace) {
+    log : function (level, msg, includeBacktrace) {
         if (!na.m.settings.siteStartTime) {
             var date = new Date();
             na.m.settings.siteStartTime = date.getTime();
@@ -407,10 +361,10 @@ export class naMisc {
         };
 
         return msg;
-    }
+    },
 
 
-	padNumber  (number, characterPositions, paddingWith) {
+	padNumber : function (number, characterPositions, paddingWith) {
 		var
 		r = '' + number,
 		padding = '';
@@ -419,8 +373,34 @@ export class naMisc {
 		};
 		r = padding + number;
 		return r;
-	}
+	},
 
+	userDevice : {
+		isPhone :
+                navigator.userAgent === 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1' // iPhone 8 and iPhone 8 Plus
+                || navigator.userAgent === 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1' // iPhone 7 and iPhone 7 Plus
+                || navigator.userAgent === 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36' // iPhoneX and iPhoneX Plus
+                || navigator.userAgent.match(/Moto/)
+				|| navigator.userAgent.match(/iPhone/i)
+				|| navigator.userAgent.match(/iPad/i)
+				|| navigator.userAgent.match(/Mobile Safari/i)
+				|| navigator.userAgent.match(/BlackBerry/i)
+				|| navigator.userAgent.match(/PlayStation/i)
+				|| navigator.userAgent.match(/IEMobile/i)
+				|| navigator.userAgent.match(/Windows CE/i)
+				|| navigator.userAgent.match(/Windows Phone/i)
+				|| navigator.userAgent.match(/SymbianOS/i)
+				|| navigator.userAgent.match(/Android/i)
+				|| navigator.userAgent.match(/PalmOS/i)
+				|| navigator.userAgent.match(/PalmSource/i)
+				|| navigator.userAgent.match(/SonyEricsson/i)
+				|| navigator.userAgent.match(/Opera Mini/i)
+				|| navigator.userAgent.match(/Vodafone/i)
+				|| navigator.userAgent.match(/DoCoMo/i)
+				|| navigator.userAgent.match(/AvantGo/i)
+				|| navigator.userAgent.match(/J-PHONE/i)
+				|| navigator.userAgent.match(/UP.Browser/i)
+	},
 
     waitForCondition_blacklisted (label) {
 		var
@@ -434,9 +414,9 @@ export class naMisc {
             if (label.match(ble)) return true;
         }
         return false;
-    }
+    },
 
-	waitForCondition  (label, condition, callback, frequency, context) {
+	waitForCondition : function (label, condition, callback, frequency, context) {
 		var
 		_fncn = 'na.m.waitForCondition(): ',
 		blacklistedEntries = [
@@ -455,7 +435,7 @@ export class naMisc {
         /*
         if (!na.m.settings.waitForCondition_reportsIssued) na.m.settings.waitForCondition_reportsIssued = setInterval (function () {
             if (!blacklistedEntries.includes(label)) na.m.waitForCondition_report_whatAmIwaitingFor(blacklistedEntries);
-        } 200); // report every 200 milli-seconds, if there's anything to report
+        }, 200); // report every 200 milli-seconds, if there's anything to report
         */
 
 		var r = condition(context);
@@ -513,9 +493,9 @@ export class naMisc {
 			//}
 		}
 		return r;
-	}
+	},
 
-    waitForCondition_report_whatAmIwaitingFor  (blacklistedEntries) {
+    waitForCondition_report_whatAmIwaitingFor : function (blacklistedEntries) {
         //if (!na.site.settings.current.timeout_waitForCondition_reporting)
         //na.site.settings.current.timeout_waitForCondition_reporting = setTimeout (function() {
                 var
@@ -525,22 +505,22 @@ export class naMisc {
                     var k = allKeys[i];
                     if (!blacklistedEntries.includes(k)) entries.push(k);
                 };
-                //delete na.site.settings.current.timeout_waitForCondition_reporting;
+                delete na.site.settings.timeout_waitForCondition_reporting;
 
                 if (entries.length > 0)
                     return 'na.m.waitForCondition() : currently waiting for conditions '+JSON.stringify(entries, null, 4);
                 else return false;
                     //na.m.log (555, 'na.m.waitForCondition() : currently waiting for conditions '+JSON.stringify(entries, null, 4), false );
-        //} 500);
-    }
+        //}, 500);
+    },
 
-    conditionExists  (label) {
+    conditionExists : function (label) {
         return label in na.m.settings.waitForCondition;
-    }
+    },
 
-    walkArray  (rt, a, keyCallback, valueCallback, callKeyForValues, callbackParams, k, level, path) {
+    walkArray : function (rt, a, keyCallback, valueCallback, callKeyForValues, callbackParams, k, level, path) {
         if (!path) path = '';
-        if (!level) level = 1;
+        if (typeof level=='undefined') level = 1;
         if (typeof a !== 'object') {
             //debugger;
         } else {
@@ -562,6 +542,7 @@ export class naMisc {
                 if (typeof v==='object') {
                     cd.type = 'value';
                     if (typeof valueCallback=='function') valueCallback(cd);
+
                     na.m.walkArray (rt, a[k], keyCallback, valueCallback, callKeyForValues, callbackParams, k, level+1, path+'/'+k);
                 } else {
                     cd.type = 'value';
@@ -569,16 +550,16 @@ export class naMisc {
                 }
             }
         }
-    }
+    },
 
-    chaseToPath  (wm, path, create) {
+    chaseToPath : function (wm, path, create) {
         var
         nodes = path.split('/');
 
         return na.m.chase (wm, nodes, create);
-    }
+    },
 
-    chase  (arr, indexes, create) {
+    chase : function (arr, indexes, create) {
         var
         r = arr;
 
@@ -597,9 +578,9 @@ export class naMisc {
         }
 
         return r;
-    }
+    },
 
-	negotiateOptions  () {
+	negotiateOptions : function () {
 		// na.m.negotiateOptions() can't handle functions, and I dont trust $.extend
 		var r = {};
 		for (var i = 0; i < arguments.length; i++) {
@@ -615,9 +596,9 @@ export class naMisc {
 			}
 		}
 		return r;
-	}
+	},
 
-    extend  () {
+    extend : function () {
 		var r = arguments[0];
 		for (var i = 1; i < arguments.length; i++) {
 			var a = arguments[i];
@@ -633,9 +614,9 @@ export class naMisc {
 			}
 		}
 		return r;
-    }
+    },
 
-    changedDateTime_current  () {
+    changedDateTime_current : function () {
         var
         d = new Date(),
         r = d.getFullYear()
@@ -645,17 +626,17 @@ export class naMisc {
             + ('0' + d.getMinutes()).slice(-2)
             + ('0' + d.getSeconds()).slice(-2);
         return r;
-    }
+    },
 
-	elapsedMilliseconds () {
+	elapsedMilliseconds: function () {
 		//thanks to http://www.web-source.net/javascript_tutorial2.htm
 		var n = new Date();
 		var s = n.getTime(); // Grab current millisecond #
 		var diff = s - na.m.settings.startTime;
 		return diff;
-	}
+	},
 
-	hookScrollwheel  (el, handler, useCapture, add) {
+	hookScrollwheel : function (el, handler, useCapture, add) {
 		if (add) {
             if (el.addEventListener) {
 				var r = el.addEventListener ('DOMMouseScroll', handler, true);
@@ -674,11 +655,11 @@ export class naMisc {
 				el.onmousewheel = null;
 			}
 		}
-	}
+	},
 
-    stacktrace  () {
+    stacktrace : function () {
         return (function () { return (new Error().stack); })().replace(/Error\s*\n*\r*/,'');
-    }
+    },
 
 
 
@@ -699,7 +680,7 @@ export class naMisc {
      (4) all functions for an event must complete, for the next event to be fired.
 
 */
-    newEventChain  (dt, rootEventData, displayStatusUpdates) {
+    newEventChain : function (dt, rootEventData, displayStatusUpdates) {
         // this returns a NicerApp WCS event chain, which may *include* HTML event data,
         // but which is also in total far more data than a single HTML event.
 
@@ -712,9 +693,9 @@ export class naMisc {
             events : [ na.m.newEvent(dt, rootEventData) ]
         };
         return r;
-    }
+    },
 
-    runFunctions  (naEventsChain, updateEvent_returnValue) {
+    runFunctions : function (naEventsChain, updateEvent_returnValue) {
         var functionsAdded = false;
         for (var eventID in updateEvent_returnValue) {
             var naEventData = updateEvent_returnValue[eventID];
@@ -751,16 +732,16 @@ export class naMisc {
         }, 250, naEventsChain, functionsAdded);
 
         //return r; // CAN'T USE THIS ANYWHERE! NOT A PROBLEM THOUGH..
-    }
+    },
 
-    updateEvent  (dt, naNewEventData) {
+    updateEvent : function (dt, naNewEventData) {
         return na.m.newEvent (dt, naNewEventData);
-    }
+    },
 
-    newEvent  (dt, naEventData) { // dt is the date and time in dateObj and timeString format
+    newEvent : function (dt, naEventData) { // dt is the date and time in dateObj and timeString format
         // this returns a NicerApp WCS event, not a HTML event.
         var
-        r = {}
+        r = {},
         st = na.m.stacktrace();
         if (typeof naEventData!=='object') debugger;
         for (var eventID in naEventData) {
@@ -808,18 +789,18 @@ export class naMisc {
             };
         };
         return r;
-    }
+    },
 
-    newEventFunction  (fnc, params) {
+    newEventFunction : function (fnc, params) {
         var r = {
             fnc : fnc
         };
         if (typeof params=='object') r.params = params;
         if (typeof fnc!=='function') r.completed = true;
         return r;
-    }
+    },
 
-    continueRunningEvents  (ec) {
+    continueRunningEvents : function (ec) {
         var
         er = ec.events[0].root,
         r = false;
@@ -873,9 +854,9 @@ export class naMisc {
         };
         na.m.eventChainCheck (ec);
         return false;
-    }
+    },
 
-    eventDescriptor  (ec, eventIdx, eventID, fncIdx, f) {
+    eventDescriptor : function (ec, eventIdx, eventID, fncIdx, f) {
         //if (!f.fnc.name) debugger;
         var ts = (
             ec.events[0].root.dt.created
@@ -885,9 +866,9 @@ export class naMisc {
         return ec.events[0].root.labels.marker.whatsThis
             +' : event created '+ts
             +', eventIdx='+eventIdx+', eventID='+eventID+', fncIdx='+fncIdx+', fncName='+f.fnc.name
-    }
+    },
 
-    startEvent  (ec, eventIdx, ev) {
+    startEvent : function (ec, eventIdx, ev) {
         var e = ec.events[eventIdx];
         for (var eventID in e) {
             var ev = e[eventID];
@@ -933,9 +914,9 @@ export class naMisc {
                 //na.m.closeEvent (ec, eventIdx, f);
             }
         }
-    }
+    },
 
-    eventFunctionsCheck  (ec, i, naEventData) {
+    eventFunctionsCheck : function (ec, i, naEventData) {
         if (naEventData && naEventData.newFunctions && !naEventData.functions) naEventData.functions = naEventData.newFunctions;
         if (naEventData && naEventData.functions && naEventData.functions.length) {
             for (var evIdx=0; evIdx < naEventData.functions.length; evIdx++) {
@@ -944,22 +925,22 @@ export class naMisc {
             }
         }
         return true;
-    }
+    },
 
-    endEvent  (ec, eventIdx, p, f) {
+    endEvent : function (ec, eventIdx, p, f) {
         debugger;
         f.runningNow = false;
         f.completed = true;
         ec.events[eventIdx].completed = true;
         return true;
-    }
+    },
 
-    closeEvent  (ec, eventIdx, f) {
+    closeEvent : function (ec, eventIdx, f) {
         if (f && f.completed) f.runningNow = false;
         //na.m.eventChainCheck (ec);
-    }
+    },
 
-    eventChainCheck  (ec) {
+    eventChainCheck : function (ec) {
         var
         numRootEvents = ec.events.length,
         numRootCompletedEvents = 0,
@@ -1086,11 +1067,11 @@ export class naMisc {
                 //console.log ('na.m.eventChainCheck() : '+msg);
 
                 na.m.eventChainCheck(ec);
-            }, 250, ec);
+            }, 333, ec);
         }
-    }
+    },
 
-    closeEventChain  (ec) {
+    closeEventChain : function (ec) {
         /*
         var
         report = {
@@ -1100,9 +1081,9 @@ export class naMisc {
         */
         ec.completed = true;
         na.site.settings.current.loadContent.current.ec = null;
-    }
+    },
 
-    findEvent  (ec, eventID) {
+    findEvent : function (ec, eventID) {
         for (var evIdx=0; evIdx < ec.events.length; evIdx++) {
             var  ev = ec.events[evIdx];
 
@@ -1111,9 +1092,9 @@ export class naMisc {
             }
         };
         return false;
-    }
+    },
 
-    makeEventsChain_theCurrentOne  (lc, ec) {
+    makeEventsChain_theCurrentOne : function (lc, ec) {
         var
         lcr = lc.recent,
         lcc = lc.current;
@@ -1145,9 +1126,9 @@ export class naMisc {
             lcc.ec = ec;
             return false;
         };
-    }
+    },
 
-    makePlaintextReportForEventChain  (ec) {
+    makePlaintextReportForEventChain : function (ec) {
         var txt = '';
         for (var ecEventIdx=0; ecEventIdx < ec.events.length; ecEventIdx++) {
             var e = ec.events[ecEventIdx];
@@ -1173,15 +1154,15 @@ export class naMisc {
             }
         };
         return txt;
-    }
-    walkArray_makePlaintextReportFor_eventChainFunction__key (cd) {
+    },
+    walkArray_makePlaintextReportFor_eventChainFunction__key : function(cd) {
         if (typeof cd.v=='function') return false;
         if (typeof cd.v=='object' && cd.v!==null && typeof cd.v.length=='number') debugger;
         if (cd.v) {
             var it = cd.v;
         }
-    }
-    walkArray_makePlaintextReportFor_eventChainFunction__value  (cd) {
+    },
+    walkArray_makePlaintextReportFor_eventChainFunction__value : function (cd) {
         if (typeof cd.v=='function') return false;
         if (typeof cd.v=='object' && cd.v!==null && typeof cd.v.length=='number') debugger;
         if (cd.v) {
@@ -1193,15 +1174,15 @@ export class naMisc {
                 //debugger;
             }
         }
-    }
+    },
 
-    findOne  (haystack, arr) {
+    findOne : function (haystack, arr) {
         return arr.some(function (v) {
             return haystack.indexOf(v) >= 0;
         });
-    }
+    },
 
-    makeHTMLreportForEventChain  (ec) {
+    makeHTMLreportForEventChain : function (ec) {
         for (var ecEventIdx=0; ecEventIdx < ec.events.length; ecEventIdx++) {
             var e = ec.events[ecEventIdx];
             for (var eventID in e) {
@@ -1215,13 +1196,13 @@ export class naMisc {
                 }
             }
         };
-    }
+    },
 // END newEventChain()
 
 
 
 
-    borderWidths  (el) {
+    borderWidths : function (el) {
         var
         blw1 = $(el).css('borderLeftWidth'),
         blw2 =
@@ -1242,7 +1223,7 @@ export class naMisc {
         bbw2 =
             typeof bbw1=='string' && bbw1!==''
             ? parseInt(bbw1.replace('px',''))
-            : 0,
+            : 0;
         r = {
             top : btw2,
             left : blw2,
@@ -1250,65 +1231,64 @@ export class naMisc {
             right : brw2
         };
         return r;
-    }
+    },
 
-    txtReport_callStack  (callStack) {
+    txtReport_callStack : function (callStack) {
         var txt = '';
         for (var i=0; i < callStack.length; i++) {
             if (txt!=='') txt += '\n';
             txt += '\t : '+callStack[i];
         }
         return txt;
-    }
+    },
 
 
 
 
 
-    extensionsLoaded  () {
+    extensionsLoaded : function () {
         $('script', $('head')[0]).each (function (idx, script) {
             if (script.innerText==='') {  return false; }
         });
         return true;
-    }
+    },
 
-    desktopIdle  (ctx) {
+    desktopIdle : function (ctx) {
         var r = (
-            typeof na === 'object'
-            //&& typeof na.site === 'object'
-            //&& !na.desktop.settings.animating
-        );
+			typeof na === 'object'
+			&& typeof na.site === 'object'
+            && !na.desktop.settings.animating
+		);
         if (!r && ctx && ctx.debugMe) debugger;
         return r;
-    }
+    },
 
-    HTMLidle (ctx) {
-        var
-        //c = na.site.settings.current,
-        r = (
-                na.m.desktopIdle()
+    HTMLidle : function(ctx) {
+		var
+		s = na.site.settings,
+		r = (
+            na.m.desktopIdle()
 
-                // no na.apps.loaded[appID].settings.loadedIn[divID] currently has
-                //  any <SCRIPT SRC="https://someSite.tld/script.js"> being loaded into my <HEAD> HTML section
+            // no na.apps.loaded[appID].settings.loadedIn[divID] currently has
+            //  any <SCRIPT SRC="https://someSite.tld/script.js"> being loaded into my <HEAD> HTML section
 
-                /*
-                &&
-                    c.scriptsToLoad > 0
-                    ? c.scriptsLoaded === true || c.scriptsLoaded <= c.scriptsToLoad
-                    : c.scriptsLoaded
+            &&
+                s.scriptsToLoad > 0
+                ? s.scriptsLoaded === true || s.scriptsLoaded <= s.scriptsToLoad
+                : true//s.scriptsLoaded
 
-                && !c.startingApps
+            && !s.startingApps
 
-                // no na.apps.loaded[appID].settings.loadedIn[divID] currently has
-                //  any <SCRIPT SRC="https://someSite.tld/script.js"> with empty content
-                && na.m.extensionsLoaded()
-                */
-        );
+            // no na.apps.loaded[appID].settings.loadedIn[divID] currently has
+            //  any <SCRIPT SRC="https://someSite.tld/script.js"> with empty content
+            && na.m.extensionsLoaded()
+
+		);
         if (!r && ctx && ctx.debugMe) debugger;
         return r;
-    }
+    },
 
-    WebOSidle  (ctx) {
+    WebOSidle : function (ctx) {
         var
         c = na.site.settings.current,
         r = (
@@ -1324,31 +1304,31 @@ export class naMisc {
         );
         if (!r && typeof ctx=='object' && ctx.debugMe) debugger;
         return r;
-    }
+    },
 
-	cloneObject  (v) {
+	cloneObject : function (v) {
 		var cIdx = na.m.settings.cloneObject.circulars.length;
 		na.m.settings.cloneObject.circulars[cIdx] = [];
 		return na.m.cloneObject_do(cIdx, v, '');
-	}
+	},
 
-	cloneObject_circularFound  (cIdx, v) {
+	cloneObject_circularFound : function (cIdx, v) {
 		var c = na.m.settings.cloneObject.circulars[cIdx];
 		for (var i=0; i<c.length; i++) {
 			if (c[i].v===v) return c[i];
 		}
 		return false;
-	}
+	},
 
-	cloneObject_addCircular  (cIdx, v, path) {
+	cloneObject_addCircular : function (cIdx, v, path) {
 		var c = na.m.settings.cloneObject.circulars[cIdx];
 		c[c.length] = {
 			v : v,
 			path : path
 		};
-	}
+	},
 
-	cloneObject_do (cIdx, v, path) {
+	cloneObject_do: function (cIdx, v, path) {
 
 		if (Array.isArray(v)) {
 			// JSON / javascrip simple list aka []
@@ -1407,15 +1387,15 @@ export class naMisc {
 			}
 		}
 		return test;
-	}
+	},
 
-	reAttachUA  (uaIdx, func) {
+	reAttachUA : function (uaIdx, func) {
 		var ua = na.tracer.userActions[uaIdx];
 		func.ua = ua;
 		return func;
-	}
+	},
 
-	cloneObjectAsync  (cmd) {
+	cloneObjectAsync : function (cmd) {
 		var rscc = na.m.settings.cloneObjectAsync.commands;
 		var cmdIdx = rscc.length;
 		rscc[cmdIdx] = cmd;
@@ -1554,9 +1534,9 @@ export class naMisc {
 			}
 	    };
 	    processQueue();
-	}
+	},
 
-    millisecondsHumanReadable  (ms, htmlYes) {
+    millisecondsHumanReadable : function (ms, htmlYes) {
       if (typeof htmlYes == 'undefined') htmlYes = true;
       if (ms < 1000) {
         var s = ms + ' milliseconds';
@@ -1566,9 +1546,9 @@ export class naMisc {
         if (htmlYes) s = '<a href="#" class="hmByteSize" title="' + size + ' bytes" onclick="return false;">' + s + '</a>';
       };
       return s;
-    }
+    },
 
-    milliseconds_format  (ms, htmlYes) {
+    milliseconds_format : function (ms, htmlYes) {
         if (typeof htmlYes == 'undefined') htmlYes = true;
         var pre = '';
         var post = '';
@@ -1586,9 +1566,9 @@ export class naMisc {
             ms = na.m.number_format(filesize / 60*1000, 2, pre + '.', post, '') + ' seconds';
         } else ms = '[Time\'s up]';
         return ms;
-    }
+    },
 
-    sizeHumanReadable (size, htmlYes) { // sizeHumanReadable
+    sizeHumanReadable: function (size, htmlYes) { // sizeHumanReadable
       if (typeof htmlYes == 'undefined') htmlYes = true;
       if (size < 1024) {
         var s = size + ' bytes';
@@ -1598,9 +1578,9 @@ export class naMisc {
         if (htmlYes) s = '<a href="#" class="hmByteSize" title="' + size + ' bytes" onclick="return false;">' + s + '</a>';
       };
       return s;
-    }
+    },
 
-    size_format (filesize, htmlYes) {
+    size_format: function (filesize, htmlYes) {
       if (typeof htmlYes == 'undefined') htmlYes = true;
       var pre = '';
       var post = '';
@@ -1622,9 +1602,9 @@ export class naMisc {
         };
       };
       return filesize;
-    }
+    },
 
-    number_format (number, decimals, dec_point, dec_point_end, thousands_sep) {
+    number_format: function (number, decimals, dec_point, dec_point_end, thousands_sep) {
       // http://kevin.vanzonneveld.net
       // +	improved by: seductiveapps@gmail.com (2010/01)
       // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
@@ -1688,7 +1668,7 @@ Date.prototype.tet = function() {
 	return (this.getTimezoneOffset() < this.stdTimezoneOffset());
 };
 
-export const arrayRemove = function(t) {
+arrayRemove = function(t) {
     var what, a = arguments, L = a.length, ax;
     while (L && t.length) {
         what = a[--L];

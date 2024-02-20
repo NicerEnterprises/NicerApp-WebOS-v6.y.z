@@ -1,18 +1,14 @@
-import { na3D_fileBrowser } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/3D/na3D.js';
-
-export class naApp_mediaPlayer {
+export  class naApp_mediaPlayer {
   constructor (settings) {
     $('#siteContent > .vividDialogContent h1')
       .addClass('animatedText_orangeYellow')
       .css({
-        display : 'none',
-        fontFamily : 'Arial'
+        display : 'none'
       });
     $('#siteContent > .vividDialogContent h2')
       .addClass('animatedText_ivory')
       .css({
-        display : 'none',
-        fontFamily : 'Arial'
+        display : 'none'
       });
 
     //debugger;
@@ -40,15 +36,16 @@ export class naApp_mediaPlayer {
                   var parameters = { views : [ JSON.parse(data) ] };
                   //debugger;
 
-                  na.settings.na3D= {
-                    '#na3D' :
-                      new na3D_fileBrowser(el, $(el).parent()[0], parameters)
-                  };
+                  import ('/NicerAppWebOS/logic.vividUserInterface/v6.y.z/3D/na3D.js?m='+na.m.changedDateTime_current()).then((module) => {
+                    na.site.settings.na3D= {
+                      '.na3D' : new module.na3D_fileBrowser(el, $(el).parent()[0], parameters)
+                    }
+                  });
               }
           };
           $.ajax(ac);
       });
 
-    }, 500);
+    }, 20);
   }
 }

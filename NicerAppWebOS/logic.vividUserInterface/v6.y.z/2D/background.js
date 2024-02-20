@@ -1,9 +1,10 @@
-import { vividUserInterface_2D_component } from '/NicerAppWebOS/ajax_getModule.php?f=/NicerAppWebOS/logic.vividUserInterface/v6.y.z/2D/_component.js';
+if (typeof na!=='object') { var NicerApp_WebOS = nicerapp = na = {}; }
+na.background = na.bg = {
+    settings : {},
 
-export class vividUserInterface_2D_background extends vividUserInterface_2D_component {
-    constructor (settings) {
-        super(settings);
+    initialize (settings) {
         var t = this;
+        t.settings = $.extend (na.bg.settings, settings);
 
         var
         url = '/NicerAppWebOS/domainConfigs/'
@@ -51,20 +52,20 @@ export class vividUserInterface_2D_background extends vividUserInterface_2D_comp
         $.ajax(ac);
 
         return this;
-    }
+    },
 
-    next (div, search, url, saveTheme, callback, callStack) {
-        var t = na.backgrounds;
-        var fncn = na.m.myName(t);
+    next : function (div, search, url, saveTheme, callback, callStack) {
+        var t = na.background;
+        var fncn = 'na.background.next()';//na.m.myName(t);
         na.m.waitForCondition (fncn+' : t.data?', function() {
             return t.data;
         }, function() {
             t.next_do (div, search, url, saveTheme, callback, callStack);
         }, 20);
-    }
+    },
 
-    next_do (div, search, url, saveTheme, callback, callStack) {
-        var t = na.backgrounds;
+    next_do : function (div, search, url, saveTheme, callback, callStack) {
+        var t = na.background;
         if (!div) div = '#siteBackground';
         if (!callStack) callStack = '';
         if (!search) search = t.settings.backgroundSearchKey;
@@ -233,9 +234,9 @@ export class vividUserInterface_2D_background extends vividUserInterface_2D_comp
                 };
 
 
-                na.globals.backgroundSearchKey = search;
-                na.globals.background = url;
-                if (na.globals.debug_backgroundChanges) debugger;
+                na.site.globals.backgroundSearchKey = search;
+                na.site.globals.background = url;
+                if (na.site.globals.debug_backgroundChanges) debugger;
                 /*if (!$.cookie('cdb_loginName') || $.cookie('cdb_loginName')=='Guest') {
                     $.cookie('siteBackground_search', search, na.m.cookieOptions());
                     $.cookie('siteBackground_url', url, na.m.cookieOptions());
@@ -243,7 +244,7 @@ export class vividUserInterface_2D_background extends vividUserInterface_2D_comp
                     na.site.saveTheme();
                 }*/
                 if (saveTheme) {
-                    na.saveTheme();
+                    na.site.saveTheme();
                 }
 
 
@@ -259,13 +260,13 @@ export class vividUserInterface_2D_background extends vividUserInterface_2D_comp
         //debugger;
         $.ajax(ajaxCommand);
 
-    }
+    },
 
-    onPlayerReady (a,b,c,d,e,f,g) {
+    onPlayerReady : function (a,b,c,d,e,f,g) {
         debugger;
-    }
+    },
 
-    onPlayerStateChange (a,b,c,d,e,f,g) {
+    onPlayerStateChange : function (a,b,c,d,e,f,g) {
         debugger;
     }
 }
