@@ -73,7 +73,7 @@ na.site = {
             switch (el.id) {
                 case 'siteTaskbar' : c.taskbar = d; break;
                 case 'siteSettingsMenu' : c.settingsMenu = d; break;
-                default : c.dialogs['#'+el.id] = d; break;
+                default : c.dialogs['#'+el.id] = d; na.d.s.visibleDivs.push ('#'+el.id); break;
             }
         });
         $('#btnSettings').hover (function() {

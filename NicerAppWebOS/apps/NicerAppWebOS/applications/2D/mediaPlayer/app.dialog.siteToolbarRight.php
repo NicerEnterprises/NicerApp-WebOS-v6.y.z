@@ -13,6 +13,7 @@ global $naWebOS;
     }, 20);
   </script>
 	<div class="naAudioPlayerUI">
+    <div id="btnRearrange" class="vividButton" style="position:relative;width:calc(100% - 20px)" onclick=" $('.na3D > canvas').remove(); import ('/NicerAppWebOS/apps/NicerAppWebOS/applications/2D/mediaPlayer/app.js?m='+na.m.changedDateTime_current()).then((module) => { var nmp = new module.naApp_mediaPlayer(); });">Re-arrange Layout</div>
             <div class="audioPlayerButtons">
                 <div id="btnPlayPause" class="vividButton4" buttonType="btn_audioVideo_playPause" onclick="na.musicPlayer.playpause()"></div>
                 <div id="btnMuteUnmute" class="vividButton4" buttonType="btn_audioVideo_muteUnmute" onclick="na.musicPlayer.mute()"></div>

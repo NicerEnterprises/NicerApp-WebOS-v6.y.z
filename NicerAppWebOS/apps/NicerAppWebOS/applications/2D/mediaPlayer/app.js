@@ -1,15 +1,10 @@
 export  class naApp_mediaPlayer {
   constructor (settings) {
     $('#siteContent > .vividDialogContent h1')
-      .addClass('animatedText_orangeYellow')
-      .css({
-        display : 'none'
-      });
+      .addClass('animatedText_orangeYellow');
+
     $('#siteContent > .vividDialogContent h2')
-      .addClass('animatedText_ivory')
-      .css({
-        display : 'none'
-      });
+      .addClass('animatedText_ivory');
 
     //debugger;
     setTimeout (function() {

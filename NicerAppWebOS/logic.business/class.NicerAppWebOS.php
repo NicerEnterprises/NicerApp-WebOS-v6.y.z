@@ -82,12 +82,20 @@ class NicerAppWebOS {
             $javascriptLinks = $this->getLinks ($this->javascriptFiles);
         }
 
-        $desktopDefinition = file_get_contents ($rp_domain.'/index.desktopDefinition.json');
-
         $content = $this->getContent();
+        if (array_key_exists('_desktopDefinition',$content))
+            $desktopDefinition = $content['_desktopDefinition'];
+        else
+            $desktopDefinition = file_get_contents ($rp_domain.'/index.desktopDefinition.json');
+
         $replacements = array (
             //'{$view}' => ( is_array($view) ? json_encode($view, JSON_PRETTY_PRINT) : '{}' ),
-            '{$title}' => array_key_exists('title',$content) && is_string($content['title']) && $content['title']!==''?$content['title']:execPHP($titleFile),
+            '{$title}' =>
+                array_key_exists('_title',$content)
+                && is_string($content['_title'])
+                && $content['_title']!==''
+                    ? $content['_title']
+                    : execPHP($titleFile),
             '{$domain}' => $this->domain,
             '{$cssLinks}' => $cssLinks,
             '{$javascriptLinks}' => $javascriptLinks,
@@ -391,6 +399,12 @@ class NicerAppWebOS {
                             //if ($debug) { var_dump ($rootPath.'/'.$viewsFolder); echo '<pre style="color:yellow;background:red;">'; var_dump ($files); echo '</pre>'.PHP_EOL.PHP_EOL;  }; exit();
 
                             $titleFile = $this->basePath.'/'.$viewsFolder.'/app.title.site.php';
+                            $desktopDefinitionFile = $this->basePath.'/'.$viewsFolder.'/index.desktopDefinition.json';
+                            if (file_exists($titleFile))
+                                $ret['_title'] = require_return ($titleFile);
+                            if (file_exists($desktopDefinitionFile))
+                                $ret['_desktopDefinition'] = require_return ($desktopDefinitionFile);
+
                             foreach ($files as $idx3 => $contentFile) {
                                 if (strpos($contentFile, 'app.dialog.')!==false) {
                                     $divID = str_replace('app.dialog.', '', basename($contentFile));

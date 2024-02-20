@@ -144,6 +144,9 @@ na.desktop = na.d = {
 
        cr.order = [];
        cr.order.push ('#siteTaskbar');
+       //cr.order.push ('#siteToolbarThemeEditor');
+       cr.order.push ('#siteToolbarLeft');
+       cr.order.push ('#siteToolbarRight');
        cr.order.push ('#siteContent');
 
         if (cr['#siteContent']) {

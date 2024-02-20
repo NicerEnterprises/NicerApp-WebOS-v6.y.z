@@ -33,7 +33,7 @@
                            "element" : {
                                 "conditions" : [
                                     {
-                                        "jsVar" : "na.c.d.s.visibleDivs",
+                                        "jsVar" : "na.desktop.settings.visibleDivs",
                                         "jsVarIncludes" : "#siteDateTime"
                                     },
                                     {
@@ -48,7 +48,7 @@
                            "edge" : {
                                 "conditions" : [
                                     {
-                                        "jsVar" : "na.c.d.s.visibleDivs",
+                                        "jsVar" : "na.desktop.settings.visibleDivs",
                                         "jsVarIncludes" : "#siteDateTime"
                                     },
                                     {
@@ -124,7 +124,7 @@
     }, {
         "conditions" : [
             {
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarIncludes" : "#siteStatusbar"
             }
         ],
@@ -153,17 +153,17 @@
     }, {
         "conditions" : [
             {
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarIncludes" : "#siteVideo"
             }, {
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarIncludes" : "#siteVideoSearch"
             }, {
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarExcludes" : "#siteToolbarRight"
             }, {
 
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarExcludes" : "#siteToolbarTop"
             }
         ],
@@ -174,7 +174,7 @@
                     {"element" : {
                         "conditions" : [
                             {
-                                "jsVar" : "na.c.d.s.visibleDivs",
+                                "jsVar" : "na.desktop.settings.visibleDivs",
                                 "jsVarIncludes" : "#siteDateTime"
                             },
                             {
@@ -198,7 +198,7 @@
                 "growToLimits" : {
                     "conditions" : [
                         {
-                            "jsVar" : "na.c.d.s.visibleDivs",
+                            "jsVar" : "na.desktop.settings.visibleDivs",
                             "jsVarIncludes" : "#siteDateTime"
                         },
                         {
@@ -214,7 +214,10 @@
         },
         "conditionsFailed" : {}
     }, {
-        "conditions" : [ { "jsVar" : "na.c.d.s.visibleDivs", "jsVarIncludes" : "#siteToolbarLeft" } ],
+        "conditions" : [ {
+            "jsVar" : "na.desktop.settings.visibleDivs",
+            "jsVarIncludes" : "#siteToolbarLeft"
+        } ],
         "conditionsMet" : {
            "mode" : 0,
             "#siteToolbarLeft" : {
@@ -229,7 +232,10 @@
         },
         "conditionsFailed" : {}
     }, {
-        "conditions" : [ { "jsVar" : "na.c.d.s.visibleDivs", "jsVarIncludes" : "#siteToolbarRight" } ],
+        "conditions" : [ {
+            "jsVar" : "na.desktop.settings.visibleDivs",
+            "jsVarIncludes" : "#siteToolbarRight"
+        } ],
         "conditionsMet" : {
            "mode" : 0,
             "#siteToolbarRight" : {
@@ -246,7 +252,7 @@
         },
         "conditionsFailed" : {}
     }, {
-        "conditions" : [ { "jsVar" : "na.c.d.s.visibleDivs", "jsVarIncludes" : "#siteToolbarThemeEditor" } ],
+        "conditions" : [ { "jsVar" : "na.desktop.settings.visibleDivs", "jsVarIncludes" : "#siteToolbarThemeEditor" } ],
         "conditionsMet" : {
            "mode" : 0,
             "#siteToolbarThemeEditor" : {
@@ -258,7 +264,7 @@
                 "growToLimits" : {
                     "conditions" : [
                         {
-                            "jsVar" : "na.c.d.s.visibleDivs",
+                            "jsVar" : "na.desktop.settings.visibleDivs",
                             "jsVarIncludes" : "#siteTaskbar"
                         },
                         {
@@ -276,7 +282,7 @@
     }, {
         "conditions" : [
             {
-                "jsVar" : "na.c.d.s.visibleDivs",
+                "jsVar" : "na.desktop.settings.visibleDivs",
                 "jsVarIncludes" : "#siteContent"
             }
         ],
@@ -286,7 +292,7 @@
                "snapTo" : {
                     "conditions" : [
                         {
-                        "jsVar" : "na.c.d.s.visibleDivs",
+                        "jsVar" : "na.desktop.settings.visibleDivs",
                         "jsVarIncludes" : "#siteToolbarLeft"
                         }
                     ],
@@ -295,7 +301,10 @@
                             {"element" : "#siteToolbarLeft","edge" : "right" }
                     ],
                     "conditionsFailed" : {
-                        "conditions" : [ { "jsVar" : "na.c.d.s.visibleDivs", "jsVarIncludes" : "#siteToolbarThemeEditor" } ],
+                        "conditions" : [{
+                            "jsVar" : "na.desktop.settings.visibleDivs",
+                            "jsVarIncludes" : "#siteToolbarThemeEditor"
+                        }],
                         "conditionsMet" : [
                             {"element" : "body","edge" : "top" },
                             {"element" : "#siteToolbarThemeEditor","edge" : "right" }
@@ -307,13 +316,20 @@
                     },
                 },
                 "growTo" : "max",
-                "growToLimits" : [ {"element" : "#siteTaskbar","edge" : "top" }, {
-                    "conditions" : [
-                        { "jsVar" : "na.c.d.s.visibleDivs", "jsVarIncludes" : "#siteToolbarRight" }
-                    ],
-                    "conditionsMet" : { "element" : "#siteToolbarRight", "edge" : "left" },
-                    "conditionsFailed" : {}
-                } ]
+                "growToLimits" : [
+                    { "element" : "#siteTaskbar","edge" : "top" },
+                    {
+                        "conditions" : [{
+                            "jsVar" : "na.desktop.settings.visibleDivs",
+                            "jsVarIncludes" : "#siteToolbarRight"
+                        }],
+                        "conditionsMet" : {
+                            "element" : "#siteToolbarRight",
+                            "edge" : "left"
+                        },
+                        "conditionsFailed" : {}
+                    }
+                ]
             }
         },
         "conditionsFailed" : {}
