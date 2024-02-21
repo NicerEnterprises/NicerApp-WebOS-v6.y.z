@@ -993,7 +993,9 @@ export class na3D_fileBrowser {
             };
 
             if (!cd.params.t.ld3) cd.params.t.ld3 = {};
-            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, items : [] };
+            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, folderCount : 0, items : [] };
+            cd.params.t.ld3[it.idxPath].folderCount++;
+            if (it.name.match('Sabaton')) debugger;
             cd.params.t.ld3[it.idxPath].itemCount++;
             cd.params.t.ld3[it.idxPath].items.push (it);
             //cd.params.idxPath2 = cd.params.idxPath + '/' + it1a.idx;
@@ -1441,7 +1443,6 @@ export class na3D_fileBrowser {
                                 pos.x++;
                             }
 
-                            if (it.name.match('Relaxation')) debugger;
                             if (columnField >= ld3.rowColumnCount) {
                                 pos.yField++;
                                 pos.xField = 1;
@@ -1771,7 +1772,7 @@ export class na3D_fileBrowser {
                         p.model.position.x
                         + (/*u2*/it.columnField * 1500)//+(it.columnField*m1)
                         //+ ((it.columnField-1) * 500)
-                        + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0)
+                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
                         //+ (it.level/2 * 500)
                         //+ (p.columnOffsetValue * m3c)
 
@@ -1788,7 +1789,7 @@ export class na3D_fileBrowser {
                         p.model.position.y
                         + (it.rowField /* * v2*/ * 1500)//+(it.rowField*m2)
                         //+ ((it.rowField-1) * 500)
-                        + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0)
+                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
                         //+ (it.level/2 * 500)
                         //+ (p.rowOffsetValue * m3c)
 
@@ -1817,7 +1818,7 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p1', it.filepath, it.name, it.model.position);
-                    if (it.name.match('Relaxation')) debugger;
+                    if (it.name.match('Sabaton')) debugger;
                 } else if (it.model && p) {
 
 
@@ -1825,7 +1826,7 @@ export class na3D_fileBrowser {
                         p.model.position.x
                         + (/*u2*/it.columnField * 1500)//+(it.columnField*m1)
                         //+ ((it.columnField-1) * 1500)
-                        + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0)
+                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
                         //+ (it.level * 500)
                         //+ (p.columnOffsetValue * m3c)
 
@@ -1842,7 +1843,7 @@ export class na3D_fileBrowser {
                         p.model.position.y
                         + (it.rowField /* * v2*/ * 1500)//+(it.rowField*m2)
                         //+ ((it.rowField-1) * 1500)
-                        + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0)
+                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
                         //+ (it.level * 500)
                         //+ (p.rowOffsetValue * m3c)
 
@@ -1871,6 +1872,7 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p', it.filepath, it.name, it.model.position);
+                    if (it.name.match('Relaxation')) debugger;
                 } else if (it.model) {
                     it.model.position.x = it.columnField  * 500;
                     it.model.position.y = it.rowField  * 500;
