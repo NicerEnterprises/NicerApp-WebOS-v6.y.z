@@ -247,13 +247,13 @@ export class na3D_fileBrowser {
             }, 800);
         });
         setTimeout (function() {
-                            var innerWidth = $('#siteContent .vividDialogContent').width();
-                var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
+            var innerWidth = $('#siteContent .vividDialogContent').width();
+            var innerHeight = $('#siteContent .vividDialogContent').height() - $('#header').position().top - $('#header').height();
 
-                t.renderer.setSize(innerWidth, innerHeight);
-                t.camera.aspect = innerWidth / innerHeight;
-                t.camera.updateProjectionMatrix();
-        }, 1000);
+            t.renderer.setSize(innerWidth, innerHeight);
+            t.camera.aspect = innerWidth / innerHeight;
+            t.camera.updateProjectionMatrix();
+        }, 500);
 
         t.renderer.setAnimationLoop(() => {
             //controls.update();
@@ -466,7 +466,7 @@ export class na3D_fileBrowser {
                     if (!t.started3) {
                         t.camera.position.x = 0;
                         t.camera.position.y = t.middle.y
-                        t.camera.position.z = 5000;//5 * t.middle.z ;
+                        t.camera.position.z = 10*1000;//5 * t.middle.z ;
                         t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
                         t.started3 = true;
                     }
@@ -753,20 +753,21 @@ export class na3D_fileBrowser {
                 t.orbitControls.enabled = false;
             }
         } else {
+            if (event.button !== 2)
             if (t.orbitControls.enabled) {
                 t.orbitControls.enabled = false;
-                t.flyControls.enabled = true;
                 t.flyControls.object.position.x = t.orbitControls.object.position.x;
                 t.flyControls.object.position.y = t.orbitControls.object.position.y;
                 t.flyControls.object.position.z = t.orbitControls.object.position.z;
+                t.flyControls.enabled = true;
 
             } else {
-                t.orbitControls.enabled = true;
                 t.flyControls.enabled = false;
-
                 t.orbitControls.object.position.x = t.flyControls.object.position.x;
                 t.orbitControls.object.position.y = t.flyControls.object.position.y;
                 t.orbitControls.object.position.z = t.flyControls.object.position.z;
+
+                t.orbitControls.enabled = true;
 
             }
 
@@ -993,7 +994,9 @@ export class na3D_fileBrowser {
             };
 
             if (!cd.params.t.ld3) cd.params.t.ld3 = {};
-            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, items : [] };
+            if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, folderCount : 0, items : [] };
+            if (!cd.params.t.ld3[it.idxPath].folderCount) cd.params.t.ld3[it.idxPath].folderCount = 0;
+            cd.params.t.ld3[it.idxPath].folderCount++;
             cd.params.t.ld3[it.idxPath].itemCount++;
             cd.params.t.ld3[it.idxPath].items.push (it);
             //cd.params.idxPath2 = cd.params.idxPath + '/' + it1a.idx;
@@ -1402,7 +1405,7 @@ export class na3D_fileBrowser {
                     it = t.items[ld3.items[i].idx];
 
                     ld3.rowColumnCount = Math.ceil(Math.sqrt(ld3.itemCount));
-                    ld3.cubeSideLengthCount = ld3.cslc = Math.ceil(Math.cbrt(ld3.itemCount));
+                    ld3.cubeSideLengthCount = Math.ceil(Math.cbrt(ld3.itemCount));
                     var
                     pos = { x : 1, xField : 1, y : 1, yField : 1, z : 1 },
 
@@ -1566,11 +1569,11 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? it.parent : null),
             p1 = (it.parent && it.parent.parent ? it.parent.parent : null),
-            rndMax = 500 + (it.ld3 ? (it.ld3.cubeSideLengthCount * 500) : 0);
+            rndMax = 1500 + (it.ld3 ? (it.ld3.rowColumnCount * 200) : 0);
 
             if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
-            if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax / 3);
+            if (p && !poz[p.idx]) poz[p.idx] = Math.abs(Math.random() * rndMax);
 
             //if (p && !pox[p.idx]) pox[p.idx] = it.level * p.columnOffsetValue;
             //if (p && !poy[p.idx]) poy[p.idx] = it.level * p.rowOffsetValue;
@@ -1708,7 +1711,8 @@ export class na3D_fileBrowser {
             w2 = (p?p.depthOffsetValue:it.depthOffsetValue),
             u2a = it.column,
             v2a = it.row,
-            w2a = it.depth;
+            w2a = it.depth,
+            divider = 1;
 
             /*
             if (p) {
@@ -1727,48 +1731,53 @@ export class na3D_fileBrowser {
             if (it.model) {
                 if (it.name.match(/\.mp3$/)) {
                     if (!t.showFiles) { /*delete it.model;*/} else {
-                        it.model.position.x = Math.round(
+                        it.model.position.x = Math.round( (
                             p.model.position.x
-                            + (it.column*500)
-
                             //+ (p.columnField * 500)
-                            //+ (p.columnOffsetValue * m3c)
+                            //+ (p.columnField * m3c)
+                            + ((it.column-1)*500)
+                            + (it.ld3 ? (/*(p.columnField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
                             //- (it.columnOffsetValue * 2500)
                             //- (u2 * m1a)+(it.columnOffsetValue*m1)
                             //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                             //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-                            //+ (it.level > min ? p.leftRight * rndx : 0)
-                        );
-                        it.model.position.y = Math.round(
+                            //+ (it.level > min ? rndx : 0)
+                        ) / divider);
+                        it.model.position.y = Math.round( (
                             p.model.position.y
-                            + (it.row*500)
-
                             //+ (p.rowField * 500)
-                            //+ (p.rowOffsetValue * m3c)
+                            //+ (p.rowField * m3c)
+                            + ((it.row-1)*500)
+                            + (it.ld3 ? (/*(p.rowField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
+
                             //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-                            //+ (it.level > min ? p.upDown * rndy : 0)
-                        );
-                        it.model.position.z = Math.round(
+                            //+ (it.level > min ? rndy : 0)
+                        ) / divider);
+                        it.model.position.z = Math.round( (
                             (p.model.position.z ? p.model.position.z : 0)
-                            - (it.depth*500)
+                            + (it.depth*500)
                             //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (w2a * x * ((o * n2))) : 0)
-                            //+ (it.level > min ? -1 * z - rndz : 0)
-                        );
-                        if (it.name.match(/Infected/)) debugger;
+                            + (it.level > min ? -1 * it.level/2*300 : 0)
+                        ) / divider);
                         /*it.model2.position.x = it.model.position.x + 30;
                         it.model2.position.y = it.model.position.y + 30;
                         it.model2.position.z = it.model.position.z + 30;*/
+                        if (it.name.match('Club Remixes')) debugger;
                     }
 
                 } else if (it.model && p && p1) {
 
 
-                    it.model.position.x = Math.round(
+                    it.model.position.x = Math.round( (
                         p.model.position.x
-                        //+ (/*u2*/it.columnOffsetValue * m3c)//+(it.columnField*m1)
-                        + (p.columnField * 500)
+                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
+                        + ((it.columnField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
+                        //+ (it.level/2 * 500)
                         //+ (p.columnOffsetValue * m3c)
 
                         //+ rndx
@@ -1776,31 +1785,34 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        //+ (it.level > min ? p.columnOffsetValue * rndx : 0)
+                        + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
-                    );
-                    it.model.position.y = Math.round(
+                    ) / divider);
+                    it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (-1 * p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
-                        //+ (p.rowField * 500)
-                        + (-1 * p.rowOffsetValue * 200)
+                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
+                        + ((it.rowField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
+                        //+ (it.level/2 * 500)
+                        //+ (p.rowOffsetValue * m3c)
 
                         //+ rndy
                         //+ (p.rowOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        //+ (it.level > min ? p.rowOffsetValue * rndy : 0)
+                        + (it.level > min ? rndy : 0)
 
                         //+ (it.rowField * 500)
-                    );
+                    ) / divider);
                     //it.model.position.x = p.model.position.x + it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
                     //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
-                    it.model.position.z = p.model.position.z + (-1 * it.level * p.depth * 500); //(p.backForth * rndz);// - rndz;
-                    if (it.name.match('Early')) debugger;
+                    it.model.position.z = p.model.position.z + (p.backForth *  500) / divider;// - rndz;
                     /*
                         Math.round(
                             (p.model.position.z ? p.model.position.z : 0)
@@ -1812,44 +1824,53 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p1', it.filepath, it.name, it.model.position);
+                    if (it.name.match('Relaxation')) debugger;
                 } else if (it.model && p) {
 
 
-                    it.model.position.x = Math.round(
+                    it.model.position.x = Math.round( (
                         p.model.position.x
-                        //+ (/*u2*/it.columnOffsetValue * 500)//+(it.columnField*m1)
-                        + (p.columnOffsetValue * 500)
-                        + (-1 * it.columnField * 500)
+                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
+                        + ((it.columnField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
+                        //+ (it.level * 500)
+                        //+ (p.columnOffsetValue * m3c)
 
                         //+ rndx
                         //+ (p.columnOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? p.columnOffsetValue * rndx : 0)
+                        + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
-                    );
-                    it.model.position.y = Math.round(
+                    ) / divider);
+                    it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (-1 * it.rowField /* * v2*/ * 500)//+(it.rowField*m2)
-                        //+ (p.rowField * 500)
-                        + (p.rowOffsetValue * 500)
+                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
+                        + ((it.rowField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
+                        //+ (it.level * 500)
+                        //+ (p.rowOffsetValue * m3c)
 
                         //+ rndy
                         //+ (p.rowOffsetValue * (it.level-2) * 500)
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        //+ (it.level > min ? p.rowOffsetValue * rndy : 0)
+                        + (it.level > min ? rndy : 0)
 
                         //+ (it.rowField * 500)
-                    );
+                    ) / divider);
                     //it.model.position.x = p.model.position.x + it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
                     //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
                     //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
-                    it.model.position.z = p.model.position.z + (-1 * it.level * p.depth * 500);//(p.backForth * rndz);
+                    it.model.position.z = p.model.position.z + (p.backForth * 500) / divider;
                     /*
                         Math.round(
                             (p.model.position.z ? p.model.position.z : 0)
@@ -1861,7 +1882,7 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p', it.filepath, it.name, it.model.position);
-                    if (it.name.match('1970s') || it.name.match('Early')) debugger;
+                    if (it.name.match('Relaxation')) debugger;
                 } else if (it.model) {
                     it.model.position.x = it.columnField  * 500;
                     it.model.position.y = it.rowField  * 500;

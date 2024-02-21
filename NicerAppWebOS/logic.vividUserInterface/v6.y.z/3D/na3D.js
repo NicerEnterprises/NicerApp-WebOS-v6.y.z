@@ -753,6 +753,7 @@ export class na3D_fileBrowser {
                 t.orbitControls.enabled = false;
             }
         } else {
+            if (event.button !== 2)
             if (t.orbitControls.enabled) {
                 t.orbitControls.enabled = false;
                 t.flyControls.object.position.x = t.orbitControls.object.position.x;
@@ -994,8 +995,8 @@ export class na3D_fileBrowser {
 
             if (!cd.params.t.ld3) cd.params.t.ld3 = {};
             if (!cd.params.t.ld3[it.idxPath]) cd.params.t.ld3[it.idxPath] = { itemCount : 0, folderCount : 0, items : [] };
+            if (!cd.params.t.ld3[it.idxPath].folderCount) cd.params.t.ld3[it.idxPath].folderCount = 0;
             cd.params.t.ld3[it.idxPath].folderCount++;
-            if (it.name.match('Sabaton')) debugger;
             cd.params.t.ld3[it.idxPath].itemCount++;
             cd.params.t.ld3[it.idxPath].items.push (it);
             //cd.params.idxPath2 = cd.params.idxPath + '/' + it1a.idx;
@@ -1568,7 +1569,7 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? it.parent : null),
             p1 = (it.parent && it.parent.parent ? it.parent.parent : null),
-            rndMax = 500 + (it.ld3 ? (it.ld3.rowColumnCount * 100) : 0);
+            rndMax = 1500 + (it.ld3 ? (it.ld3.rowColumnCount * 200) : 0);
 
             if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
@@ -1735,7 +1736,7 @@ export class na3D_fileBrowser {
                             //+ (p.columnField * 500)
                             //+ (p.columnField * m3c)
                             + ((it.column-1)*500)
-                            + (it.ld3 ? (/*(p.columnField-1) * */it.ld3.cubeSideLengthCount * 500) : 0)
+                            + (it.ld3 ? (/*(p.columnField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
                             //- (it.columnOffsetValue * 2500)
                             //- (u2 * m1a)+(it.columnOffsetValue*m1)
                             //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
@@ -1747,7 +1748,7 @@ export class na3D_fileBrowser {
                             //+ (p.rowField * 500)
                             //+ (p.rowField * m3c)
                             + ((it.row-1)*500)
-                            + (it.ld3 ? (/*(p.rowField-1) * */it.ld3.cubeSideLengthCount * 500) : 0)
+                            + (it.ld3 ? (/*(p.rowField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
 
                             //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                             //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
@@ -1763,6 +1764,7 @@ export class na3D_fileBrowser {
                         /*it.model2.position.x = it.model.position.x + 30;
                         it.model2.position.y = it.model.position.y + 30;
                         it.model2.position.z = it.model.position.z + 30;*/
+                        if (it.name.match('Club Remixes')) debugger;
                     }
 
                 } else if (it.model && p && p1) {
@@ -1770,9 +1772,11 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (/*u2*/it.columnField * 1500)//+(it.columnField*m1)
-                        //+ ((it.columnField-1) * 500)
-                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
+                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
+                        + ((it.columnField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
                         //+ (it.level/2 * 500)
                         //+ (p.columnOffsetValue * m3c)
 
@@ -1781,15 +1785,17 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? it.columnField * rndx : 0)
+                        + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (it.rowField /* * v2*/ * 1500)//+(it.rowField*m2)
-                        //+ ((it.rowField-1) * 500)
-                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
+                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
+                        + ((it.rowField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
                         //+ (it.level/2 * 500)
                         //+ (p.rowOffsetValue * m3c)
 
@@ -1798,7 +1804,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? it.rowField * rndy : 0)
+                        + (it.level > min ? rndy : 0)
 
                         //+ (it.rowField * 500)
                     ) / divider);
@@ -1818,15 +1824,17 @@ export class na3D_fileBrowser {
                     it.model.position.z = p.model.position.z + (it.depth * 1000);
                     */
                     console.log ('t555p1', it.filepath, it.name, it.model.position);
-                    if (it.name.match('Sabaton')) debugger;
+                    if (it.name.match('Relaxation')) debugger;
                 } else if (it.model && p) {
 
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (/*u2*/it.columnField * 1500)//+(it.columnField*m1)
-                        //+ ((it.columnField-1) * 1500)
-                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
+                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
+                        + ((it.columnField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
                         //+ (it.level * 500)
                         //+ (p.columnOffsetValue * m3c)
 
@@ -1835,15 +1843,17 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
                         //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
 
-                        + (it.level > min ? it.columnField * rndx : 0)
+                        + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (it.rowField /* * v2*/ * 1500)//+(it.rowField*m2)
-                        //+ ((it.rowField-1) * 1500)
-                        + (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 500) : 0)
+                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
+                        + ((it.rowField-1) * 200)
+
+                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
+
                         //+ (it.level * 500)
                         //+ (p.rowOffsetValue * m3c)
 
@@ -1852,7 +1862,7 @@ export class na3D_fileBrowser {
                         //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
                         //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
 
-                        + (it.level > min ? it.rowField * rndy : 0)
+                        + (it.level > min ? rndy : 0)
 
                         //+ (it.rowField * 500)
                     ) / divider);
