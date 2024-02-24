@@ -99,7 +99,7 @@ na.desktop = na.d = {
             callbacks : [],
             callbacksProgress : [],
             cmds : [],
-            visibleDivs : [ '#siteContent', '#siteStatusbar' ]
+            visibleDivs : [ '#siteContent', '#siteTaskbar' ]
         }, settings);
 
         $(window).resize(t.resize);
@@ -145,8 +145,8 @@ na.desktop = na.d = {
        cr.order = [];
        cr.order.push ('#siteTaskbar');
        //cr.order.push ('#siteToolbarThemeEditor');
-       cr.order.push ('#siteToolbarLeft');
-       cr.order.push ('#siteToolbarRight');
+       if (na.d.s.visibleDivs.includes('#siteToolbarLeft')) cr.order.push('#siteToolbarLeft');
+       if (na.d.s.visibleDivs.includes('#siteToolbarRight')) cr.order.push('#siteToolbarRight');
        cr.order.push ('#siteContent');
 
         if (cr['#siteContent']) {

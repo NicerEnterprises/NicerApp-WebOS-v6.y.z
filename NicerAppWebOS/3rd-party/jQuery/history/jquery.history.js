@@ -1897,7 +1897,7 @@
 					History.expectedStateId = newState.id;
 
 					// Push the newState
-					history.pushState(newState.id,newState.title,newState.url);
+					History.pushState(newState.id,newState.title,newState.url);
 
 					// Fire HTML5 Event
 					History.Adapter.trigger(window,'popstate');

@@ -880,12 +880,15 @@ export class na3D_fileBrowser {
     
     onresize (t, levels) {
         if (!t) t = this;
+        debugger;
+        t.onresize_do (t, levels);
+        /*
         //debugger;
         na.m.waitForCondition ('waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
             function () { t.onresize_do (t, levels); }, 
             50
-        );
+        );*/
     }
 
     

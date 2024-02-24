@@ -46,9 +46,9 @@ class vividUserInterface_2D_dialog {
         if (t.borderVideo) {
             t.borderVideo.onloadstart = function (evt) {
                 if (t.canvas) {
-                    t.canvasInterval = window.setInterval(() => {
+                    //t.canvasInterval = window.setInterval(() => {
                         t.drawImage (t);
-                    }, 1000 / 30);
+                    //}, 1000 / 30);
                     t.borderVideo.play();
                     t.backgroundVideo.play();
                 }
@@ -59,6 +59,7 @@ class vividUserInterface_2D_dialog {
     }
 
     drawImage (t) {
+        requestAnimationFrame (function(p) { t.drawImage(t) } );
         const ctx = t.canvas.getContext('2d');
         ctx.canvas.width = $('#siteTaskbar').width();
         ctx.canvas.height = $('#siteTaskbar').height();

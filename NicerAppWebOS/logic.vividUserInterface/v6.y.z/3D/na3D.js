@@ -281,6 +281,7 @@ export class na3D_fileBrowser {
         t.flyControls.rollSpeed = Math.PI / 24;
         t.flyControls.autoMove = false;
 
+        /*
         t.fpControls = new FirstPersonControls (t.camera, t.renderer.domElement);
         t.fpControls.enabled = false;
         t.fpControls.movementSpeed = 3000;
@@ -288,6 +289,7 @@ export class na3D_fileBrowser {
         t.fpControls.activeLook = false;
         t.fpControls.mouseDragOn = false;
         t.fpControls.moveForward = false;
+        */
         setTimeout(function() {
             t.initializeItems (t);
             //t.initializeFolderList (t, t.data);
@@ -299,7 +301,7 @@ export class na3D_fileBrowser {
                 return t.items.length > 2 && t.winners
             }, function() {
                 t.animate(t, null);
-            }, 2)
+            }, 20)
         }, 25);
     }
     /*
@@ -315,7 +317,10 @@ export class na3D_fileBrowser {
 
 
     animate(t, p) {
-        requestAnimationFrame( function(p) { t.animate (t,p) });
+        setTimeout(function() {
+            requestAnimationFrame( function(p) { t.animate (t,p) });
+        }, 1000); // 1000 = 100% CPU usage, 10 = 850% CPU usage!
+
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
 
             for (var i=0; i<t.s2.length; i++) {
@@ -329,24 +334,7 @@ export class na3D_fileBrowser {
 
             //t.flyControls.enabled = false;
 
-            //if (t.debug) console.log ('t.lookClock', t.lookClock);
-            if (t.lookClock === -2) {
-                t.lookClock = Date.now();
-            }
-            if (t.lookClock > 0) {
-                //debugger;
-                var delta2 = Date.now() - 1000;
-                if (t.debug) console.log ('animate(): delta2', delta2 > t.lookClock);
-            } else {
-                var delta2 = 0;
-            }
             const delta = t.clock.getDelta();
-            /*
-            var dbg = {
-                    't.cameraControls.deltaX' : t.cameraControls.deltaX,
-                    't.cameraControls.deltaY' : t.cameraControls.deltaY
-                };
-            if (t.debug) console.log (dbg);*/
 
             if (false) {
                 var x = t.cameraControls._activePointers;
@@ -360,141 +348,24 @@ export class na3D_fileBrowser {
                 if (t.debug) console.log (dbg);
             }
 
-            /*
-            if (t.animPlaying) {
-                t.fpControls.enabled = false;
-                t.cameraControls.enabled = true;
-            } else {
-                t.fpControls.enabled = true;
-                t.cameraControls.enabled = false;
-            }*/
-
-            /*
-            if (delta2 > t.lookClock) {
-                t.orbitControls.enabled = false;
-                t.flyControls.enabled = true;
-            } else {
-                t.orbitControls.enabled = true;
-                t.flyControls.enabled = false;
-            };*/
-
-/*
-            var threshold = 50;
-            if (t.evt && t.evt2 && t.evt.buttons===1) {
-                // left or middle mouse button(s) held down
-                if (
-                    //!t.cameraControls._isUserControllingTruck
-                    (
-                        t.evt.clientX - t.evt2.clientX < -1 * threshold
-                        || t.evt.clientX - t.evt2.clientX > threshold
-                        || t.evt.clientY - t.evt2.clientY < -1 * threshold
-                        || t.evt.clientY - t.evt2.clientY > threshold
-                    )
-                ) {
-                    // mouse pointer falls outside threshold from when first clicked
-
-                    if (t.lookClock<0) {
-                        t.lookClock = -2;
-                    }
-                } else {
-                        delete t.evt2;
-                        t.flyControls.enabled = false;
-                        t.orbitControls.enabled = true;
-                }
-            } else if (t.evt && t.evt.buttons===2) {
-                // right mouse button held down
-                t.flyControls.enabled = false;
-                t.orbitControls.enabled = true;
-            }
-*/
-
-
-
-/*
-            if (t.cameraControls.enabled) {
-                /*t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
-                t.cameraControls.enabled = true;
-                t.cameraControls.setLookAt (
-                    t.cameraOrigin.x,
-                    t.cameraOrigin.y,
-                    t.cameraOrigin.z,
-                    t.middle.x,
-                    t.middle.y,
-                    t.middle.z,
-                    false
-                );* /
-                var tar = t.cameraControls._targetEnd.clone();
-                tar.set(0,0,-10).applyQuaternion(t.camera.quaternion).add(t.camera.position);
-                t.cameraControls.setLookAt (
-                    t.camera.position.x,
-                    t.camera.position.y,
-                    t.camera.position.z,
-                    tar.x,
-                    tar.y,
-                    tar.z,
-                    false
-                );
-                t.cameraControls.update (delta, true);
-            } else {
-                /*t.fpControls.object.position.x = t.middle.x;
-                t.fpControls.object.position.y = t.middle.y;
-                t.fpControls.object.position.z = t.middle.z;* /
-                t.fpControls.update(delta);
-            }*/
 
             if (t.cameraOrigin && t.cameraOrigin.x && t.middle && t.middle.x) {
-                if (t.cameraControls.enabled && t.cameraOrigin && t.cameraOrigin.x) {
-                    /*
-                    t.cameraControls.setLookAt (
-                        t.cameraOrigin.x,
-                        t.cameraOrigin.y,
-                        t.cameraOrigin.z,
-                        t.middle.x,
-                        t.middle.y,
-                        t.middle.z,
-                        false
-                    );*/
-                }
-
                 if (t.middle && t.middle.x) {
-                    /*t.orbitControls.center =  new THREE.Vector3(
-                        t.middle.x,
-                        t.middle.y,
-                        t.middle.z
-                    );*/
-
                     if (!t.started3) {
-                        t.camera.position.x = 0;
-                        t.camera.position.y = t.middle.y
-                        t.camera.position.z = 10*1000;//5 * t.middle.z ;
+                        t.camera.position.x = -10*1000;//t.middle.x;
+                        t.camera.position.y = 2*t.middle.y;
+                        t.camera.position.z = -10*1000;//5 * t.middle.z ;
                         t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
+                        t.orbitControls.center =  new THREE.Vector3(
+                            t.middle.x,
+                            t.winners.north.y,
+                            t.winners.north.z
+                        );
                         t.started3 = true;
                     }
                 };
             }
 
-            /*
-            if (t.middle && t.middle.x) {
-                t.camera.position.x = t.middle.x;
-                t.camera.position.y = t.middle.y;
-                t.camera.position.z = t.middle.z;
-                /*t.camera.setViewOffset(
-                    $('#siteContent > .vividDialogContent').width(),
-                    $('#siteContent > .vividDialogContent').height(),
-                    t.middle.x, t.middle.y, 1920, 800
-                );* /
-            }
-
-            if (t.cameraOrigin && t.cameraOrigin.x) {
-                t.camera.position.x = t.cameraOrigin.x;
-                t.camera.position.y = t.cameraOrigin.y;
-                t.camera.position.z = t.cameraOrigin.z;
-                /*t.camera.setViewOffset(
-                    $('#siteContent > .vividDialogContent').width(),
-                    $('#siteContent > .vividDialogContent').height(),
-                    t.middle.x, t.middle.y, 1920, 800
-                );* /
-            }*/
             if (t.orbitControls.enabled/* && t.middle && t.middle.x*/) {
                 //t.orbitControls.target.set(t.middle.x, t.middle.y, t.middle.z);
                 t.orbitControls.update(delta);
@@ -503,10 +374,6 @@ export class na3D_fileBrowser {
                 //t.flyControls.object.set (t.middle.x, t.middle.y, t.middle.z);
                 t.flyControls.update(delta);
             };
-            if (t.fpControls.enabled) {
-                t.fpControls.update(delta);
-            };
-
 
             t.camera.updateProjectionMatrix();
             t.camera.updateWorldMatrix (true, false);
@@ -723,7 +590,6 @@ export class na3D_fileBrowser {
         t.mouse.clientX = event.clientX;
         t.mouse.clientY = event.clientY;
         t.mouse.event = event;
-        t.fpControls.activeLook = event.buttons === 1;
 
         var rect = t.renderer.domElement.getBoundingClientRect();
         t.mouse.x = ( ( event.clientX - rect.left ) / ( rect.right - rect.left ) ) * 2 - 1;
@@ -738,43 +604,28 @@ export class na3D_fileBrowser {
     }
 
     onPointerUp( event, t ) {
-        if (false) {
-            if (t.flyControls.enabled) {
-                t.flyControls.enabled = false;
-                t.orbitControls.enabled = true;
-                t.orbitControls.object.position.x = t.flyControls.object.position.x;
-                t.orbitControls.object.position.y = t.flyControls.object.position.y;
-                t.orbitControls.object.position.z = t.flyControls.object.position.z;
-            } else {
-                t.flyControls.enabled = true;
-                t.flyControls.object.position.x = t.orbitControls.object.position.x;
-                t.flyControls.object.position.y = t.orbitControls.object.position.y;
-                t.flyControls.object.position.z = t.orbitControls.object.position.z;
-                t.orbitControls.enabled = false;
-            }
+        const intersects = t.raycaster.intersectObjects (t.s2);
+        var intersectsItem = (intersects[0] && intersects[0].object.type!=='Line');
+        if (!intersectsItem && (event.button === 0 || event.button === 2))
+        if (t.orbitControls.enabled) {
+            t.orbitControls.enabled = false;
+  /*          debugger;
+            t.flyControls.object.position.x = t.orbitControls.object.position.x;
+            t.flyControls.object.position.y = t.orbitControls.object.position.y;
+            t.flyControls.object.position.z = t.orbitControls.object.position.z;*/
+            t.flyControls.enabled = true;
+
         } else {
-            if (event.button !== 2)
-            if (t.orbitControls.enabled) {
-                t.orbitControls.enabled = false;
-                t.flyControls.object.position.x = t.orbitControls.object.position.x;
-                t.flyControls.object.position.y = t.orbitControls.object.position.y;
-                t.flyControls.object.position.z = t.orbitControls.object.position.z;
-                t.flyControls.enabled = true;
-
-            } else {
-                t.flyControls.enabled = false;
-                t.orbitControls.object.position.x = t.flyControls.object.position.x;
-                t.orbitControls.object.position.y = t.flyControls.object.position.y;
-                t.orbitControls.object.position.z = t.flyControls.object.position.z;
-
-                t.orbitControls.enabled = true;
-
-            }
-
+            t.flyControls.enabled = false;
+            /*
+            debugger;
+            t.orbitControls.object.position.x = t.flyControls.object.position.x;
+            t.orbitControls.object.position.y = t.flyControls.object.position.y;
+            t.orbitControls.object.position.z = t.flyControls.object.position.z;
+*/
+            t.orbitControls.enabled = true;
 
         }
-
-        //t.fpControls.activeLook = false;
     }
 
 
@@ -1319,11 +1170,13 @@ export class na3D_fileBrowser {
    onresize (t, levels) {
         if (!t) t = this;
         //debugger;
+        t.onresize_do (t, levels);
+       /*
         na.m.waitForCondition ('waiting for other onresize commands to finish',
             function () { return t.resizing === false; },
             function () { t.onresize_do (t, levels); },
             50
-        );
+        );*/
     }
 
 
@@ -1569,7 +1422,7 @@ export class na3D_fileBrowser {
             it = t.items[i],
             p = (it.parent ? it.parent : null),
             p1 = (it.parent && it.parent.parent ? it.parent.parent : null),
-            rndMax = 1500 + (it.ld3 ? (it.ld3.rowColumnCount * 200) : 0);
+            rndMax = 500 + (it.ld3 ? (it.ld3.rowColumnCount * 300) : 0);
 
             if (p && !pox[p.idx]) pox[p.idx] = Math.abs(Math.random() * rndMax);
             if (p && !poy[p.idx]) poy[p.idx] = Math.abs(Math.random() * rndMax);
@@ -1733,38 +1586,23 @@ export class na3D_fileBrowser {
                     if (!t.showFiles) { /*delete it.model;*/} else {
                         it.model.position.x = Math.round( (
                             p.model.position.x
-                            //+ (p.columnField * 500)
-                            //+ (p.columnField * m3c)
+                            + (p.columnOffsetValue * 3500)
                             + ((it.column-1)*500)
-                            + (it.ld3 ? (/*(p.columnField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
-                            //- (it.columnOffsetValue * 2500)
-                            //- (u2 * m1a)+(it.columnOffsetValue*m1)
-                            //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
-                            //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-                            //+ (it.level > min ? rndx : 0)
+                            + (p.ld3 && it.ld3 ? (p.columnOffsetValue* it.ld3.cubeSideLengthCount * 500) : 0)
+                            //+ (it.ld3 ? (it.columnOffsetValue * it.ld3.cubeSideLengthCount * 500) : 0)
                         ) / divider);
                         it.model.position.y = Math.round( (
                             p.model.position.y
-                            //+ (p.rowField * 500)
-                            //+ (p.rowField * m3c)
+                            + (p.rowOffsetValue * 3500)
                             + ((it.row-1)*500)
-                            + (it.ld3 ? (/*(p.rowField-1) * */it.ld3.cubeSideLengthCount * 50) : 0)
-
-                            //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
-                            //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-                            //+ (it.level > min ? rndy : 0)
+                            + (p.ld3 && it.ld3 ? (p.rowOffsetValue * it.ld3.cubeSideLengthCount * 500) : 0)
+                            //+ (it.ld3 ? (it.columnOffsetValue * it.ld3.cubeSideLengthCount * 500) : 0)
                         ) / divider);
                         it.model.position.z = Math.round( (
                             (p.model.position.z ? p.model.position.z : 0)
                             + (it.depth*500)
-                            //+ (it.level > min ? (w2 * x * ((o * n1))) : 0)
-                            //+ (it.level > min ? (w2a * x * ((o * n2))) : 0)
-                            + (it.level > min ? -1 * it.level/2*300 : 0)
+                            + (it.level > min ? -1 * p.depthOffsetValue * it.level*1000 : 0)
                         ) / divider);
-                        /*it.model2.position.x = it.model.position.x + 30;
-                        it.model2.position.y = it.model.position.y + 30;
-                        it.model2.position.z = it.model.position.z + 30;*/
-                        if (it.name.match('Club Remixes')) debugger;
                     }
 
                 } else if (it.model && p && p1) {
@@ -1772,117 +1610,47 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
-                        + ((it.columnField-1) * 200)
-
-                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
-
-                        //+ (it.level/2 * 500)
-                        //+ (p.columnOffsetValue * m3c)
-
-                        //+ rndx
-                        //+ (p.columnOffsetValue * (it.level-2) * 500)
-                        //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
-                        //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-
+                        + (p.columnOffsetValue * 500)
+                        + (p.column * p.ld3.cubeSideLengthCount * 400)
+                        + (it.ld3.cubeSideLengthCount * 500)
+                        + ((it.columnOffsetValue-1) * 500)
                         + (it.level > min ? rndx : 0)
-
-                        //+ (it.columnField * 500)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
-                        + ((it.rowField-1) * 200)
-
-                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
-
-                        //+ (it.level/2 * 500)
-                        //+ (p.rowOffsetValue * m3c)
-
-                        //+ rndy
-                        //+ (p.rowOffsetValue * (it.level-2) * 500)
-                        //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
-                        //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-
+                        + (p.rowOffsetValue * 500)
+                        + (p.row * p.ld3.cubeSideLengthCount * 400)
+                        + (it.ld3.cubeSideLengthCount * 500)
+                        + ((it.rowOffsetValue-1) * 500)
                         + (it.level > min ? rndy : 0)
-
-                        //+ (it.rowField * 500)
                     ) / divider);
-                    //it.model.position.x = p.model.position.x + it.columnOffsetValue * 500;
-                    //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
-                    //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
-                    //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
-                    it.model.position.z = p.model.position.z + (p.backForth *  500) / divider;// - rndz;
-                    /*
-                        Math.round(
-                            (p.model.position.z ? p.model.position.z : 0)
-                            + (w2 * m3b)+(it.depth*m2)
-                            + (it.level > min ? (w2 * x * ((o * n1))) : 0)
-                            //+ (it.level > min ? (w2 * x * ((o * n2))) : 0)
-                            + (it.level > min ? -1 * z - rndz : 0)
-                        );
-                    it.model.position.z = p.model.position.z + (it.depth * 1000);
-                    */
+                    it.model.position.z = p.model.position.z + (p.backForth *  500) / divider;
                     console.log ('t555p1', it.filepath, it.name, it.model.position);
-                    if (it.name.match('Relaxation')) debugger;
+                    //if (it.name.match('Relaxation')) debugger;
                 } else if (it.model && p) {
 
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (/*u2*/p.columnOffsetValue * 200)//+(it.columnField*m1)
-                        + ((it.columnField-1) * 200)
-
-                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
-
-                        //+ (it.level * 500)
-                        //+ (p.columnOffsetValue * m3c)
-
-                        //+ rndx
-                        //+ (p.columnOffsetValue * (it.level-2) * 500)
-                        //+ (it.level > min ? (u2 * v * ((o * n1))) : 0)
-                        //+ (it.level > min ? (u2 * v * ((o * n2))) : 0)
-
+                        + (p.columnOffsetValue * 500)
+                        + (p.ld3?p.column*p.ld3.cubeSideLengthCount * 400:0)
+                        + (it.ld3.cubeSideLengthCount * 400)
+                        + ((it.columnOffsetValue-1) * 500)
                         + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue /* * v2*/ * 200)//+(it.rowField*m2)
-                        + ((it.rowField-1) * 200)
-
-                        //+ (p.ld3 ? (Math.sqrt(p.ld3.folderCount) * 200) : 0)
-
-                        //+ (it.level * 500)
-                        //+ (p.rowOffsetValue * m3c)
-
-                        //+ rndy
-                        //+ (p.rowOffsetValue * (it.level-2) * 500)
-                        //+ (it.level > min ? (v2 * x * ((o * n1))) : 0)
-                        //+ (it.level > min ? (v2 * x * ((o * n2))) : 0)
-
+                        + (p.rowOffsetValue * 500)
+                        + (p.ld3?p.row*p.ld3.cubeSideLengthCount * 300:0)
+                        + (it.ld3.cubeSideLengthCount * 300)
+                        + ((it.rowOffsetValue-1) * 500)
                         + (it.level > min ? rndy : 0)
-
-                        //+ (it.rowField * 500)
                     ) / divider);
-                    //it.model.position.x = p.model.position.x + it.columnOffsetValue * 500;
-                    //it.model.position.y = p.model.position.y + it.rowOffsetValue * 500;
-                    //it.model.position.x = p.model.position.x + /*(it.leftRight * 400) +*/ it.columnOffsetValue * 500;
-                    //it.model.position.y = p.model.position.y + /*(it.upDown * 400) +*/ it.rowOffsetValue * 500;
                     it.model.position.z = p.model.position.z + (p.backForth * 500) / divider;
-                    /*
-                        Math.round(
-                            (p.model.position.z ? p.model.position.z : 0)
-                            + (w2 * m3b)+(it.depth*m2)
-                            + (it.level > min ? (w2 * x * ((o * n1))) : 0)
-                            //+ (it.level > min ? (w2 * x * ((o * n2))) : 0)
-                            + (it.level > min ? -1 * z - rndz : 0)
-                        );
-                    it.model.position.z = p.model.position.z + (it.depth * 1000);
-                    */
                     console.log ('t555p', it.filepath, it.name, it.model.position);
-                    if (it.name.match('Relaxation')) debugger;
+                    //if (it.name.match('Relaxation')) debugger;
                 } else if (it.model) {
                     it.model.position.x = it.columnField  * 500;
                     it.model.position.y = it.rowField  * 500;
@@ -2249,13 +2017,13 @@ export class na3D_fileBrowser {
             t.points3 = t.curve3.getPoints(numPoints);
 
 
-            if (false && !t.dragndrop) {
+            if (!t.dragndrop) {
                 t.orbitControls.center =  new THREE.Vector3(
                     t.middle.x,
                     t.middle.y,
                     t.middle.z
                 );
-                t.cameraControls._target.copy (t.middle);
+                //t.cameraControls._target.copy (t.middle);
             }
 
     /*

@@ -49,6 +49,7 @@ na.site = {
         var c = t.components;
 
         na.background.initialize({naSite : t});
+        na.backgrounds = na.background;
 
 
 
@@ -73,7 +74,7 @@ na.site = {
             switch (el.id) {
                 case 'siteTaskbar' : c.taskbar = d; break;
                 case 'siteSettingsMenu' : c.settingsMenu = d; break;
-                default : c.dialogs['#'+el.id] = d; na.d.s.visibleDivs.push ('#'+el.id); break;
+                default : if ($('#'+el.id+' > .vividDialogContent').html().trim()!=='{$div_'+el.id+'}') { c.dialogs['#'+el.id] = d;  }break;
             }
         });
         $('#btnSettings').hover (function() {
@@ -210,6 +211,7 @@ na.site = {
 
    // debugger;
         if (!url.match(/\/view\//) && url.indexOf('/')===0) {
+            debugger;
             History.pushState (null, '', document.location.origin+url);
         } else if (url.indexOf('/')===-1) {
             History.pushState (null, '', document.location.origin+'/view/'+url);
@@ -223,6 +225,7 @@ na.site = {
 		c = na.site.settings,
 
         lcc = c.loadContent.current;
+        debugger;
 
         if (!lcc.ec) {
             var
@@ -267,6 +270,7 @@ na.site = {
 
         na.m.log (200, 'na.s.c.stateChange(2) : na.site.settings.current.url='+state.url);
         na.site.settings.current.url = state.url;
+        debugger;
         na.site.loadContent_getContent (ec, url1); // also displays the content
 	},
 
