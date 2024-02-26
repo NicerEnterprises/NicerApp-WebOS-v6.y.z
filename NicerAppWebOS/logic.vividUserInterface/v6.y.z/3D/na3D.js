@@ -323,7 +323,7 @@ export class na3D_fileBrowser {
 
         const delta = t.clock.getDelta();
         totaldelta+=delta;
-        if(totaldelta<1/30)return; //change 10 to other values to speedup
+        if(totaldelta<1/10)return; //change 10 to other values to speedup
         totaldelta=0;
         //}, 1000); // 1000 = 100% CPU usage, 10 = 850% CPU usage!
 
@@ -375,10 +375,16 @@ export class na3D_fileBrowser {
             if (t.orbitControls.enabled/* && t.middle && t.middle.x*/) {
                 //t.orbitControls.target.set(t.middle.x, t.middle.y, t.middle.z);
                 t.orbitControls.update(delta);
+                t.flyControls.object.position.x = t.orbitControls.object.position.x;
+                t.flyControls.object.position.y = t.orbitControls.object.position.y;
+                t.flyControls.object.position.z = t.orbitControls.object.position.z;
             };
             if (t.flyControls.enabled && t.middle && t.middle.x) {
                 //t.flyControls.object.set (t.middle.x, t.middle.y, t.middle.z);
                 t.flyControls.update(delta);
+                t.orbitControls.object.position.x = t.flyControls.object.position.x;
+                t.orbitControls.object.position.y = t.flyControls.object.position.y;
+                t.orbitControls.object.position.z = t.flyControls.object.position.z;
             };
 
             t.camera.updateProjectionMatrix();

@@ -43,7 +43,7 @@ class vividUserInterface_2D_dialog {
     }
 
     init_borderVideo (t) {
-        return false;
+        //return false;
         if (t.borderVideo) {
             t.backgroundVideo.onloadstart = function (evt) {
                 if (t.canvas) {

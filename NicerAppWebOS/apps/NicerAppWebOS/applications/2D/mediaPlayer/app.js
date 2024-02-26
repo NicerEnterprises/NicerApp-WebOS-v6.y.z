@@ -149,5 +149,142 @@ na.mediaPlayer = {
     $('.audioVolumeBar_setting').css ({ width : evt.offsetX });
   },
 
+	playpause : function () {
+		if (na.mediaPlayer.settings.stopped || na.mediaPlayer.settings.paused) {
+			$('#audioTag')[0].play();
+			na.mediaPlayer.settings.paused = false;
+			na.mediaPlayer.settings.stopped = false;
+            //$('#from_play_to_pause')[0].beginElement();
+            //$('#btnPlayPause').addClass('selected');
+            //na.ui.vb.hoverOver(na.ui.vb.settings.buttons['btnPlayPause']);
+		} else {
+			$('#audioTag')[0].pause();
+			na.mediaPlayer.settings.paused = true;
+			na.mediaPlayer.settings.stopped = false;
+            //$('#from_pause_to_play')[0].beginElement();
+            //$('#btnPlayPause').removeClass('selected');
+            //na.ui.vb.hoverOut(na.ui.vb.settings.buttons['btnPlayPause']);
+		}
+	},
+
+	stop : function () {
+    na.ui.vividButton.onclick({currentTarget:$('#btnPlayPause')[0]});
+    $('#btnPlayPause').addClass('disabled');
+		$('#audioTag')[0].pause();
+		na.mediaPlayer.settings.stopped = true;
+
+        $('.mp3').each (function (index,element) {
+			if (this.id=='') return false;
+		});
+		$('#mp3descText').fadeOut (1000);
+		setTimeout (function () {
+			$('#siteIntroText').fadeIn (1000);
+		}, 1010);
+	},
+
+  next : function () {
+    if (na.mediaPlayer.settings.playingIndex===false) {
+      return false;
+    } else if (na.mediaPlayer.settings.shuffle) {
+      var found2 = true;
+      while (found2) {
+        var pl = $('#playlist')[0];
+        if (!na.mediaPlayer.settings.shuffleList) {
+          na.mediaPlayer.settings.shuffleList = pl.children;
+          for (var i=0; i<pl.children.length; i++) {
+            pl.children[i].shufflePlayed = i === na.mediaPlayer.settings.playingIndex;
+          }
+        }
+        var found = false, i = 0;
+        while (!found && i < 100) {
+          var newIndex = Math.floor(Math.random() * (pl.children.length - 1));
+          found = pl.children[newIndex] && !pl.children[newIndex].shufflePlayed;
+          i++;
+          if (found) {
+              i = 0;
+              found2 = false;
+          };
+        }
+        if (i == 99) {
+          found2 = !found && na.mediaPlayer.settings.repeating;
+          if (found2) delete na.mediaPlayer.settings.shuffleList;
+        }
+      }
+      for (var i=0; i<pl.children.length; i++) {
+        var newIndex2 = 'playlist_' + newIndex;
+        if (pl.children[i].id == newIndex2) {
+          na.mediaPlayer.selectMP3 (newIndex2, $(pl.children[i]).attr('file'), false);
+          return true;
+        }
+        if (pl.children[i].children[0] && pl.children[i].children[0].id== newIndex2) {
+          na.mediaPlayer.selectMP3 (newIndex2, $(pl.children[i].children[0]).attr('file'), false);
+          return true;
+        }
+    }
+
+    } else {
+        var pl = $('#playlist')[0];
+        for (var i=0; i<pl.children.length; i++) {
+            var newIndex = 'playlist_' + (na.mediaPlayer.settings.playingIndex + 1);
+            if (pl.children[i].id == newIndex) {
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('file'), false);
+                return true;
+            }
+            if (pl.children[i].children[0] && pl.children[i].children[0].id== newIndex) {
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i].children[0]).attr('file'), false);
+                return true;
+            }
+        }
+        if (na.mediaPlayer.settings.repeating) {
+            debugger;
+            var newIndex = 'playlist_0';
+            i = 0;
+            if (pl.children[i].id == newIndex) {
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('file'), false);
+                return true;
+            }
+            if (pl.children[i].children[0] && pl.children[i].children[0].id== newIndex) {
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i].children[0]).attr('file'), false);
+                return true;
+            }
+        }
+    };
+  },
+
+	mute : function () {
+		if (na.mediaPlayer.settings.muted) {
+			$('#audioTag')[0].muted = false;
+			na.mediaPlayer.settings.muted = false;
+		} else {
+			$('#audioTag')[0].muted = true;
+			na.mediaPlayer.settings.muted = true;
+		}
+	},
+
+	toggleShuffle : function () {
+		na.mediaPlayer.settings.shuffle = !na.mediaPlayer.settings.shuffle;
+	},
+
+	toggleRepeat : function () {
+		na.mediaPlayer.settings.repeating = !na.mediaPlayer.settings.repeating;
+	},
+
+  seek : function (evt) {
+    var
+    length = $('#audioTag')[0].duration, // in seconds
+    strLength = na.mediaPlayer.convertSecondsToTimeString(length),
+    currentTime = $('#audioTag')[0].currentTime;
+
+    $('.audioSeekBarLabel_length').html(strLength);
+    $('.audioSeekBarLabel_currentTime').html(currentTime);
+
+    var
+    widthSeekBar = $('.audioSeekBar').width(),
+    widthPlayBar = evt.offsetX;//Math.round((widthSeekBar * evt.offsetX)/length),
+    newCurrentTime = Math.round((widthPlayBar * length)/widthSeekBar);
+
+    $('.audioSeekBar_setting')[0].style.width = widthPlayBar+'px';
+    $('#audioTag')[0].currentTime = newCurrentTime;
+  }
 
 }
