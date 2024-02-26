@@ -48,7 +48,7 @@ export class na3D_fileBrowser {
         t.ld2 = {}; //levelDataTwo
         t.items = [];
         t.itemsFolders = [];
-        t.meshLength = 100;
+        t.meshLength = 150;
         window.totaldelta = 0;
 
         //na.d.s.visibleDivs.push ('#siteToolbarLeft');
