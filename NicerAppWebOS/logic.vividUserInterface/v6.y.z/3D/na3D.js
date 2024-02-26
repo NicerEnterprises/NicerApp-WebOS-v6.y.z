@@ -49,6 +49,7 @@ export class na3D_fileBrowser {
         t.items = [];
         t.itemsFolders = [];
         t.meshLength = 100;
+        window.totaldelta = 0;
 
         //na.d.s.visibleDivs.push ('#siteToolbarLeft');
         na.d.s.visibleDivs.push ('#siteToolbarRight');
@@ -319,6 +320,11 @@ export class na3D_fileBrowser {
     animate(t, p) {
         //setTimeout(function() {
             requestAnimationFrame( function(p) { t.animate (t,p) });
+
+        const delta = t.clock.getDelta();
+        totaldelta+=delta;
+        if(totaldelta<1/30)return; //change 10 to other values to speedup
+        totaldelta=0;
         //}, 1000); // 1000 = 100% CPU usage, 10 = 850% CPU usage!
 
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
@@ -334,7 +340,7 @@ export class na3D_fileBrowser {
 
             //t.flyControls.enabled = false;
 
-            const delta = t.clock.getDelta();
+            //const delta = t.clock.getDelta();
 
             if (false) {
                 var x = t.cameraControls._activePointers;
@@ -353,7 +359,7 @@ export class na3D_fileBrowser {
                 if (t.middle && t.middle.x) {
                     if (!t.started3) {
                         t.camera.position.x = -10*1000;//t.middle.x;
-                        t.camera.position.y = 3*t.middle.y;
+                        t.camera.position.y = 2.5*t.middle.y;
                         t.camera.position.z = -10*1000;//5 * t.middle.z ;
                         t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
                         t.orbitControls.center =  new THREE.Vector3(
@@ -609,20 +615,16 @@ export class na3D_fileBrowser {
         if (!intersectsItem && (event.button === 0 || event.button === 2))
         if (t.orbitControls.enabled) {
             t.orbitControls.enabled = false;
-  /*          debugger;
             t.flyControls.object.position.x = t.orbitControls.object.position.x;
             t.flyControls.object.position.y = t.orbitControls.object.position.y;
-            t.flyControls.object.position.z = t.orbitControls.object.position.z;*/
+            t.flyControls.object.position.z = t.orbitControls.object.position.z;
             t.flyControls.enabled = true;
 
         } else {
             t.flyControls.enabled = false;
-            /*
-            debugger;
             t.orbitControls.object.position.x = t.flyControls.object.position.x;
             t.orbitControls.object.position.y = t.flyControls.object.position.y;
             t.orbitControls.object.position.z = t.flyControls.object.position.z;
-*/
             t.orbitControls.enabled = true;
 
         }
@@ -643,12 +645,17 @@ export class na3D_fileBrowser {
                 var html = '', j = 0;
                 for (var file in cit.it.parent.data.files) {
                     if (file.match(/\.mp3$/)) {
-                        var file2 = file.replace(/\-[\-\w]+\.mp3/, '.mp3');
-                        html += '<div id="file_'+j+'" class="vividButton" style="position:relative; font-size:small;">'+file2+'</div>';
+                        var
+                        path = cit.it.filepath.replace(/\/0\/filesAtRoot\/folders/, '').replace(/\/folders/g,''),
+                        file2 = file.replace(/\-[\-\w]+\.mp3/, '.mp3');
+                        html += '<div id="file_'+j+'" class="vividButton" style="position:relative; font-size:small;" filepath="'+path+'/'+file+'">'+file2+'</div>';
                         j++;
                     }
                 };
-                $('.naFolderFilesList').html(html);
+                $('.naFolderFilesList').html(html).delay(50);
+                $('.naFolderFilesList .vividButton').each(function(idx,el) {
+                    $(el).on('dblclick', na.mediaPlayer.onDoubleClick);
+                });
                 done = true;
             }
         }
@@ -685,6 +692,12 @@ export class na3D_fileBrowser {
                     +cit.it.name.replace(/\-[\-\w]+\.mp3/, '.mp3')
                     +'</div>';
                 $('.naAudioPlayerPlaylist').append(html);
+
+                var
+                el2 = $('.naAudioPlayerPlaylist .vividButton').last();
+                el2.attr('filepath', cit.it.filepath.replace(/\/0\/filesAtRoot\/folders/,'').replace(/\/folders/g,'')+'/'+cit.it.name);
+
+                na.mediaPlayer.bindPlaylistClickHandlers();
 
                 done = true;
             }
