@@ -317,9 +317,9 @@ export class na3D_fileBrowser {
 
 
     animate(t, p) {
-        setTimeout(function() {
+        //setTimeout(function() {
             requestAnimationFrame( function(p) { t.animate (t,p) });
-        }, 1000); // 1000 = 100% CPU usage, 10 = 850% CPU usage!
+        //}, 1000); // 1000 = 100% CPU usage, 10 = 850% CPU usage!
 
         //if (t.mouse.x!==0 || t.mouse.y!==0) {
 
@@ -353,7 +353,7 @@ export class na3D_fileBrowser {
                 if (t.middle && t.middle.x) {
                     if (!t.started3) {
                         t.camera.position.x = -10*1000;//t.middle.x;
-                        t.camera.position.y = 2*t.middle.y;
+                        t.camera.position.y = 3*t.middle.y;
                         t.camera.position.z = -10*1000;//5 * t.middle.z ;
                         t.camera.lookAt (t.middle.x, t.middle.y, t.middle.z);
                         t.orbitControls.center =  new THREE.Vector3(
@@ -1610,17 +1610,17 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (p.columnOffsetValue * 500)
-                        + (p.column * p.ld3.cubeSideLengthCount * 400)
-                        + (it.ld3.cubeSideLengthCount * 500)
+                        + (p.columnOffsetValue * 300)
+                        + (p.column * p.ld3.cubeSideLengthCount * 200)
+                        + (it.ld3.cubeSideLengthCount * 200)
                         + ((it.columnOffsetValue-1) * 500)
                         + (it.level > min ? rndx : 0)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue * 500)
-                        + (p.row * p.ld3.cubeSideLengthCount * 400)
-                        + (it.ld3.cubeSideLengthCount * 500)
+                        + (p.rowOffsetValue * 300)
+                        + (p.row * p.ld3.cubeSideLengthCount * 200)
+                        + (it.ld3.cubeSideLengthCount * 200)
                         + ((it.rowOffsetValue-1) * 500)
                         + (it.level > min ? rndy : 0)
                     ) / divider);
@@ -1632,9 +1632,9 @@ export class na3D_fileBrowser {
 
                     it.model.position.x = Math.round( (
                         p.model.position.x
-                        + (p.columnOffsetValue * 500)
-                        + (p.ld3?p.column*p.ld3.cubeSideLengthCount * 400:0)
-                        + (it.ld3.cubeSideLengthCount * 400)
+                        + (p.columnOffsetValue * 300)
+                        + (p.ld3?p.column*p.ld3.cubeSideLengthCount * 200:0)
+                        + (it.ld3.cubeSideLengthCount * 200)
                         + ((it.columnOffsetValue-1) * 500)
                         + (it.level > min ? rndx : 0)
 
@@ -1642,9 +1642,9 @@ export class na3D_fileBrowser {
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue * 500)
-                        + (p.ld3?p.row*p.ld3.cubeSideLengthCount * 300:0)
-                        + (it.ld3.cubeSideLengthCount * 300)
+                        + (p.rowOffsetValue * 300)
+                        + (p.ld3?p.row*p.ld3.cubeSideLengthCount * 200:0)
+                        + (it.ld3.cubeSideLengthCount * 200)
                         + ((it.rowOffsetValue-1) * 500)
                         + (it.level > min ? rndy : 0)
                     ) / divider);

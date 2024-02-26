@@ -43,23 +43,24 @@ class vividUserInterface_2D_dialog {
     }
 
     init_borderVideo (t) {
+        //return false;
         if (t.borderVideo) {
-            t.borderVideo.onloadstart = function (evt) {
+            t.backgroundVideo.onloadstart = function (evt) {
                 if (t.canvas) {
-                    //t.canvasInterval = window.setInterval(() => {
+                    t.canvasInterval = window.setInterval(() => {
                         t.drawImage (t);
-                    //}, 1000 / 30);
-                    t.borderVideo.play();
+                    }, 1000 / 30);
+                    //t.borderVideo.play();
                     t.backgroundVideo.play();
                 }
             };
-            t.borderVideo.load();
+            //t.borderVideo.load();
             t.backgroundVideo.load();
         }
     }
 
     drawImage (t) {
-        requestAnimationFrame (function(p) { t.drawImage(t) } );
+        //requestAnimationFrame (function(p) { t.drawImage(t) } );
         const ctx = t.canvas.getContext('2d');
         ctx.canvas.width = $('#siteTaskbar').width();
         ctx.canvas.height = $('#siteTaskbar').height();
