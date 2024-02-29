@@ -268,8 +268,8 @@ na.site = {
 
         if (url1==='') url1 = '/';
 
-        na.m.log (200, 'na.s.c.stateChange(2) : na.site.settings.current.url='+state.url);
-        na.site.settings.current.url = state.url;
+        na.m.log (200, 'na.s.c.stateChange(2) : na.site.settings.url='+state.url);
+        na.site.settings.url = state.url;
         debugger;
         na.site.loadContent_getContent (ec, url1); // also displays the content
 	},
@@ -287,7 +287,7 @@ na.site = {
         na.site.closeAll_2D_apps();
         na.site.closeAll_3D_apps();
 
-        na.an.logEvent(na.site.settings.current.event);
+        na.an.logEvent(na.site.settings.event);
 
         if (url1.match('/view-content/')) {
             var
@@ -315,7 +315,7 @@ na.site = {
             var app = url1.match(/\/view-content/)?JSON.parse(na.m.base64_decode_url(url2)):{};
         } catch (error) {
             appValidJSON = false;
-            na.site.settings.current.loadContent_appValidJSON = appValidJSON;
+            na.site.settings.loadContent_appValidJSON = appValidJSON;
             var msg = na.m.log (11, 'na.site.loadContent_getContent() : base64 decode error *or* JSON decode error in loadContent_getContent() for <b>url3</b>='+url3+', error='+error.message+', base64 data='+url2+', JSON data='+na.m.base64_decode_url(url2), false);
             reports.push (msg);
             na.site.fail (msg, null);
@@ -508,8 +508,8 @@ na.site = {
             }
         });
         lcc.ec.events.push(naEventData);
-        na.site.settings.current.running_loadTheme = true;
-        na.site.settings.current.running_loadContent = true;
+        na.site.settings.running_loadTheme = true;
+        na.site.settings.running_loadContent = true;
 
 
         na.m.runFunctions (lcc.ec, na.m.updateEvent (dt, {
@@ -519,36 +519,121 @@ na.site = {
                     { initializeScriptsForApps : [na.m.newEventFunction (na.site.initializeScriptsForApps, { dat : dat })] },
                     { initializeApps : [na.m.newEventFunction(na.site.initializeApps, { dat : dat })] },
                     { resizeApps : [na.m.newEventFunction(function() {
-                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.loadingApps?', function () { var r1=na.m.HTMLidle(); var r2=!na.site.settings.current.loadingApps; return r1&&r2;}, function () {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.loadingApps?', function () { var r1=na.m.HTMLidle(); var r2=!na.site.settings.loadingApps; return r1&&r2;}, function () {
                             na.site.resizeApps();
-                            na.site.settings.current.running_loadContent = false;
+                            na.site.settings.running_loadContent = false;
                         }, 100);
                     }, { dat : dat })] },
                     //{ getPageSpecificSettings : [na.m.newEventFunction (na.site.getPageSpecificSettings)] }
                     { loadTheme : [na.m.newEventFunction (function() {
-                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadContent?', function () { var r1 = na.m.HTMLidle(); var r2=!na.site.settings.current.running_loadContent; return r1 && r2;}, function () {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.running_loadContent?', function () { var r1 = na.m.HTMLidle(); var r2=!na.site.settings.running_loadContent; return r1 && r2;}, function () {
                             na.site.loadTheme (null, null, true, true);
                         }, 100);
                     })] },
                     { reloadMenu : [na.m.newEventFunction(na.site.reloadMenu)] },
                     { loadTheme_cleanup : [na.m.newEventFunction (function() {
-                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.current.running_loadTheme?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadTheme}, function () {
+                        na.m.waitForCondition ('loadContent_displayContent : na.m.HTMLidle() && !na.site.settings.running_loadTheme?', function () { return na.m.HTMLidle() && !na.site.settings.running_loadTheme}, function () {
                             na.site.globals.themes[na.site.globals.themeName].themeSettings.Apps = {};
                             na.themeEditor.onload(); // results in excess /view/logs data
                             na.site.globals.themes.default = na.site.loadTheme_fetchDialogs();
                         }, 100);
                     })] },
                     { initializeVivids : [na.m.newEventFunction(function(){
-                        na.m.waitForCondition ('na.site.initializeVivids() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, na.site.startUIvisuals, 100);
+                        na.m.waitForCondition ('na.site.initializeVivids() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.running_loadContent}, na.site.startUIvisuals, 100);
                     })] },
                     { renderAllCustomHeadingsAndLinks : [na.m.newEventFunction(function(){
-                        na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.current.running_loadContent}, na.site.renderAllCustomHeadingsAndLinks, 100);
+                        na.m.waitForCondition ('na.site.renderAllCustomHeadingsAndLinks() : na.m.HTMLidle()?', function () { return na.m.HTMLidle() && !na.site.settings.running_loadContent}, na.site.renderAllCustomHeadingsAndLinks, 100);
                     })] }
                 ]
             }
         }));
     },
 
+    onresize : function(settings) {
+        $('#siteBackground, #siteBackground iframe, #siteBackground img, #siteBackground div').css({
+            width : $(window).width(),
+            height : $(window).height()
+        });
+        //$('#siteBackground img.bg_first').fadeIn(2000);
+
+        // fix attempts (all failed) for [apple bug 1] orientation change bug on iphone 6
+        $('body')[0].scrollLeft = 0;//	$('body')[0].style.position = 'relative';
+        $('body')[0].scrollTop = 0;//	$('body')[0].style.position = 'relative';
+
+        $('html')[0].scrollLeft = 0;
+        $('html')[0].scrollTop = 0;
+        $('html')[0].style.display = 'none';
+        $('html')[0].style.display = 'block';
+
+        if (typeof settings=='object' && settings.possiblyChangeBackground) {
+            var oldBSK = na.site.globals.backgroundSearchKey;
+            if (oldBSK==='' || oldBSK=='landscape' || oldBSK=='portrait') {
+                if ( parseFloat($(window).width()) > parseFloat($(window).height()) )
+                    na.site.globals.backgroundSearchKey = 'landscape';
+                else
+                    na.site.globals.backgroundSearchKey = 'portrait';
+            }
+            if (oldBSK !== '' && oldBSK != na.site.globals.backgroundSearchKey)
+                na.backgrounds.next (
+                    '#siteBackground',
+                    na.site.globals.backgroundSearchKey,
+                    null,
+                    false
+                );
+        };
+
+        if (
+            na.site.settings.app
+            && na.apps.loaded[na.site.settings.app]
+            && typeof na.apps.loaded[na.site.settings.app].preResize == 'function'
+        ) na.apps.loaded[na.site.settings.app].preResize ( {} );
+
+        na.desktop.resize(function (div, calculationResults, sectionIdx, section, divOrderIdx) {
+            if (!settings) settings = {};
+            if (!settings.finalized) {
+                settings.finalized = true;
+
+                na.site.settings.siteInitialized = true;
+
+                na.site.reloadMenu();
+
+                na.site.onresize_doContent(settings);
+
+
+
+                if (typeof settings=='object' && typeof settings.callback=='function') {
+
+                    var cb2 = function (settings) {
+                        settings.callback = settings.callback_naSiteOnresize;
+                        delete settings.callback_naSiteOnresize;
+                        if (
+                            (typeof settings=='object' && settings.reloadMenu===true)
+                        ) na.site.reloadMenu(settings);
+                        else if (typeof settings=='object' && typeof settings.callback=='function') settings.callback();
+                    }
+
+                    var cb = settings.callback;
+                    settings.callback_naSiteOnresize = cb;
+                    settings.callback = function() {
+                        na.site.settings.numAppsResizing = 0;
+                        na.site.settings.numAppsResized = 0;
+                        na.site.settings.appsResizing = {};
+                        cb2(settings);
+                    };
+                } else
+                    settings.callback = function() {
+                        na.site.settings.numAppsResizing = 0;
+                        na.site.settings.numAppsResized = 0;
+                        na.site.settings.appsResizing = {};
+                        //cb2(settings);
+                    };
+
+                na.site.resizeApps(settings.callback);
+            }
+        });
+
+
+    },
 
 
     updateSiteDatetime : function () {

@@ -7,8 +7,9 @@ global $naWebOS;
         return na.d && na.d.s && na.d.s.negotiateOptions;
     }, function () {
         if (!na.d.s.visibleDivs.includes('#siteToolbarRight')) {
-            na.d.s.visibleDivs.push('#siteToolbarRight');
-            na.d.resize();
+            na.desktop.settings.visibleDivs.push('#siteToolbarRight');
+            debugger;
+            na.desktop.resize();
         }
     }, 20);
   </script>
@@ -25,7 +26,7 @@ global $naWebOS;
             <div class="flexBreak"></div>
             <div class="audioPlayerControls">
                 <div class="audioVolumeBar" onclick="na.mediaPlayer.setVolume(event);">
-                    <div class="audioVolumeBar_setting" style="width:calc(100% - 4px);"></div>
+                    <div class="audioVolumeBar_setting"></div>
                 </div>
                 <div style="width:100%;">&nbsp;</div>
                 <div class="audioSeekBar" onclick="na.mediaPlayer.seek(event);">

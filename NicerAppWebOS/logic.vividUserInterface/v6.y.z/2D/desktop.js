@@ -73,7 +73,7 @@ na.desktop = na.d = {
                     top : $('#siteDateTime').height()+20,
                     left : $(window).width()+100,
                     height : $(window).height()-120,
-                    width : !na.m.userDevice.isPhone ? 300 : $(window).width() - 50,
+                    width : 300,//!na.m.userDevice.isPhone ? 300 : $(window).width() - 50,
                     opacity : 0.0001
                 },
                 '#siteToolbarTop' : {
@@ -99,12 +99,48 @@ na.desktop = na.d = {
             callbacks : [],
             callbacksProgress : [],
             cmds : [],
-            visibleDivs : [ '#siteContent', '#siteTaskbar' ]
+            visibleDivs : [ '#siteContent' ]
         }, settings);
+        if (!na.m.userDevice.isPhone) t.s.visibleDivs.push ('#siteTaskbar');
 
         $(window).resize(t.resize);
         setTimeout (t.resize, 10);
 
+        window.removeEventListener('deviceorientation', na.desktop.reloadMenu);
+        window.addEventListener('deviceorientation', na.desktop.reloadMenu);
+        window.removeEventListener('devicemotion', na.desktop.reloadMenu);
+        window.addEventListener('devicemotion', na.desktop.reloadMenu, false);
+        window.removeEventListener('gesturechange', na.desktop.gestureChange);
+        window.addEventListener('gesturechange', na.desktop.gestureChange, false);
+        window.removeEventListener('gestureend', na.desktop.gestureChange);
+        window.addEventListener('gestureend', na.desktop.gestureChange, false);
+
+        document.removeEventListener('touchmove', na.desktop.gestureChange);
+        document.addEventListener('touchmove', na.desktop.gestureChange, false);
+        window.visualViewport.addEventListener("resize", na.desktop.gestureChange);
+        $('body').hammer().on('pinchin', '.vividDialog', na.desktop.gestureChange);
+        $('body').hammer().on('pinchout', '.vividDialog', na.desktop.gestureChange);
+        /*
+        na.site.settings.zingtouch = new ZingTouch.Region(document.body);
+        na.site.settings.zingtouch.bind ($('#siteContent')[0], 'distance', na.desktop.gestureChange);
+        */
+
+    },
+
+    reloadMenu : function () {
+        na.site.onresize({ reloadMenu : true });
+    },
+
+    gestureChange : function (e) {
+        debugger;
+        if (e.scale < 1.0) {
+            // User moved fingers closer together
+            na.site.settings.na3D['.na3D'].orbitControls.handleTouchMovePan (e);
+
+        } else if (e.scale > 1.0) {
+            // User moved fingers further apart
+            na.site.settings.na3D['.na3D'].orbitControls.handleTouchMovePan (e);
+        }
     },
 
     resize : function (callback, animate, reset) {
@@ -130,11 +166,14 @@ na.desktop = na.d = {
             bottom : -100
         });
 
-        na.d.s.visibleDivs.push('#siteTaskbar');
+        if (!na.d.s.visibleDivs.includes('#siteTaskbar')) na.d.s.visibleDivs.push('#siteTaskbar');
         //na.d.s.visibleDivs.push('#siteToolbarThemeEditor');
+        if (!na.d.s.visibleDivs.includes('#siteContent'))
         na.d.s.visibleDivs.push('#siteContent');
 
-        var cr = $.extend( {}, na.desktop.settings.negotiateOptions );
+        debugger;
+        //var cr = $.extend(true, {}, na.desktop.settings.negotiateOptions );
+        var cr = JSON.parse(JSON.stringify(na.desktop.settings.negotiateOptions));
         while (JSON.stringify(cr).match('conditions')) {
             var cr = t.parseOptions(t, cr);
         }
@@ -148,7 +187,7 @@ na.desktop = na.d = {
        if (na.d.s.visibleDivs.includes('#siteToolbarLeft')) cr.order.push('#siteToolbarLeft');
        if (na.d.s.visibleDivs.includes('#siteToolbarRight')) cr.order.push('#siteToolbarRight');
        cr.order.push ('#siteContent');
-
+debugger;
         if (cr['#siteContent']) {
             let gtl = cr['#siteContent'].growToLimits;
 
@@ -235,6 +274,7 @@ na.desktop = na.d = {
                 if (section[0][divID].growToLimits)
                 for (var j=0; j<section[0][divID].growToLimits.length; j++) {
                     var gtl = section[0][divID].growToLimits[j];
+                    debugger;
                     switch (gtl.edge) {
                         case 'left': divs[divID].width -= ($(window).width() - divs[gtl.element].left); break;
                         case 'top': divs[divID].height -= ($(window).height() - divs[gtl.element].top); break;

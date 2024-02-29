@@ -7,7 +7,7 @@
 //use Defuse\Crypto\Crypto;
 
 function timestampJSmodule ($js) {
-    $js = timestampJSmodule1 ($js);
+    //$js = timestampJSmodule1 ($js);
     //$js = timestampJSmodule2 ($js);
     return $js;
 }

@@ -277,9 +277,9 @@ export class na3D_fileBrowser {
 
         t.flyControls = new FlyControls (t.camera, t.renderer.domElement, t.cameraControls);
         t.flyControls.enabled = false;
-        t.flyControls.movementSpeed = 2000;
+        t.flyControls.movementSpeed = 2500;
         t.flyControls.dragToLook = true;
-        t.flyControls.rollSpeed = Math.PI / 24;
+        t.flyControls.rollSpeed = Math.PI / 15;
         t.flyControls.autoMove = false;
 
         /*
@@ -374,7 +374,7 @@ export class na3D_fileBrowser {
 
             if (t.orbitControls.enabled/* && t.middle && t.middle.x*/) {
                 //t.orbitControls.target.set(t.middle.x, t.middle.y, t.middle.z);
-                t.orbitControls.update(delta);
+                t.orbitControls.update(t.flyControls.object.quaternion);
                 t.flyControls.object.position.x = t.orbitControls.object.position.x;
                 t.flyControls.object.position.y = t.orbitControls.object.position.y;
                 t.flyControls.object.position.z = t.orbitControls.object.position.z;
@@ -382,6 +382,7 @@ export class na3D_fileBrowser {
             if (t.flyControls.enabled && t.middle && t.middle.x) {
                 //t.flyControls.object.set (t.middle.x, t.middle.y, t.middle.z);
                 t.flyControls.update(delta);
+                //t.orbitControls.tmpQuaternion.set (t.flyControls.rotationVector.x, t.flyControls.rotationVector.y, t.flyControls.rotationVector.z);
                 t.orbitControls.object.position.x = t.flyControls.object.position.x;
                 t.orbitControls.object.position.y = t.flyControls.object.position.y;
                 t.orbitControls.object.position.z = t.flyControls.object.position.z;
@@ -632,6 +633,7 @@ export class na3D_fileBrowser {
             t.orbitControls.object.position.y = t.flyControls.object.position.y;
             t.orbitControls.object.position.z = t.flyControls.object.position.z;
             t.orbitControls.enabled = true;
+            t.orbitControls.update(t.flyControls.object.quaternion);
 
         }
     }
@@ -1632,15 +1634,15 @@ export class na3D_fileBrowser {
                         + (p.columnOffsetValue * 300)
                         + (p.column * p.ld3.cubeSideLengthCount * 200)
                         + (it.ld3.cubeSideLengthCount * 200)
-                        + ((it.columnOffsetValue-1) * 500)
+                        + ((it.column) * 500)
                         + (it.level > min ? rndx : 0)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue * 300)
-                        + (p.row * p.ld3.cubeSideLengthCount * 200)
-                        + (it.ld3.cubeSideLengthCount * 200)
-                        + ((it.rowOffsetValue-1) * 500)
+                        //+ (p.rowOffsetValue * 300)
+                        //+ (p.row * p.ld3.cubeSideLengthCount * 200)
+                        //+ (it.ld3.cubeSideLengthCount * 200)
+                        + ((it.row) * 500)
                         + (it.level > min ? rndy : 0)
                     ) / divider);
                     it.model.position.z = p.model.position.z + (p.backForth *  500) / divider;
@@ -1654,17 +1656,17 @@ export class na3D_fileBrowser {
                         + (p.columnOffsetValue * 300)
                         + (p.ld3?p.column*p.ld3.cubeSideLengthCount * 200:0)
                         + (it.ld3.cubeSideLengthCount * 200)
-                        + ((it.columnOffsetValue-1) * 500)
+                        + ((it.column) * 500)
                         + (it.level > min ? rndx : 0)
 
                         //+ (it.columnField * 500)
                     ) / divider);
                     it.model.position.y = Math.round( (
                         p.model.position.y
-                        + (p.rowOffsetValue * 300)
-                        + (p.ld3?p.row*p.ld3.cubeSideLengthCount * 200:0)
-                        + (it.ld3.cubeSideLengthCount * 200)
-                        + ((it.rowOffsetValue-1) * 500)
+                        //+ (p.rowOffsetValue * 300)
+                        //+ (p.ld3?p.row*p.ld3.cubeSideLengthCount * 200:0)
+                        //+ (it.ld3.cubeSideLengthCount * 200)
+                        + ((it.row) * 500)
                         + (it.level > min ? rndy : 0)
                     ) / divider);
                     it.model.position.z = p.model.position.z + (p.backForth * 500) / divider;

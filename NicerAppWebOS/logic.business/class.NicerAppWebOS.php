@@ -721,6 +721,13 @@ class NicerAppWebOS {
                 //trigger_error ($file.' (2)', E_USER_NOTICE);
                 if (file_exists($this->path.$file)) {
                     $url = str_replace ($this->path,'',$file);
+                    if (strpos($url, 'zingtouch')!==false) $lineSrc = "\t".'<script type="module"> import { ZingTouch } from \'{$src}?c={$changed}\';</script>'."\r\n"; else {
+                        switch ($indexType) {
+                            case 'css': $lineSrc = "\t".'<link type="text/css" rel="StyleSheet" href="{$src}?c={$changed}">'."\r\n"; break;
+                            case 'javascript': $lineSrc = "\t".'<script type="text/javascript" src="{$src}?c={$changed}"></script>'."\r\n"; break;
+                        };
+
+                    }
                     $search = array ('{$src}', '{$changed}');
                     $replace = array ($url, date('Ymd_His', filemtime($this->path.'/'.$file)));
                     $lines .= str_replace ($search, $replace, $lineSrc);

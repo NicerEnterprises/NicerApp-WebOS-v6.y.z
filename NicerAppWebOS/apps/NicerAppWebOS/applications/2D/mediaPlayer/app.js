@@ -67,6 +67,7 @@ na.mediaPlayer = {
     });
 
     na.mediaPlayer.bindPlaylistClickHandlers();
+    evt.preventDefault();
   },
 
   bindPlaylistClickHandlers : function() {
@@ -76,7 +77,9 @@ na.mediaPlayer = {
         el.hasClickHandler = true;
         $(el).on('click', function() {
           var fp = na.mediaPlayer.settings.basePath+$(event.currentTarget).attr('filepath');
-          $(el).removeClass('vividButtonSelected');
+
+          $('.naAudioPlayerPlaylist .vividButtonSelected').removeClass('vividButtonSelected').addClass('vividButton');
+
           $(event.currentTarget).removeClass('vividButton').addClass('vividButtonSelected');
           na.mediaPlayer.play(fp);
         })
@@ -223,7 +226,7 @@ na.mediaPlayer = {
     }
 
     } else {
-        var pl = $('#playlist')[0];
+        var pl = $('.naAudioPlayerPlaylist')[0];
         for (var i=0; i<pl.children.length; i++) {
             var newIndex = 'playlist_' + (na.mediaPlayer.settings.playingIndex + 1);
             if (pl.children[i].id == newIndex) {
@@ -240,15 +243,42 @@ na.mediaPlayer = {
             var newIndex = 'playlist_0';
             i = 0;
             if (pl.children[i].id == newIndex) {
-                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('file'), false);
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('filepath'), false);
                 return true;
             }
             if (pl.children[i].children[0] && pl.children[i].children[0].id== newIndex) {
-                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i].children[0]).attr('file'), false);
+                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i].children[0]).attr('filepath'), false);
                 return true;
             }
         }
     };
+  },
+	selectMP3 : function (id, file) {
+        if (na.mp.settings.ignoreClick) { na.mp.settings.ignoreClick = false; return false; }
+
+        clearInterval (na.mp.settings.timeDisplayInterval);
+
+        var firstRun = na.mp.settings.firstRun;
+        if (firstRun) na.mp.settings.firstRun = false;
+
+		na.mp.settings.activeID = id;
+
+        na.mp.settings.playingIndex = false;
+        delete na.mp.settings.stopped;
+		var pl = $('#playlist')[0];
+		for (var i=0; i<pl.children.length; i++) {
+            if (pl.children[i].id==id || (pl.children[i].children[0] && pl.children[i].children[0].id==id)) na.mp.settings.playingIndex = i;
+		};
+
+    if (!file) debugger;
+
+    $('.mp3').removeClass('selected').removeClass('vividButtonSelected').addClass('vividButton');
+    $('#'+id).addClass('selected').removeClass('vividButton').addClass('vividButtonSelected');
+    $('#btnPlayPause').addClass('selected');
+    $('#line2').addClass('atPlay');
+    $('#from_pause_to_play')[0].beginElement();
+
+
   },
 
 	mute : function () {

@@ -10,210 +10,6 @@
                 "offsetY" : 5
             }
         }, {
-            "conditions" : [
-                {
-                    "htmlSelector" : "#siteDateTime",
-                    "cssPropertyName" : "display",
-                    "isNotExactly" : "none"
-                }
-            ],
-            "conditionsMet" : {
-               "mode" : 0,
-                "#siteDateTime" : {
-                    "snapTo" : [
-                        { "element" : "body", "edge" : "top" },
-                        { "element" : "body", "edge" : "left" }
-                    ],
-                    "offsetY" : 5
-                },
-                "#btnOptions" : {
-                   "snapTo" : [
-                        {"element" : "body","edge" : "top" },
-                        {
-                           "element" : {
-                                "conditions" : [
-                                    {
-                                        "jsVar" : "na.desktop.settings.visibleDivs",
-                                        "jsVarIncludes" : "#siteDateTime"
-                                    },
-                                    {
-                                        "htmlSelector" : "#siteDateTime",
-                                        "cssPropertyName" : "display",
-                                        "isNotExactly" : "none"
-                                    }
-                                ],
-                                "conditionsMet" : "#siteDateTime",
-                                "conditionsFailed" : "body"
-                            },
-                           "edge" : {
-                                "conditions" : [
-                                    {
-                                        "jsVar" : "na.desktop.settings.visibleDivs",
-                                        "jsVarIncludes" : "#siteDateTime"
-                                    },
-                                    {
-                                        "htmlSelector" : "#siteDateTime",
-                                        "cssPropertyName" : "display",
-                                        "isNotExactly" : "none"
-                                    }
-                                ],
-                                "conditionsMet" : "right",
-                                "conditionsFailed" : "left"
-                            }
-                        }
-                    ],
-                   "offsetY" : 3
-                },
-                "#btnLoginLogout" : {
-                   "snapTo" : [
-                        {"element" : "body","edge" : "top" },
-                        {"element" : "#btnOptions","edge" : "right" }
-                    ],
-                   "offsetY" : 3
-                },
-                "#btnChangeBackground" : {
-                   "snapTo" : [
-                        {"element" : "body","edge" : "top" },
-                        {"element" : "#btnLoginLogout","edge" : "right" }
-                    ],
-                   "offsetY" : 3
-                },
-                "#siteMenu" : {
-                   "snapTo" : [
-                        {"element" : "body","edge" : "top" },
-                        {"element" : "#btnChangeBackground","edge" : "right" }
-                    ],
-                   "growTo" : "maxX",
-                   "offsetY" : 10
-                }
-
-        },
-        "conditionsFailed" : {
-           "mode" : 1,
-            "#btnOptions" : {
-               "snapTo" : [
-                    {"element" : "body","edge" : "top" },
-                    {"element" : "body","edge" : "left" }
-                ],
-               "offsetY" : 3
-            },
-            "#siteMenu" : {
-               "snapTo" : [
-                    {"element" : "body","edge" : "top" },
-                    {"element" : "#btnOptions","edge" : "right" }
-                ],
-               "growTo" : "maxX",
-               "offsetY" : 10
-            },
-            "#btnLoginLogout" : {
-               "snapTo" : [
-                    {"element" : "body","edge" : "top" },
-                    {"element" : "body","edge" : "right" }
-                ],
-               "offsetY" : 3
-            },
-            "#btnChangeBackground" : {
-               "snapTo" : [
-                    {"element" : "body","edge" : "top" },
-                    {"element" : "#btnLoginLogout","edge" : "rightNegative" }
-                ],
-               "offsetY" : 3
-            }
-
-        }
-    }, {
-        "conditions" : [
-            {
-                "jsVar" : "na.desktop.settings.visibleDivs",
-                "jsVarIncludes" : "#siteStatusbar"
-            }
-        ],
-        "conditionsMet" : {
-            "#siteStatusbar" : {
-               "mode" : 0,
-               "snapTo" : [
-                    {"element" : "body","edge" : "left" },
-                    {"element" : "body","edge" : "bottom" }
-                ],
-               "growTo" : "maxX",
-                "yMinTop" : {
-                    "conditions" : [
-                        {
-                            "jsVar" : "na.desktop.settings.showVideoBackgroundControls",
-                            "jsVarIs" : {
-                                "boolTrue" : 200,
-                                "boolFalse" : 0
-                            }
-                        }
-                    ]
-                }
-            }
-        },
-        "conditionsFailed" : {}
-    }, {
-        "conditions" : [
-            {
-                "jsVar" : "na.desktop.settings.visibleDivs",
-                "jsVarIncludes" : "#siteVideo"
-            }, {
-                "jsVar" : "na.desktop.settings.visibleDivs",
-                "jsVarIncludes" : "#siteVideoSearch"
-            }, {
-                "jsVar" : "na.desktop.settings.visibleDivs",
-                "jsVarExcludes" : "#siteToolbarRight"
-            }, {
-
-                "jsVar" : "na.desktop.settings.visibleDivs",
-                "jsVarExcludes" : "#siteToolbarTop"
-            }
-        ],
-        "conditionsMet" : {
-           "mode" : 0,
-            "#siteVideo" : {
-               "snapTo" : [
-                    {"element" : {
-                        "conditions" : [
-                            {
-                                "jsVar" : "na.desktop.settings.visibleDivs",
-                                "jsVarIncludes" : "#siteDateTime"
-                            },
-                            {
-                                "htmlSelector" : "#siteDateTime",
-                                "cssPropertyName" : "display",
-                                "isNotExactly" : "none"
-                            }
-                        ],
-                        "conditionsMet" : "#siteDateTime",
-                        "conditionsFailed" : "#btnOptions"
-                    },"edge" : "bottom" },
-                    {"element" : "body","edge" : "right" }
-                ]
-            },
-            "#siteVideoSearch" : {
-               "snapTo" : [
-                    {"element" : "#siteVideo","edge" : "bottom" },
-                    {"element" : "body","edge" : "right" }
-                ],
-               "growTo" : "maxY",
-                "growToLimits" : {
-                    "conditions" : [
-                        {
-                            "jsVar" : "na.desktop.settings.visibleDivs",
-                            "jsVarIncludes" : "#siteDateTime"
-                        },
-                        {
-                            "htmlSelector" : "#siteDateTime",
-                            "cssPropertyName" : "display",
-                            "isNotExactly" : "none"
-                        }
-                    ],
-                    "conditionsMet" : [ {"element" : "#siteStatusbar","edge" : "top" } ],
-                    "conditionsFailed" : []
-                }
-            }
-        },
-        "conditionsFailed" : {}
-    }, {
         "conditions" : [ {
             "jsVar" : "na.desktop.settings.visibleDivs",
             "jsVarIncludes" : "#siteToolbarLeft"
@@ -293,26 +89,61 @@
                     "conditions" : [
                         {
                         "jsVar" : "na.desktop.settings.visibleDivs",
-                        "jsVarIncludes" : "#siteToolbarLeft"
+                        "jsVarIncludes" : "#siteToolbarRight"
                         }
                     ],
-                    "conditionsMet" : [
-                            {"element" : "body","edge" : "top" },
-                            {"element" : "#siteToolbarLeft","edge" : "right" }
-                    ],
-                    "conditionsFailed" : {
-                        "conditions" : [{
+                    "conditionsMet" : {
+                        "conditions" : [
+                            {
                             "jsVar" : "na.desktop.settings.visibleDivs",
-                            "jsVarIncludes" : "#siteToolbarThemeEditor"
-                        }],
-                        "conditionsMet" : [
-                            {"element" : "body","edge" : "top" },
-                            {"element" : "#siteToolbarThemeEditor","edge" : "right" }
+                            "jsVarIncludes" : "#siteToolbarLeft"
+                            }
                         ],
+                        "conditionsMet" : {
+                            "conditions" : [{
+                                "jsVar" : "na.desktop.settings.visibleDivs",
+                                "jsVarIncludes" : "#siteToolbarThemeEditor"
+                            }],
+                            "conditionsMet" : [
+                                {"element" : "body","edge" : "top" },
+                                {"element" : "#siteToolbarThemeEditor","edge" : "right" }
+                            ],
+                            "conditionsFailed" : [
+                                {"element" : "body","edge" : "top" },
+                                {"element" : "#siteToolbarLeft","edge" : "right" }
+                            ]
+                        },
                         "conditionsFailed" : [
-                            {"element" : "body","edge" : "top" },
-                            {"element" : "body","edge" : "left" }
+                                {"element" : "body","edge" : "top" }
                         ]
+
+                    },
+                    "conditionsFailed" : {
+                        "conditions" : [
+                            {
+                            "jsVar" : "na.desktop.settings.visibleDivs",
+                            "jsVarIncludes" : "#siteToolbarLeft"
+                            }
+                        ],
+                        "conditionsMet" : [
+                                {"element" : "body","edge" : "top" },
+                                {"element" : "#siteToolbarLeft","edge" : "right" }
+                        ],
+                        "conditionsFailed" : {
+                            "conditions" : [{
+                                "jsVar" : "na.desktop.settings.visibleDivs",
+                                "jsVarIncludes" : "#siteToolbarThemeEditor"
+                            }],
+                            "conditionsMet" : [
+                                {"element" : "body","edge" : "top" },
+                                {"element" : "#siteToolbarThemeEditor","edge" : "right" }
+                            ],
+                            "conditionsFailed" : [
+                                {"element" : "body","edge" : "top" },
+                                {"element" : "body","edge" : "left" }
+                            ]
+                        }
+
                     },
                 },
                 "growTo" : "max",
