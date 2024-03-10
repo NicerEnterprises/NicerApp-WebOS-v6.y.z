@@ -277,7 +277,7 @@ export class na3D_fileBrowser {
 
         t.flyControls = new FlyControls (t.camera, t.renderer.domElement, t.cameraControls);
         t.flyControls.enabled = true;
-        t.flyControls.movementSpeed = 2500;
+        t.flyControls.movementSpeed = 3000;
         t.flyControls.dragToLook = true;
         t.flyControls.rollSpeed = Math.PI / 4;
         t.flyControls.autoMove = false;
@@ -371,6 +371,9 @@ export class na3D_fileBrowser {
                     }
                 };
             }
+
+            if (t.flyControls.movementSpeed > 0)
+                t.flyControls.movementSpeed += 100;
 
             if (t.orbitControls.enabled/* && t.middle && t.middle.x*/) {
                 //t.orbitControls.target.set(t.middle.x, t.middle.y, t.middle.z);
@@ -623,7 +626,7 @@ export class na3D_fileBrowser {
             if (t.flyControls.movementSpeed > 0)
                 t.flyControls.movementSpeed = 0;
             else
-                t.flyControls.movementSpeed = 2500;
+                t.flyControls.movementSpeed = 3000;
         /*
         if (!intersectsItem && (event.button === 0 || event.button === 2))
         if (t.orbitControls.enabled) {
