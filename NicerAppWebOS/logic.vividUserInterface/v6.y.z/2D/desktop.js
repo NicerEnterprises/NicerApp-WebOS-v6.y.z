@@ -171,7 +171,6 @@ na.desktop = na.d = {
         if (!na.d.s.visibleDivs.includes('#siteContent'))
         na.d.s.visibleDivs.push('#siteContent');
 
-        debugger;
         //var cr = $.extend(true, {}, na.desktop.settings.negotiateOptions );
         var cr = JSON.parse(JSON.stringify(na.desktop.settings.negotiateOptions));
         while (JSON.stringify(cr).match('conditions')) {
@@ -187,7 +186,7 @@ na.desktop = na.d = {
        if (na.d.s.visibleDivs.includes('#siteToolbarLeft')) cr.order.push('#siteToolbarLeft');
        if (na.d.s.visibleDivs.includes('#siteToolbarRight')) cr.order.push('#siteToolbarRight');
        cr.order.push ('#siteContent');
-debugger;
+
         if (cr['#siteContent']) {
             let gtl = cr['#siteContent'].growToLimits;
 
@@ -274,7 +273,6 @@ debugger;
                 if (section[0][divID].growToLimits)
                 for (var j=0; j<section[0][divID].growToLimits.length; j++) {
                     var gtl = section[0][divID].growToLimits[j];
-                    debugger;
                     switch (gtl.edge) {
                         case 'left': divs[divID].width -= ($(window).width() - divs[gtl.element].left); break;
                         case 'top': divs[divID].height -= ($(window).height() - divs[gtl.element].top); break;

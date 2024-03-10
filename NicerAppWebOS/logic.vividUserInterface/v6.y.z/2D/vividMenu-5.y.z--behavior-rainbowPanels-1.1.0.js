@@ -248,7 +248,7 @@ class naVividMenu__behavior_rainbowPanels {
             var
             idx = parseInt(event.currentTarget.id.replace(/.*__/,'')),
             id = event.currentTarget.id.replace('__'+idx,''),
-            t = na.settings.menus['#'+id],
+            t = na.site.components.menus['#'+id],
             it = t.items[idx];
 
             if (t.debugMe) na.m.log(20,'naVividMenu.createVividButton : mouseenter '+it.label, false);
@@ -327,7 +327,7 @@ class naVividMenu__behavior_rainbowPanels {
             var
             idx = parseInt(event.currentTarget.id.replace(/.*__/,'')),
             id = event.currentTarget.id.replace('__'+idx,''),
-            t = na.settings.menus['#'+id],
+            t = na.site.components.menus['#'+id],
             it = t.items[idx];
             //if (it.label=='Background'||it.label=='Landscape') debugger;
 

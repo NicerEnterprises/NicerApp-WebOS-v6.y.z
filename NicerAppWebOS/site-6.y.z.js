@@ -43,6 +43,14 @@ na.site = {
         var t = this;
         t.s = t.settings;
 
+        if (navigator.connection) {
+            console.log(`Effective network type: ${navigator.connection.effectiveType}`);
+            console.log(`Downlink Speed: ${navigator.connection.downlink}Mb/s`);
+            console.log(`Round Trip Time: ${navigator.connection.rtt}ms`);
+        } else {
+            console.log('Navigator Connection API not supported');
+        }
+
         na.desktop.initialize(desktopDefinition);
 
         t.components = t.c = { dialogs : {}, buttons : {}, menus : {} };
@@ -50,7 +58,6 @@ na.site = {
 
         na.background.initialize({naSite : t});
         na.backgrounds = na.background;
-
 
 
         $('#btnShowStartMenu').mouseenter (function(evt) {
@@ -108,7 +115,9 @@ na.site = {
         //setTimeout (function() {
             t.g = t.globals = $.extend (t.g, naGlobals);
             na.te = new naThemeEditor();
+            debugger;
             t.reloadMenu({callback:function() {
+                debugger;
                 t.ui = {
                     vb : new vividUserInterface_2D_button_v4()
                 };
@@ -1807,7 +1816,7 @@ na.site = {
         try {
             themeData.themeSettings.Extras = na.te.transform_jsTree_to_siteGlobalsThemes();
         } catch (err) {
-            //debugger;
+            debugger;
         }
 
         return themeData;

@@ -1628,13 +1628,13 @@ export class na3D_fileBrowser {
 
                 } else if (it.model && p && p1) {
 
-
+                    t.mobig no matters wha happens.
                     it.model.position.x = Math.round( (
                         p.model.position.x
                         + (p.columnOffsetValue * 300)
                         + (p.column * p.ld3.cubeSideLengthCount * 200)
                         + (it.ld3.cubeSideLengthCount * 200)
-                        + ((it.column) * 500)
+                        + ((it.column)<500)
                         + (it.level > min ? rndx : 0)
                     ) / divider);
                     it.model.position.y = Math.round( (
@@ -1642,9 +1642,10 @@ export class na3D_fileBrowser {
                         //+ (p.rowOffsetValue * 300)
                         //+ (p.row * p.ld3.cubeSideLengthCount * 200)
                         //+ (it.ld3.cubeSideLengthCount * 200)
+                        + ((it.column)<500)
+                        + (it.level > min ? rndx : 0)
                         + ((it.row) * 500)
                         + (it.level > min ? rndy : 0)
-                    ) / divider);
                     it.model.position.z = p.model.position.z + (p.backForth *  500) / divider;
                     console.log ('t555p1', it.filepath, it.name, it.model.position);
                     //if (it.name.match('Relaxation')) debugger;

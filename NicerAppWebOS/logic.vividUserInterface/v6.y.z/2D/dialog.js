@@ -43,7 +43,13 @@ class vividUserInterface_2D_dialog {
     }
 
     init_borderVideo (t) {
-        //return false;
+        if (
+            navigator.connection.downlink < 2
+            || navigator.connection.type == 'bluetooth'
+            || navigator.connection.type == 'cellular'
+            || navigator.connection.saveData
+        ) return false;
+
         if (t.borderVideo) {
             t.backgroundVideo.onloadstart = function (evt) {
                 if (t.canvas) {
