@@ -21,7 +21,15 @@ class vividUserInterface_2D_dialog {
         }
         t.borderVideo = $('video',t.cmd.el)[0];
         t.backgroundVideo = $('video',t.cmd.el)[1];
-        if (t.borderVideo) {
+        if (
+            navigator.connection.downlink < 2
+            || navigator.connection.type == 'bluetooth'
+            || navigator.connection.type == 'cellular'
+            || navigator.connection.saveData
+        ) {
+            // todo : display a tiled background for this div.
+            return this;
+        } else if (t.borderVideo) {
             t.init_borderVideo(t);
             t.init_vividUserInterface_2D_dialogBorder_lavaLamp(t);
         };
@@ -43,16 +51,6 @@ class vividUserInterface_2D_dialog {
     }
 
     init_borderVideo (t) {
-        if (
-            navigator.connection.downlink < 2
-            || navigator.connection.type == 'bluetooth'
-            || navigator.connection.type == 'cellular'
-            || navigator.connection.saveData
-        ) {
-            // todo : display a tiled background for this div.
-            return false;
-        }
-
         if (t.borderVideo) {
             t.backgroundVideo.onloadstart = function (evt) {
                 if (t.canvas) {
