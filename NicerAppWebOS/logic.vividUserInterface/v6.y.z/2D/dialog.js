@@ -57,7 +57,7 @@ class vividUserInterface_2D_dialog {
                     t.canvasInterval = window.setInterval(() => {
                         t.drawImage (t);
                     }, 1000 / 30);
-                    //t.borderVideo.play();
+                    t.borderVideo.play();
                     t.backgroundVideo.play();
                 }
             };
