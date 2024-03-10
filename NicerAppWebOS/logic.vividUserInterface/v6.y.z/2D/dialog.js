@@ -48,7 +48,10 @@ class vividUserInterface_2D_dialog {
             || navigator.connection.type == 'bluetooth'
             || navigator.connection.type == 'cellular'
             || navigator.connection.saveData
-        ) return false;
+        ) {
+            // todo : display a tiled background for this div.
+            return false;
+        }
 
         if (t.borderVideo) {
             t.backgroundVideo.onloadstart = function (evt) {
