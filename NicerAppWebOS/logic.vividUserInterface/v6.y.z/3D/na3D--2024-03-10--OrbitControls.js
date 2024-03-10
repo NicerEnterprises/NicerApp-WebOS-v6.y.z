@@ -269,17 +269,17 @@ export class na3D_fileBrowser {
         t.lookClock = -1;
 
         t.orbitControls = new OrbitControls( t.camera, t.renderer.domElement );
-        //t.orbitControls.enabled = true;
+        t.orbitControls.enabled = true;
         //t.orbitControls.listenToKeyEvents( window ); // optional
 
         t.cameraControls = new CameraControls (t.camera, t.renderer.domElement);
         t.cameraControls.enabled = false;
 
         t.flyControls = new FlyControls (t.camera, t.renderer.domElement, t.cameraControls);
-        t.flyControls.enabled = true;
+        t.flyControls.enabled = false;
         t.flyControls.movementSpeed = 2500;
         t.flyControls.dragToLook = true;
-        t.flyControls.rollSpeed = Math.PI / 4;
+        t.flyControls.rollSpeed = Math.PI / 15;
         t.flyControls.autoMove = false;
 
         /*
@@ -620,12 +620,6 @@ export class na3D_fileBrowser {
         const intersects = t.raycaster.intersectObjects (t.s2);
         var intersectsItem = (intersects[0] && intersects[0].object.type!=='Line');
         if (!intersectsItem && (event.button === 0 || event.button === 2))
-            if (t.flyControls.movementSpeed > 0)
-                t.flyControls.movementSpeed = 0;
-            else
-                t.flyControls.movementSpeed = 2500;
-        /*
-        if (!intersectsItem && (event.button === 0 || event.button === 2))
         if (t.orbitControls.enabled) {
             t.orbitControls.enabled = false;
             t.flyControls.object.position.x = t.orbitControls.object.position.x;
@@ -641,7 +635,7 @@ export class na3D_fileBrowser {
             t.orbitControls.enabled = true;
             t.orbitControls.update(t.flyControls.object.quaternion);
 
-        }*/
+        }
     }
 
 
