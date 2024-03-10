@@ -1922,6 +1922,9 @@ export class na3D_fileBrowser {
             y : Math.round((t.winners.north + t.winners.south) / 2),
             z : Math.round((t.winners.front + t.winners.behind) /2)
         };
+        debugger;
+        t.camera.lookAt (new THREE.Vector3( t.middle.x, t.middle.y, t.middle.z));
+        debugger;
 
         t.cameraOrigin = {
             x : t.middle.x,
