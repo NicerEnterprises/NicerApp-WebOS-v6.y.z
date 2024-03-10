@@ -46,7 +46,7 @@ class vividUserInterface_2D_dialog {
         const h = $('#siteTaskbar').height();
         const dlw = 3;
 
-        //ctx.strokeStyle = ctx.createPattern(t.borderVideo,'no-repeat');
+        ctx.strokeStyle = ctx.createPattern(t.borderVideo,'no-repeat');
         ctx.lineWidth = dlw;
     }
 
@@ -61,7 +61,7 @@ class vividUserInterface_2D_dialog {
                     t.backgroundVideo.play();
                 }
             };
-            //t.borderVideo.load();
+            t.borderVideo.load();
             t.backgroundVideo.load();
         }
     }
