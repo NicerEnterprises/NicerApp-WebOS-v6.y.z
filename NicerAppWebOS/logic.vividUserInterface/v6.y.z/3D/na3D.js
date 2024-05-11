@@ -209,12 +209,6 @@ export class na3D_fileBrowser {
             event.preventDefault();
             clearInterval(t.zoomInterval);
         });
-        $(window).on("resize", function(event) {
-            setTimeout (function() {
-                debugger;
-                t.onresize (t);
-            }, 50);
-        });
         
         const light1  = new THREE.AmbientLight(0xFFFFFF, 0.3);
         light1.name = "ambient_light";
@@ -242,16 +236,19 @@ export class na3D_fileBrowser {
         t.mouse.y = 0;
 
         // Handle window resize
-        window.addEventListener("resize", () => {
+        na.desktop.registerCallback ('na3D resize', '#siteContent', () => {
+        //window.addEventListener("resize", () => {
             setTimeout(function() {
                 //const { innerWidth, innerHeight } = window;
                 var innerWidth = $("#siteContent .vividDialogContent").width();
                 var innerHeight = $("#siteContent .vividDialogContent").height() - $("#header").position().top - $("#header").height();
+                debugger;
 
                 t.renderer.setSize(innerWidth, innerHeight);
                 t.camera.aspect = innerWidth / innerHeight;
                 t.camera.updateProjectionMatrix();
-            }, 800);
+                t.onresize (t);
+            }, 200);
         });
         setTimeout (function() {
             var innerWidth = $("#siteContent .vividDialogContent").width();
@@ -260,7 +257,7 @@ export class na3D_fileBrowser {
             t.renderer.setSize(innerWidth, innerHeight);
             t.camera.aspect = innerWidth / innerHeight;
             t.camera.updateProjectionMatrix();
-        }, 500);
+        }, 200);
 
         t.renderer.setAnimationLoop(() => {
             //controls.update();
