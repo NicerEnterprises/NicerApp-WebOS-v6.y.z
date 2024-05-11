@@ -242,13 +242,12 @@ export class na3D_fileBrowser {
                 //const { innerWidth, innerHeight } = window;
                 var innerWidth = $("#siteContent .vividDialogContent").width();
                 var innerHeight = $("#siteContent .vividDialogContent").height() - $("#header").position().top - $("#header").height();
-                debugger;
 
                 t.renderer.setSize(innerWidth, innerHeight);
                 t.camera.aspect = innerWidth / innerHeight;
                 t.camera.updateProjectionMatrix();
                 t.onresize (t);
-            }, 200);
+            }, 100);
         });
         setTimeout (function() {
             var innerWidth = $("#siteContent .vividDialogContent").width();
@@ -257,7 +256,7 @@ export class na3D_fileBrowser {
             t.renderer.setSize(innerWidth, innerHeight);
             t.camera.aspect = innerWidth / innerHeight;
             t.camera.updateProjectionMatrix();
-        }, 200);
+        }, 100);
 
         t.renderer.setAnimationLoop(() => {
             //controls.update();
