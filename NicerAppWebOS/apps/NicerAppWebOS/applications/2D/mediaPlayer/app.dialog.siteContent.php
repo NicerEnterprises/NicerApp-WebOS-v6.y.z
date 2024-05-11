@@ -8,7 +8,13 @@ $appCodeFile =
 $appCodeLink =
   $appCodeFile.'?m='.date('Ymd_His', filemtime($naWebOS->basePath.$appCodeFile));
 ?>
+<script type="importmap">
+  { "imports": {
+      "three":               "/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js"
+  } }
+</script>
 <script type="module" src="/NicerAppWebOS/3rd-party/3D/libs/three.js/build/three.module.js"></script>
+<script type="module" src="/NicerAppWebOS/logic.vividUserInterface/v6.y.z/3D/na3D.js"></script>
 <script type="text/javascript" src="<?php echo $appCodeFile?>"></script>
 
 <div id="header">

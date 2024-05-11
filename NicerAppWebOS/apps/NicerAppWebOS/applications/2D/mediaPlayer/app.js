@@ -75,19 +75,20 @@ na.mediaPlayer = {
     $('.naAudioPlayerPlaylist .vividButton').each(function(idx,el) {
       if (!el.hasClickHandler) {
         el.hasClickHandler = true;
+        el.id = 'playlist_'+idx;
         $(el).on('click', function() {
           var fp = na.mediaPlayer.settings.basePath+$(event.currentTarget).attr('filepath');
 
           $('.naAudioPlayerPlaylist .vividButtonSelected').removeClass('vividButtonSelected').addClass('vividButton');
 
           $(event.currentTarget).removeClass('vividButton').addClass('vividButtonSelected');
-          na.mediaPlayer.play(fp);
+          na.mediaPlayer.play(el.id, fp);
         })
       }
     });
   },
 
-  play : function (relPath) {
+  play : function (id, relPath) {
     $('#audioTag')[0].src = relPath;
     $('#audioTag')[0].play();
     $('.audioVolumeBarLabel').html ( 'Volume : '+ Math.round($('#audioTag')[0].volume*100) );
@@ -97,6 +98,11 @@ na.mediaPlayer = {
         $('#btnPlayPause').removeClass('disabled');
         na.ui.vividButton.onclick({currentTarget:$('#btnPlayPause')[0]});
     }
+
+		var pl = $('.naAudioPlayerPlaylist')[0];
+		for (var i=0; i<pl.children.length; i++) {
+            if (pl.children[i].id==id || (pl.children[i].children[0] && pl.children[i].children[0].id==id)) na.mediaPlayer.settings.playingIndex = i;
+		};
 
     setTimeout(na.mediaPlayer.setTimeDisplayInterval,1000);
     na.mediaPlayer.settings.stopped = false;
@@ -114,6 +120,7 @@ na.mediaPlayer = {
 
       if (currentTime==length) {
         clearInterval (na.mediaPlayer.settings.timeDisplayInterval);
+        debugger;
         na.mediaPlayer.next();
       } else {
 
@@ -227,10 +234,11 @@ na.mediaPlayer = {
 
     } else {
         var pl = $('.naAudioPlayerPlaylist')[0];
+        debugger;
         for (var i=0; i<pl.children.length; i++) {
             var newIndex = 'playlist_' + (na.mediaPlayer.settings.playingIndex + 1);
-            if (pl.children[i].id == newIndex) {
-                na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('file'), false);
+            if (i == na.mediaPlayer.settings.playingIndex + 1) {
+                na.mediaPlayer.selectMP3 (pl.children[i].id, $(pl.children[i]).attr('file'), false);
                 return true;
             }
             if (pl.children[i].children[0] && pl.children[i].children[0].id== newIndex) {
@@ -240,8 +248,10 @@ na.mediaPlayer = {
         }
         if (na.mediaPlayer.settings.repeating) {
             debugger;
-            var newIndex = 'playlist_0';
+            var
+            newIndex = 'playlist_0',
             i = 0;
+
             if (pl.children[i].id == newIndex) {
                 na.mediaPlayer.selectMP3 (newIndex, $(pl.children[i]).attr('filepath'), false);
                 return true;
@@ -254,25 +264,22 @@ na.mediaPlayer = {
     };
   },
 	selectMP3 : function (id, file) {
-        if (na.mp.settings.ignoreClick) { na.mp.settings.ignoreClick = false; return false; }
+    if (na.mp.settings.ignoreClick) { na.mp.settings.ignoreClick = false; return false; }
 
-        clearInterval (na.mp.settings.timeDisplayInterval);
+    clearInterval (na.mp.settings.timeDisplayInterval);
 
-        var firstRun = na.mp.settings.firstRun;
-        if (firstRun) na.mp.settings.firstRun = false;
+    var firstRun = na.mp.settings.firstRun;
+    if (firstRun) na.mp.settings.firstRun = false;
 
 		na.mp.settings.activeID = id;
 
-        na.mp.settings.playingIndex = false;
-        delete na.mp.settings.stopped;
-		var pl = $('#playlist')[0];
-		for (var i=0; i<pl.children.length; i++) {
-            if (pl.children[i].id==id || (pl.children[i].children[0] && pl.children[i].children[0].id==id)) na.mp.settings.playingIndex = i;
-		};
+    na.mp.settings.playingIndex = false;
+    delete na.mp.settings.stopped;
 
-    if (!file) debugger;
+    var fp = na.mediaPlayer.settings.basePath+$('#'+id).attr('filepath');
+    na.mp.play (id, fp);
 
-    $('.mp3').removeClass('selected').removeClass('vividButtonSelected').addClass('vividButton');
+    $('.naAudioPlayerPlaylist .vividButtonSelected').removeClass('selected').removeClass('vividButtonSelected').addClass('vividButton');
     $('#'+id).addClass('selected').removeClass('vividButton').addClass('vividButtonSelected');
     $('#btnPlayPause').addClass('selected');
     $('#line2').addClass('atPlay');
@@ -318,3 +325,4 @@ na.mediaPlayer = {
   }
 
 }
+na.mp = na.mediaPlayer;
