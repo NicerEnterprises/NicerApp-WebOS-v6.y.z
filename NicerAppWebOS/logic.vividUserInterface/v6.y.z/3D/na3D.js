@@ -1015,9 +1015,30 @@ export class na3D_fileBrowser {
         t.cameraControls.enabled = true;
         t.orbitControls.enabled = true;
 
+        // adjust camera position
         t.orbitControls.object.position.x = t.flyControls.object.position.x;
         t.orbitControls.object.position.y = t.flyControls.object.position.y;
         t.orbitControls.object.position.z = t.flyControls.object.position.z;
+
+        // adjust view angle
+        var tar = t.cameraControls._targetEnd.clone();
+        tar.set(0,0,-1).applyQuaternion(t.camera.quaternion).add(t.camera.position);
+
+        t.orbitControls.target.x = tar.x;
+        t.orbitControls.target.y = tar.y;
+        t.orbitControls.target.z = tar.z;
+
+
+        t.cameraControls.setLookAt (
+            t.flyControls.object.position.x,
+            t.flyControls.object.position.y,
+            t.flyControls.object.position.z,
+            tar.x,
+            tar.y,
+            tar.z,
+            false
+        );
+
         debugger;
         // NONE OF THESE WORK :(
         //t.orbitControls.target.copy (t.flyControls.tmpQuaternion);
